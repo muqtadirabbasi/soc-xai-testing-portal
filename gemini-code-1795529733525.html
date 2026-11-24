@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SOC Anomaly Triage & Explainability Study Portal</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-left">
+      <span class="badge">SOC ANALYST TRIAGE PORTAL</span>
+      <h1>Insider Threat Behavioral Anomaly Review</h1>
+    </div>
+    <div class="topbar-right" id="progress-indicator">
+      Session Setup
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- STEP 1: PARTICIPANT SETUP & INFORMED CONSENT -->
+    <section id="view-setup" class="card active">
+      <h2>Participant Onboarding & Study Configuration</h2>
+      <p class="subtitle">
+        You will review daily user behavioral alerts flagged by an unsupervised Bidirectional LSTM Autoencoder on enterprise activity logs.
+        For each alert, inspect the explanation panel and decide whether to escalate the alert or dismiss it as benign activity.
+      </p>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="participant-id">Participant ID</label>
+          <input type="text" id="participant-id" placeholder="e.g., P001" required />
+        </div>
+
+        <div class="form-group">
+          <label for="participant-role">Background / Role</label>
+          <select id="participant-role">
+            <option value="SOC_Analyst">Professional SOC / Security Analyst</option>
+            <option value="Graduate_Student">Graduate Student (Cybersecurity / Engineering)</option>
+            <option value="Undergraduate_Student">Undergraduate Student</option>
+            <option value="Prefer_not_to_answer">Prefer not to answer</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="condition-order">Counterbalanced Explanation Order</label>
+          <select id="condition-order">
+            <option value="AUTO">Auto-Assign by Participant ID (Even: A→B, Odd: B→A)</option>
+            <option value="A_FIRST">Block 1: Design A (Baseline Z-Score) → Block 2: Design B (SHAP)</option>
+            <option value="B_FIRST">Block 1: Design B (SHAP) → Block 2: Design A (Baseline Z-Score)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="trial-subset">Trial Scope</label>
+          <select id="trial-subset">
+            <option value="BALANCED_12">Balanced Core Set (12 Trials: 6 per Design across S1–S4 + Benign)</option>
+            <option value="ALL">Full Manifest Set (All Trials × 2 Designs)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="consent-box">
+        <label class="checkbox-label">
+          <input type="checkbox" id="consent-check" />
+          <span>
+            I confirm that I am participating voluntarily in this user study, understand that I may select
+            <strong>"Prefer not to answer"</strong> on any question or withdraw at any time without penalty,
+            and consent to recording my triage decisions and response times.
+          </span>
+        </label>
+      </div>
+
+      <div id="setup-error" class="error-msg hidden"></div>
+
+      <div class="actions">
+        <button id="btn-start" class="btn primary">Start Evaluation Session</button>
+      </div>
+    </section>
+
+    <!-- STEP 2: BLOCK TRANSITION / BRIEFING -->
+    <section id="view-block-intro" class="card hidden">
+      <h2 id="block-title">Block 1 Briefing</h2>
+      <p id="block-description" class="subtitle"></p>
+      <div class="info-callout" id="block-guide"></div>
+      <div class="actions">
+        <button id="btn-begin-block" class="btn primary">Begin Block Trials</button>
+      </div>
+    </section>
+
+    <!-- STEP 3: ACTIVE TRIAGE TRIAL -->
+    <section id="view-trial" class="hidden">
+      <div class="trial-layout">
+        <!-- Left: Visualization Stimulus -->
+        <div class="card stimulus-pane">
+          <div class="stimulus-header">
+            <div>
+              <span class="tag" id="trial-design-tag">Design A</span>
+              <span class="tag neutral" id="trial-user-tag">User: ALT1465</span>
+              <span class="tag neutral" id="trial-date-tag">Date: 2010-08-20</span>
+            </div>
+            <button id="btn-zoom" class="btn small">Toggle Full-Width Zoom</button>
+          </div>
+
+          <div class="score-banner">
+            <div>
+              <span class="metric-label">Daily Reconstruction Deviation Score</span>
+              <strong class="metric-val" id="trial-score">0.072169</strong>
+            </div>
+            <div>
+              <span class="metric-label">User Baseline Cutoff (MAD τ)</span>
+              <strong class="metric-val" id="trial-thresh">0.060022</strong>
+            </div>
+            <div>
+              <span class="metric-label">Statistical Status</span>
+              <strong class="metric-val status-flag" id="trial-status">Above Baseline Cutoff</strong>
+            </div>
+          </div>
+
+          <div class="image-wrapper" id="image-wrapper">
+            <img id="stimulus-img" src="" alt="Explanation Visualization" />
+          </div>
+        </div>
+
+        <!-- Right: Analyst Decision & Ratings Form -->
+        <div class="card decision-pane">
+          <h3>Analyst Triage Assessment</h3>
+          <p class="hint">Review all 33 behavioral features on the left before submitting your assessment.</p>
+
+          <div class="q-block">
+            <label class="q-title">1. Triage Action</label>
+            <div class="radio-stack">
+              <label class="radio-card">
+                <input type="radio" name="triage_decision" value="Escalate" />
+                <span><strong>Escalate Alert</strong> — Behavioral pattern warrants security investigation</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="triage_decision" value="Dismiss" />
+                <span><strong>Dismiss Alert</strong> — Consistent with benign / false-positive deviation</span>
+              </label>
+              <label class="radio-card muted">
+                <input type="radio" name="triage_decision" value="Prefer not to answer" />
+                <span>Prefer not to answer</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="q-block">
+            <label class="q-title">2. Decision Confidence (1 = Not at all confident, 7 = Extremely confident)</label>
+            <div class="likert-row" id="likert-confidence"></div>
+          </div>
+
+          <div class="q-block">
+            <label class="q-title">3. Explanation Clarity (1 = Very unclear, 7 = Very clear)</label>
+            <div class="likert-row" id="likert-clarity"></div>
+          </div>
+
+          <div class="q-block">
+            <label class="q-title">4. Trust in Explanation (1 = Very low trust, 7 = Very high trust)</label>
+            <div class="likert-row" id="likert-trust"></div>
+          </div>
+
+          <div class="q-block">
+            <label class="q-title" for="analyst-notes">5. Key Drivers / Rationale (Optional)</label>
+            <textarea id="analyst-notes" rows="2" placeholder="Briefly note which features influenced your decision..."></textarea>
+          </div>
+
+          <div id="trial-error" class="error-msg hidden">Please complete questions 1–4 (or select "Prefer not to answer") before continuing.</div>
+
+          <div class="actions">
+            <button id="btn-submit-trial" class="btn primary full-width">Submit Decision & Next Alert →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 4: POST-STUDY SUMMARY & DOWNLOAD -->
+    <section id="view-complete" class="card hidden">
+      <h2>Session Complete — Thank You</h2>
+      <p class="subtitle">
+        Your triage responses have been recorded. Please download your session data files below and share them with the study coordinator.
+      </p>
+
+      <div class="summary-stats" id="summary-stats"></div>
+
+      <div class="actions">
+        <button id="btn-download-csv" class="btn primary">Download Results (CSV)</button>
+        <button id="btn-download-json" class="btn secondary">Download Results (JSON)</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
