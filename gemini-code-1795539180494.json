@@ -1,0 +1,9 @@
+{
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": ["/data/*", "*.css", "*.js", "*.png", "*.json"]
+  },
+  "globalHeaders": {
+    "Cache-Control": "no-cache"
+  }
+}
