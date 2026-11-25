@@ -589,7 +589,7 @@
     }
     .triage-img-viewport {
       width: 100%;
-      max-height: 62vh;
+      max-height: 72vh;
       overflow: auto;
       background: #ffffff;
       border-radius: 4px;
@@ -599,7 +599,7 @@
     .triage-img-viewport img {
       width: auto;
       max-width: 100%;
-      max-height: 62vh;
+      max-height: 72vh;
       height: auto;
       margin: 0 auto;
       display: block;
@@ -622,7 +622,7 @@
       background: rgba(244, 63, 94, 0.08);
     }
 
-    /* Full 4-Column Scenario Description & Playbook Drawer */
+    /* Full 4-Column Scenario Description & Playbook Drawer (Hidden by Default) */
     .playbook-mini {
       margin-top: 8px;
       background: #1e293b;
@@ -943,7 +943,7 @@
   <!-- ALERT TRIAGE EVALUATION MODAL -->
   <div id="triageModal" class="image-modal">
     <div class="triage-modal-box">
-      <!-- Left Pane: Explanation Image + Interactive Zoom + Full 4-Column Scenario Playbook -->
+      <!-- Left Pane: Explanation Image (72vh) + Interactive Zoom + Hidden-by-Default Playbook -->
       <div class="triage-img-pane">
         <div class="zoom-toolbar">
           <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
@@ -964,13 +964,13 @@
           <img id="triageTargetImg" src="" alt="Behavioral Explanation Plot" title="Click image or use + / - buttons to zoom">
         </div>
 
-        <!-- Full 4-Column Scenario Description & Behavioral Indicator Playbook -->
+        <!-- Full 4-Column Scenario Description & Behavioral Indicator Playbook (Hidden by Default) -->
         <div class="playbook-mini">
           <div style="display:flex;justify-content:space-between;align-items:center;">
             <strong style="color:#f1f5f9;">Scenario Descriptions &amp; Behavioral Indicator Playbook</strong>
-            <button type="button" class="zoom-btn" id="btnToggleRefTable">Hide Playbook</button>
+            <button type="button" class="zoom-btn" id="btnToggleRefTable">Show Playbook</button>
           </div>
-          <div id="refTableContainer" style="display:block;overflow-x:auto;max-height:240px;overflow-y:auto;">
+          <div id="refTableContainer" style="display:none;overflow-x:auto;max-height:240px;overflow-y:auto;">
             <table>
               <thead>
                 <tr>
@@ -1226,6 +1226,7 @@
     let unlockedCohortId = '';
     let activeTrialContext = null;
     let trialOpenTimestamp = 0;
+    let playbookOpenedCount = 0;
     let currentZoomPct = 100;
     const triageResponses = {};
 
@@ -1288,7 +1289,7 @@
         currentZoomPct = 100;
         img.style.width = 'auto';
         img.style.maxWidth = '100%';
-        img.style.maxHeight = '62vh';
+        img.style.maxHeight = '72vh';
         img.style.margin = '0 auto';
         img.style.cursor = 'zoom-in';
         viewport.scrollTop = 0;
@@ -1554,7 +1555,12 @@
 
           activeTrialContext = { cohortId, slot, trial };
           trialOpenTimestamp = performance.now();
+          playbookOpenedCount = 0;
           applyZoom(100);
+
+          // Keep Playbook collapsed by default on each alert open
+          document.getElementById('refTableContainer').style.display = 'none';
+          document.getElementById('btnToggleRefTable').textContent = 'Show Playbook';
 
           const isA = slot.design === 'A';
           const scoreVal = Number(trial.anomaly_score);
@@ -1693,6 +1699,7 @@
     document.getElementById('btnToggleRefTable').addEventListener('click', function () {
       const box = document.getElementById('refTableContainer');
       const isHidden = box.style.display === 'none';
+      if (isHidden) playbookOpenedCount += 1;
       box.style.display = isHidden ? 'block' : 'none';
       this.textContent = isHidden ? 'Hide Playbook' : 'Show Playbook';
     });
@@ -1737,6 +1744,7 @@
         primary_indicator: primaryCue,
         secondary_indicators: secondaryCues.join(';'),
         confidence: confidenceVal,
+        playbook_opened_count: playbookOpenedCount,
         reaction_time_ms: elapsedMs,
         timestamp_iso: new Date().toISOString()
       };
