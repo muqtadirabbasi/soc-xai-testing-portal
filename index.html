@@ -71,6 +71,7 @@
       text-decoration: none;
       cursor: pointer;
       transition: all 0.15s ease-in-out;
+      font-family: inherit;
     }
     .btn-nav-back:hover {
       border-color: #cbd5e1;
@@ -177,9 +178,7 @@
       margin-bottom: 20px;
       display: none;
     }
-    .cohort-group-block.visible {
-      display: block;
-    }
+    .cohort-group-block.visible { display: block; }
     .group-header-title {
       font-size: 1rem;
       color: #f1f5f9;
@@ -207,15 +206,9 @@
       grid-template-columns: repeat(5, 1fr);
       gap: 10px;
     }
-    @media (max-width: 1280px) {
-      .users-grid { grid-template-columns: repeat(3, 1fr); }
-    }
-    @media (max-width: 768px) {
-      .users-grid { grid-template-columns: 1fr 1fr; }
-    }
-    @media (max-width: 480px) {
-      .users-grid { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 1280px) { .users-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 768px) { .users-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 480px) { .users-grid { grid-template-columns: 1fr; } }
 
     .user-card {
       background: #1e293b;
@@ -410,11 +403,18 @@
       transition: all 0.15s;
       width: 100%;
       max-width: 320px;
+      cursor: pointer;
     }
     .survey-btn:hover {
       background: #059669;
       border-color: #047857;
       box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .survey-param-preview {
+      margin-top: 12px;
+      font-size: 0.74rem;
+      color: #94a3b8;
     }
 
     /* Footer */
@@ -442,11 +442,11 @@
       top: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(15, 23, 42, 0.90);
+      background-color: rgba(15, 23, 42, 0.92);
       backdrop-filter: blur(4px);
       align-items: center;
       justify-content: center;
-      padding: 16px;
+      padding: 14px;
     }
     .modal-content-wrapper {
       position: relative;
@@ -457,12 +457,12 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      max-width: 92vw;
-      max-height: 92vh;
+      max-width: 94vw;
+      max-height: 94vh;
     }
     .modal-img {
-      max-width: 85vw;
-      max-height: 80vh;
+      max-width: 88vw;
+      max-height: 84vh;
       object-fit: contain;
       border-radius: 4px;
       background: #ffffff;
@@ -484,15 +484,15 @@
       border: 1px solid #475569;
       border-radius: 10px;
       width: 100%;
-      max-width: 1480px;
-      max-height: 92vh;
+      max-width: 1540px;
+      max-height: 94vh;
       overflow-y: auto;
       padding: 16px;
       display: grid;
-      grid-template-columns: 1.65fr 1fr;
+      grid-template-columns: 1.55fr 1fr;
       gap: 16px;
     }
-    @media (max-width: 1024px) {
+    @media (max-width: 1120px) {
       .triage-modal-box { grid-template-columns: 1fr; }
     }
     .triage-img-pane {
@@ -500,15 +500,55 @@
       border: 1px solid #334155;
       border-radius: 8px;
       padding: 10px;
-      text-align: center;
+      display: flex;
+      flex-direction: column;
     }
-    .triage-img-pane img {
+    .zoom-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    .zoom-btn-group {
+      display: inline-flex;
+      gap: 4px;
+      align-items: center;
+    }
+    .zoom-btn {
+      background: #1e293b;
+      border: 1px solid #475569;
+      color: #e2e8f0;
+      padding: 4px 9px;
+      border-radius: 4px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .zoom-btn:hover {
+      border-color: #a78bfa;
+      color: #ffffff;
+    }
+    .triage-img-viewport {
       width: 100%;
       max-height: 70vh;
-      object-fit: contain;
+      overflow: auto;
       background: #ffffff;
       border-radius: 4px;
+      text-align: center;
+      position: relative;
     }
+    .triage-img-viewport img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transform-origin: top left;
+      transition: width 0.15s ease;
+      cursor: zoom-in;
+    }
+
     .design-guide-bar {
       text-align: left;
       font-size: 0.76rem;
@@ -518,10 +558,36 @@
       border-left: 3px solid #38bdf8;
       background: rgba(56, 189, 248, 0.08);
       color: #e2e8f0;
+      line-height: 1.4;
     }
     .design-guide-bar.theme-b {
       border-left-color: #f43f5e;
       background: rgba(244, 63, 94, 0.08);
+    }
+
+    /* Collapsible Playbook Reference inside Modal */
+    .playbook-mini {
+      margin-top: 8px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-size: 0.74rem;
+    }
+    .playbook-mini table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 6px;
+    }
+    .playbook-mini th, .playbook-mini td {
+      border: 1px solid #334155;
+      padding: 5px 6px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .playbook-mini th {
+      background: #0f172a;
+      color: #f8fafc;
     }
 
     .triage-form-pane {
@@ -544,20 +610,20 @@
       font-size: 0.74rem;
     }
     .score-strip span { color: #94a3b8; display: block; }
-    .score-strip strong { display: block; font-size: 0.9rem; color: #ffffff; margin-top: 2px; }
+    .score-strip strong { display: block; font-size: 0.88rem; color: #ffffff; margin-top: 2px; }
 
-    .form-section { margin-bottom: 12px; }
+    .form-section { margin-bottom: 11px; }
     .form-section label.sec-lbl {
       display: block;
-      font-size: 0.8rem;
+      font-size: 0.79rem;
       font-weight: 700;
       color: #f1f5f9;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
     }
     .choice-btn-group {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 5px;
     }
     .choice-opt {
       display: flex;
@@ -565,43 +631,71 @@
       gap: 8px;
       background: #1e293b;
       border: 1px solid #334155;
-      padding: 8px 10px;
+      padding: 7px 10px;
       border-radius: 6px;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       cursor: pointer;
     }
     .choice-opt:hover { border-color: #7c3aed; }
-    .likert-bar {
-      display: flex;
-      gap: 4px;
-      flex-wrap: wrap;
-    }
-    .likert-bar label {
-      flex: 1 1 auto;
-      text-align: center;
-      background: #1e293b;
-      border: 1px solid #334155;
-      padding: 5px 6px;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      cursor: pointer;
-    }
-    .likert-bar input { display: none; }
-    .likert-bar label:has(input:checked) {
-      background: #7c3aed;
-      border-color: #7c3aed;
-      color: #ffffff;
-      font-weight: 700;
-    }
-    .triage-notes {
+    .choice-opt.muted-opt { color: #94a3b8; }
+
+    .triage-select {
       width: 100%;
       background: #1e293b;
-      border: 1px solid #334155;
+      border: 1px solid #475569;
       color: #ffffff;
       border-radius: 6px;
-      padding: 8px;
+      padding: 7px 9px;
       font-family: inherit;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
+      outline: none;
+    }
+    .triage-select:focus { border-color: #a78bfa; }
+
+    .slider-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .slider-row input[type="range"] {
+      flex: 1;
+      accent-color: #7c3aed;
+      cursor: pointer;
+    }
+    .range-hints {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      color: #94a3b8;
+      margin-top: 2px;
+    }
+
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      padding: 8px;
+      max-height: 175px;
+      overflow-y: auto;
+    }
+    @media (max-width: 560px) {
+      .checkbox-grid { grid-template-columns: 1fr; }
+    }
+    .checkbox-grid label {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      font-size: 0.74rem;
+      color: #cbd5e1;
+      cursor: pointer;
+      line-height: 1.3;
+    }
+    .checkbox-grid input[type="checkbox"] {
+      margin-top: 2px;
+      accent-color: #7c3aed;
     }
 
     /* SECURE PASSKEY MODAL POPUP DESIGN */
@@ -668,7 +762,7 @@
 
   <div class="wrapper">
     <header>
-      <div class="badge">Experimental User Study (N = 40 • 4 Cohorts)</div>
+      <div class="badge">Experimental User Study (N = 40 &bull; 4 Cohorts)</div>
       <h1>SOC Triage Operations - Evaluation Portal</h1>
       <div class="subtitle">Cohort Matrix Routing &amp; Target Verification Hub</div>
 
@@ -714,15 +808,23 @@
     <div id="cohort-3" class="cohort-group-block"></div>
     <div id="cohort-4" class="cohort-group-block"></div>
 
-    <!-- EXIT SURVEY DEPLOYMENT BLOCK -->
+    <!-- EXIT SURVEY DEPLOYMENT BLOCK WITH AUTOMATIC QUALTRICS PARAMETER FORWARDING -->
     <div class="survey-section">
       <h2 style="color: #10b981; font-size: 1.1rem; font-weight: 800; margin-bottom: 4px;">Study Phase Completion</h2>
-      <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 12px;">Please select the appropriate exit survey matching your participant role:</p>
+      <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 12px;">
+        Please select the appropriate exit survey matching your participant role. Your Participant ID, Cohort, and session metrics will be forwarded automatically:
+      </p>
 
       <div class="survey-grid">
         <div class="survey-card">
           <div class="survey-card-title student-theme">University Students / Staff (n = 20)</div>
-          <a href="https://uwaterloo.yul1.qualtrics.com/jfe/preview/previewId/a5d74870-1412-4b41-8754-c0df9d1f70e8/SV_es8HRdyIVOMqW6q?Q_CHL=preview&Q_SurveyVersionID=current" class="survey-btn" target="_blank">
+          <a id="btnStudentSurvey"
+             href="https://uwaterloo.yul1.qualtrics.com/jfe/preview/previewId/a5d74870-1412-4b41-8754-c0df9d1f70e8/SV_es8HRdyIVOMqW6q?Q_CHL=preview&Q_SurveyVersionID=current"
+             data-base-url="https://uwaterloo.yul1.qualtrics.com/jfe/preview/previewId/a5d74870-1412-4b41-8754-c0df9d1f70e8/SV_es8HRdyIVOMqW6q?Q_CHL=preview&Q_SurveyVersionID=current"
+             data-role="Student_Staff"
+             class="survey-btn"
+             target="_blank"
+             rel="noopener noreferrer">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
             Open Student Exit Survey
           </a>
@@ -730,11 +832,21 @@
 
         <div class="survey-card">
           <div class="survey-card-title analyst-theme">Professional SOC Analysts (n = 20)</div>
-          <a href="https://uwaterloo.ca1.qualtrics.com/jfe/form/SV_es8HRdyIVOMqW6q" class="survey-btn" target="_blank">
+          <a id="btnAnalystSurvey"
+             href="https://uwaterloo.ca1.qualtrics.com/jfe/form/SV_es8HRdyIVOMqW6q"
+             data-base-url="https://uwaterloo.ca1.qualtrics.com/jfe/form/SV_es8HRdyIVOMqW6q"
+             data-role="SOC_Analyst"
+             class="survey-btn"
+             target="_blank"
+             rel="noopener noreferrer">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
             Open Professional Analyst Survey
           </a>
         </div>
+      </div>
+
+      <div id="surveyParamPreview" class="survey-param-preview">
+        Embedded Qualtrics Metadata Ready: <code>ParticipantID=UNSPECIFIED</code> &bull; <code>Cohort=NONE</code> &bull; <code>TrialsCompleted=0</code>
       </div>
     </div>
 
@@ -760,69 +872,198 @@
     </div>
   </div>
 
-  <!-- MODEL MATRIX IMAGE LIGHTBOX MODAL -->
+  <!-- MODEL MATRIX / FULL-SCREEN LIGHTBOX MODAL -->
   <div id="matrixModal" class="image-modal">
     <div class="modal-content-wrapper">
       <span class="modal-close" id="modalClose">&times;</span>
-      <img class="modal-img" id="modalTargetImg" src="" alt="Model Metric View">
+      <img class="modal-img" id="modalTargetImg" src="" alt="Explanation Plot View">
     </div>
   </div>
 
-  <!-- ALERT TRIAGE EVALUATION MODAL (CONDITION-ADAPTIVE HEADER + SHARED TRIAGE FORM) -->
+  <!-- ALERT TRIAGE EVALUATION MODAL (EXACT QUESTIONS & ZOOM FROM TRAINING PORTAL) -->
   <div id="triageModal" class="image-modal">
     <div class="triage-modal-box">
+      <!-- Left Pane: Explanation Image + Interactive Zoom + Quick Playbook -->
       <div class="triage-img-pane">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-          <span id="triageModalTitle" style="color:#ffffff;font-weight:700;font-size:0.9rem;">Alert Review</span>
-          <span id="triageDesignBadge" class="badge">Design A</span>
+        <div class="zoom-toolbar">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span id="triageModalTitle" style="color:#ffffff;font-weight:700;font-size:0.88rem;">Alert Review</span>
+            <span id="triageDesignBadge" class="badge" style="margin:0;">Design A</span>
+          </div>
+          <div class="zoom-btn-group">
+            <button type="button" class="zoom-btn" id="btnZoomOut" title="Zoom Out">&minus;</button>
+            <button type="button" class="zoom-btn" id="btnZoomReset" title="Reset Zoom"><span id="zoomLevelLabel">100%</span></button>
+            <button type="button" class="zoom-btn" id="btnZoomIn" title="Zoom In">+</button>
+            <button type="button" class="zoom-btn" id="btnFullLightbox" style="border-color:#38bdf8;color:#38bdf8;">Full-Screen Zoom</button>
+          </div>
         </div>
+
         <div id="designGuideBar" class="design-guide-bar"></div>
-        <img id="triageTargetImg" src="" alt="Behavioral Explanation Plot">
+
+        <div class="triage-img-viewport" id="triageImgViewport">
+          <img id="triageTargetImg" src="" alt="Behavioral Explanation Plot" title="Click image or use + / - buttons to zoom">
+        </div>
+
+        <!-- Collapsible Scenario & Behavioral Indicator Reference -->
+        <div class="playbook-mini">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <strong style="color:#f1f5f9;">Scenario &amp; Behavioral Indicator Quick-Reference</strong>
+            <button type="button" class="zoom-btn" id="btnToggleRefTable">Show / Hide Playbook</button>
+          </div>
+          <div id="refTableContainer" style="display:none;overflow-x:auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Scenario / Pattern</th>
+                  <th>Primary Indicators (Strongest Drivers)</th>
+                  <th>Secondary / Co-Occurring Indicators</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>S1: WikiLeaks Exfiltration</strong></td>
+                  <td>WikiLeaks Access Count; Thumb Drive / Removable Media</td>
+                  <td>After-hours (Evening/Night/Weekend); Sudden Departure Flag</td>
+                </tr>
+                <tr>
+                  <td><strong>S2: Pre-Departure IP Theft</strong></td>
+                  <td>Thumb Drive Usage spike; Job Site / Competitor Email</td>
+                  <td>Sudden Departure Flag; Elevated File / Http transitions</td>
+                </tr>
+                <tr>
+                  <td><strong>S3: Keylogger &amp; Sabotage</strong></td>
+                  <td>Keylogger Download Count; Mass Email (&ge; 5 recipients)</td>
+                  <td>Thumb Drive Usage; Unauthorized PC Login; Sudden Departure</td>
+                </tr>
+                <tr>
+                  <td><strong>S4: Lateral &amp; Home Email</strong></td>
+                  <td>Unauthorized / Non-Primary PC Logon; Home Email Count</td>
+                  <td>File Search / Decoy File Access; Http &harr; File transitions</td>
+                </tr>
+                <tr>
+                  <td><strong>Mixed Mode</strong></td>
+                  <td>2+ primary threat indicators active simultaneously</td>
+                  <td>Multi-channel spikes across email, http, file, after-hours</td>
+                </tr>
+                <tr>
+                  <td><strong>Benign Anomaly</strong></td>
+                  <td>Routine Workload / Timing Spike (Morning/Afternoon, inter-activity time)</td>
+                  <td>Occasional authorized USB or Weekend work without exfiltration cues</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
+      <!-- Right Pane: Exact 5 Questions from Training Portal -->
       <div class="triage-form-pane">
         <div>
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-            <strong style="color:#ffffff;font-size:0.95rem;">Analyst Triage Assessment</strong>
+            <strong style="color:#ffffff;font-size:0.95rem;">Analyst Triage Decision &amp; Behavioral Attribution</strong>
             <span class="modal-close" id="triageClose" style="margin:0;">&times;</span>
           </div>
 
           <!-- Condition-specific metrics strip (Z-score vs. SHAP f(x) & E[f(x)]) -->
           <div class="score-strip" id="scoreStripContainer"></div>
 
+          <!-- Q1: Triage Classification Decision -->
           <div class="form-section">
-            <label class="sec-lbl">1. Triage Decision</label>
+            <label class="sec-lbl">1. Triage Classification Decision:</label>
             <div class="choice-btn-group">
-              <label class="choice-opt"><input type="radio" name="t_decision" value="Escalate"> <span><strong>Escalate Alert</strong> — Investigate anomalous behavior</span></label>
-              <label class="choice-opt"><input type="radio" name="t_decision" value="Dismiss"> <span><strong>Dismiss Alert</strong> — Benign / false-positive deviation</span></label>
-              <label class="choice-opt"><input type="radio" name="t_decision" value="Prefer not to answer"> <span>Prefer not to answer</span></label>
+              <label class="choice-opt">
+                <input type="radio" name="decision" value="THREAT">
+                <span>Escalate as Insider Threat / Malicious Anomaly</span>
+              </label>
+              <label class="choice-opt">
+                <input type="radio" name="decision" value="BENIGN">
+                <span>Dismiss as Benign (Normal or Benign Anomaly)</span>
+              </label>
+              <label class="choice-opt muted-opt">
+                <input type="radio" name="decision" value="PREFER_NOT_TO_ANSWER">
+                <span>Prefer not to answer</span>
+              </label>
             </div>
           </div>
 
+          <!-- Q2: Suspected Scenario / Pattern Type -->
           <div class="form-section">
-            <label class="sec-lbl">2. Confidence (1 = Low, 7 = High)</label>
-            <div class="likert-bar" id="likertConf"></div>
+            <label class="sec-lbl" for="scenarioHypothesis">2. Suspected Scenario / Pattern Type:</label>
+            <select id="scenarioHypothesis" class="triage-select">
+              <option value="">-- Select scenario / pattern type --</option>
+              <option value="S1_wikileaks">Scenario 1: WikiLeaks Exfiltration (USB + WikiLeaks + After-Hours)</option>
+              <option value="S2_ip_theft">Scenario 2: Pre-Departure IP Theft (Job Sites / Competitor + USB)</option>
+              <option value="S3_keylogger_sabotage">Scenario 3: Keylogger / Mass Email Sabotage</option>
+              <option value="S4_lateral_home_email">Scenario 4: Unauthorized PC Login + File Search + Home Email</option>
+              <option value="MIXED_MODE">Mixed Mode: Multiple Co-Occurring Attack Scenarios</option>
+              <option value="BENIGN_ANOMALY">Benign Anomaly: High Workload / Timing Shift (Non-Malicious)</option>
+              <option value="NORMAL_BASELINE">Normal Baseline Activity</option>
+              <option value="prefer_not_to_answer">Prefer not to answer</option>
+            </select>
           </div>
 
+          <!-- Q3: Primary Behavioral Indicator -->
           <div class="form-section">
-            <label class="sec-lbl">3. Explanation Clarity (1 = Unclear, 7 = Very Clear)</label>
-            <div class="likert-bar" id="likertClar"></div>
+            <label class="sec-lbl" for="primaryCue">3. Primary Behavioral Indicator (Strongest Driver):</label>
+            <select id="primaryCue" class="triage-select">
+              <option value="">-- Select primary indicator --</option>
+              <option value="wikileaks_access">WikiLeaks Access (S1)</option>
+              <option value="thumb_removable_drive">Thumb Drive / Removable Media Usage (S1 / S2 / S3)</option>
+              <option value="job_site_competitor">Job Site Surfing / Competitor Email (S2)</option>
+              <option value="keylogger_download">Keylogger / Spyware Download (S3)</option>
+              <option value="mass_email">Mass Email Burst (&ge; 5 Recipients) (S3)</option>
+              <option value="unauthorized_pc_login">Unauthorized / Non-Primary PC Logon (S4 / S3)</option>
+              <option value="file_search_decoy">Decoy / Sensitive File Search &amp; Access (S4)</option>
+              <option value="home_email">Personal / Home Email Exfiltration (S4)</option>
+              <option value="after_hours_departure">After-Hours Activity / Sudden Departure (S1 / S2 / S3)</option>
+              <option value="workload_timing_spike">Routine Workload / Inter-Activity Timing Spike (Benign Anomaly)</option>
+              <option value="prefer_not_to_answer">Prefer not to answer</option>
+            </select>
           </div>
 
+          <!-- Q4: Decision Confidence (0% - 100%, step 5% + Prefer not to answer) -->
           <div class="form-section">
-            <label class="sec-lbl">4. Trust in Explanation (1 = Low, 7 = High)</label>
-            <div class="likert-bar" id="likertTrust"></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+              <label class="sec-lbl" for="confidenceRange" style="margin:0;">
+                4. Decision Confidence: <strong id="confidenceVal" style="color:#a78bfa;">50%</strong>
+              </label>
+              <label style="font-size:0.74rem;color:#94a3b8;cursor:pointer;display:flex;align-items:center;gap:4px;">
+                <input type="checkbox" id="confPreferNot" style="accent-color:#7c3aed;"> Prefer not to answer
+              </label>
+            </div>
+            <div class="slider-row">
+              <input type="range" id="confidenceRange" min="0" max="100" step="5" value="50">
+            </div>
+            <div class="range-hints">
+              <span>0% (Guess)</span>
+              <span>50%</span>
+              <span>100% (Certain)</span>
+            </div>
           </div>
 
+          <!-- Q5: Secondary / Co-Occurring Indicators (Multi-Select) -->
           <div class="form-section">
-            <label class="sec-lbl">5. Key Drivers / Rationale (Optional)</label>
-            <textarea id="triageNotes" class="triage-notes" rows="2" placeholder="Note key behavioral features influencing your triage..."></textarea>
+            <label class="sec-lbl">5. Secondary / Co-Occurring Indicators (Check all that apply):</label>
+            <div class="checkbox-grid" id="secondaryCueGroup">
+              <label><input type="checkbox" name="secondaryCue" value="wikileaks_access"> WikiLeaks Access</label>
+              <label><input type="checkbox" name="secondaryCue" value="thumb_removable_drive"> Thumb / Removable Drive</label>
+              <label><input type="checkbox" name="secondaryCue" value="job_site_competitor"> Job Site / Competitor Email</label>
+              <label><input type="checkbox" name="secondaryCue" value="keylogger_download"> Keylogger Download</label>
+              <label><input type="checkbox" name="secondaryCue" value="mass_email"> Mass Email (&ge; 5 recipients)</label>
+              <label><input type="checkbox" name="secondaryCue" value="unauthorized_pc_login"> Unauthorized PC Login</label>
+              <label><input type="checkbox" name="secondaryCue" value="file_search_decoy"> Decoy / Sensitive File Access</label>
+              <label><input type="checkbox" name="secondaryCue" value="home_email"> Home Email (Gmail/Yahoo/Hotmail)</label>
+              <label><input type="checkbox" name="secondaryCue" value="after_hours_weekend"> After-Hours / Weekend Shift</label>
+              <label><input type="checkbox" name="secondaryCue" value="sudden_departure"> Sudden Departure Flag</label>
+              <label><input type="checkbox" name="secondaryCue" value="workload_timing_spike"> Workload / Timing Variance</label>
+              <label><input type="checkbox" name="secondaryCue" value="prefer_not_to_answer"> Prefer not to answer</label>
+            </div>
           </div>
         </div>
 
         <div>
           <div id="triageValidationMsg" style="color:#f87171;font-size:0.78rem;margin-bottom:8px;display:none;">
-            Please complete questions 1–4 (or select "Prefer not to answer").
+            Please complete Questions 1–3 (or select "Prefer not to answer") before saving.
           </div>
           <button type="button" id="btnSaveTriage" class="passkey-btn passkey-submit" style="width:100%;">
             Save Triage Decision &amp; Close
@@ -856,6 +1097,7 @@
     const COHORT_MATRIX = {
       'cohort-1': {
         title: 'Testing Cohort Group 1',
+        orderCode: 'A_A_A_B_B',
         composition: '10 Participants (5 Students/Staff + 5 SOC Analysts) • Order: A, A, A (Benign), B, B',
         slots: [
           { cert_id: 'ALT1465', scenario: 'S1', label: 'Scenario S1 (ALT1465)', design: 'A' },
@@ -867,6 +1109,7 @@
       },
       'cohort-2': {
         title: 'Testing Cohort Group 2',
+        orderCode: 'B_B_A_A_A',
         composition: '10 Participants (5 Students/Staff + 5 SOC Analysts) • Order: B, B, A (Benign), A, A',
         slots: [
           { cert_id: 'CIF1430', scenario: 'S2', label: 'Scenario S2 (CIF1430)', design: 'B' },
@@ -878,6 +1121,7 @@
       },
       'cohort-3': {
         title: 'Testing Cohort Group 3',
+        orderCode: 'A_A_B_B_B',
         composition: '10 Participants (5 Students/Staff + 5 SOC Analysts) • Order: A, A, B (Benign), B, B',
         slots: [
           { cert_id: 'CRD0272', scenario: 'S3', label: 'Scenario S3 (CRD0272)', design: 'A' },
@@ -889,6 +1133,7 @@
       },
       'cohort-4': {
         title: 'Testing Cohort Group 4',
+        orderCode: 'B_B_B_A_A',
         composition: '10 Participants (5 Students/Staff + 5 SOC Analysts) • Order: B, B, B (Benign), A, A',
         slots: [
           { cert_id: 'AMC1883', scenario: 'S4', label: 'Scenario S4 (AMC1883)', design: 'B' },
@@ -905,19 +1150,67 @@
     let activeCohortId = '';
     let activeTrialContext = null;
     let trialOpenTimestamp = 0;
+    let currentZoomPct = 100;
     const triageResponses = {};
 
     function basename(pathStr) {
       return String(pathStr || '').split(/[\\/]/).pop();
     }
 
-    function buildLikert(containerId, name) {
-      const el = document.getElementById(containerId);
-      el.innerHTML = '';
-      for (let i = 1; i <= 7; i++) {
-        el.innerHTML += `<label><input type="radio" name="${name}" value="${i}">${i}</label>`;
+    function applyZoom(pct) {
+      currentZoomPct = Math.min(250, Math.max(80, pct));
+      const img = document.getElementById('triageTargetImg');
+      img.style.width = `${currentZoomPct}%`;
+      img.style.cursor = currentZoomPct > 100 ? 'zoom-out' : 'zoom-in';
+      document.getElementById('zoomLevelLabel').textContent = `${currentZoomPct}%`;
+    }
+
+    // Build dynamic Qualtrics URL with Embedded Data query parameters
+    function buildQualtricsUrl(baseUrl, roleLabel) {
+      const pid = document.getElementById('participantIdInput').value.trim() || 'UNSPECIFIED';
+      const cohort = activeCohortId || 'NONE';
+      const orderCode = activeCohortId && COHORT_MATRIX[activeCohortId] ? COHORT_MATRIX[activeCohortId].orderCode : 'NONE';
+      const rows = Object.values(triageResponses);
+      const totalCompleted = rows.length;
+      const escalatedCount = rows.filter(r => r.decision === 'THREAT').length;
+      const dismissedCount = rows.filter(r => r.decision === 'BENIGN').length;
+      const preferNotCount = rows.filter(r => r.decision === 'PREFER_NOT_TO_ANSWER').length;
+      const meanRtMs = totalCompleted > 0
+        ? Math.round(rows.reduce((sum, r) => sum + Number(r.reaction_time_ms || 0), 0) / totalCompleted)
+        : 0;
+
+      const urlObj = new URL(baseUrl);
+      urlObj.searchParams.set('ParticipantID', pid);
+      urlObj.searchParams.set('Cohort', cohort);
+      urlObj.searchParams.set('Role', roleLabel);
+      urlObj.searchParams.set('ConditionOrder', orderCode);
+      urlObj.searchParams.set('TrialsCompleted', String(totalCompleted));
+      urlObj.searchParams.set('EscalatedCount', String(escalatedCount));
+      urlObj.searchParams.set('DismissedCount', String(dismissedCount));
+      urlObj.searchParams.set('PreferNotCount', String(preferNotCount));
+      urlObj.searchParams.set('MeanReactionTimeMs', String(meanRtMs));
+      return urlObj.toString();
+    }
+
+    function syncQualtricsLinks() {
+      const pid = document.getElementById('participantIdInput').value.trim() || 'UNSPECIFIED';
+      const cohort = activeCohortId || 'NONE';
+      const totalCompleted = Object.keys(triageResponses).length;
+
+      ['btnStudentSurvey', 'btnAnalystSurvey'].forEach(btnId => {
+        const btn = document.getElementById(btnId);
+        if (!btn) return;
+        const baseUrl = btn.getAttribute('data-base-url');
+        const roleLabel = btn.getAttribute('data-role');
+        btn.href = buildQualtricsUrl(baseUrl, roleLabel);
+      });
+
+      const previewEl = document.getElementById('surveyParamPreview');
+      if (previewEl) {
+        previewEl.innerHTML =
+          `Embedded Qualtrics Metadata Ready: <code>ParticipantID=${pid}</code> &bull; ` +
+          `<code>Cohort=${cohort}</code> &bull; <code>TrialsCompleted=${totalCompleted}</code>`;
       }
-      el.innerHTML += `<label><input type="radio" name="${name}" value="Prefer not to answer">Prefer not to answer</label>`;
     }
 
     async function initManifest() {
@@ -1009,6 +1302,7 @@
       });
 
       bindDynamicEvents();
+      syncQualtricsLinks();
     }
 
     function bindDynamicEvents() {
@@ -1042,6 +1336,7 @@
 
           activeTrialContext = { cohortId, slot, trial };
           trialOpenTimestamp = performance.now();
+          applyZoom(100);
 
           const isA = slot.design === 'A';
           const scoreVal = Number(trial.anomaly_score);
@@ -1053,8 +1348,8 @@
 
           const badge = document.getElementById('triageDesignBadge');
           badge.textContent = isA
-            ? 'Design A: Statistical Baseline Deviation (Z-Score)'
-            : 'Design B: SHAP Feature Attribution Waterfall';
+            ? 'Design A — Standardized Baseline Deviation (Z-Score)'
+            : 'Design B — SHAP Feature Attribution Waterfall';
           badge.style.color = isA ? '#38bdf8' : '#f43f5e';
           badge.style.borderColor = isA ? '#38bdf8' : '#f43f5e';
 
@@ -1064,10 +1359,10 @@
           if (isA) {
             guideBar.className = 'design-guide-bar';
             guideBar.innerHTML =
-              '<strong>Design A Guide (Z-Score Deviation):</strong> Bars show how many standard deviations (&sigma;) each feature shifted from this user&rsquo;s 96-day normal baseline. Red bars (&ge; +2&sigma;) mark elevated deviations.';
+              '<strong>Z-Score Criteria:</strong> <span style="color:#fca5a5;">Red (&ge; +2.0&sigma;)</span> = strong spike above 96-day baseline; <span style="color:#fdba74;">Orange (0 to +2.0&sigma;)</span> = mild elevation (+1.0&sigma; for rare zero-baseline events); <span style="color:#93c5fd;">Blue (&le; 0&sigma;)</span> = normal or below baseline.';
             stripEl.innerHTML = `
               <div>
-                <span>Daily Deviation Score</span>
+                <span>Reconstruction Score</span>
                 <strong>${scoreVal.toFixed(6)}</strong>
               </div>
               <div>
@@ -1084,19 +1379,19 @@
           } else {
             guideBar.className = 'design-guide-bar theme-b';
             guideBar.innerHTML =
-              '<strong>Design B Guide (SHAP Waterfall):</strong> Starts from the expected baseline prediction <strong>E[f(x)]</strong> at the bottom and accumulates each feature&rsquo;s attribution (<span style="color:#fda4af;">+SHAP red</span> vs. <span style="color:#93c5fd;">&minus;SHAP blue</span>) to reach final output <strong>f(x)</strong> at the top.';
+              '<strong>SHAP Conservation Rule &mdash; <code>f(x) = E[f(X)] + &Sigma; &phi;<sub>j</sub></code>:</strong> Start at expected baseline <code>E[f(X)]</code> (bottom) and sum feature arrows to reach surrogate threat probability <code>f(x)</code> (top). <span style="color:#fca5a5;">Red (+&phi;)</span> &rarr; <em>Threat</em>; <span style="color:#93c5fd;">Blue (&minus;&phi;)</span> &rarr; <em>Benign</em> (<code>f(x) &ge; 0.50</code> = flagged).';
 
             const hasShapVals = trial.shap_output_value !== undefined && trial.shap_expected_value !== undefined;
-            const fxText = hasShapVals ? Number(trial.shap_output_value).toFixed(3) : 'See Waterfall Top f(x)';
-            const efxText = hasShapVals ? Number(trial.shap_expected_value).toFixed(3) : 'See Waterfall Base E[f(x)]';
+            const fxText = hasShapVals ? Number(trial.shap_output_value).toFixed(3) : 'See Top f(x)';
+            const efxText = hasShapVals ? Number(trial.shap_expected_value).toFixed(3) : 'See Base E[f(X)]';
 
             stripEl.innerHTML = `
               <div>
-                <span>SHAP Model Output f(x)</span>
+                <span>SHAP Output f(x)</span>
                 <strong style="color:#fda4af;">${fxText}</strong>
               </div>
               <div>
-                <span>Expected Baseline E[f(x)]</span>
+                <span>Expected Baseline E[f(X)]</span>
                 <strong style="color:#93c5fd;">${efxText}</strong>
               </div>
               <div>
@@ -1110,22 +1405,39 @@
 
           document.getElementById('triageTargetImg').src = isA ? trial.imgA : trial.imgB;
 
-          document.querySelectorAll('#triageModal input[type="radio"]').forEach(r => r.checked = false);
-          document.getElementById('triageNotes').value = '';
+          // Reset all 5 training-portal fields
+          document.querySelectorAll('input[name="decision"]').forEach(r => r.checked = false);
+          document.getElementById('scenarioHypothesis').value = '';
+          document.getElementById('primaryCue').value = '';
+          document.getElementById('confidenceRange').value = 50;
+          document.getElementById('confidenceRange').disabled = false;
+          document.getElementById('confidenceVal').textContent = '50%';
+          document.getElementById('confPreferNot').checked = false;
+          document.querySelectorAll('input[name="secondaryCue"]').forEach(cb => cb.checked = false);
           document.getElementById('triageValidationMsg').style.display = 'none';
 
+          // Restore previous response if re-opening a reviewed trial
           const key = `${cohortId}__${slot.cert_id}__${trial.trial_id}`;
           const prev = triageResponses[key];
           if (prev) {
-            const dRadio = document.querySelector(`input[name="t_decision"][value="${prev.triage_decision}"]`);
-            const cRadio = document.querySelector(`input[name="t_conf"][value="${prev.confidence}"]`);
-            const clRadio = document.querySelector(`input[name="t_clar"][value="${prev.clarity}"]`);
-            const trRadio = document.querySelector(`input[name="t_trust"][value="${prev.trust}"]`);
+            const dRadio = document.querySelector(`input[name="decision"][value="${prev.decision}"]`);
             if (dRadio) dRadio.checked = true;
-            if (cRadio) cRadio.checked = true;
-            if (clRadio) clRadio.checked = true;
-            if (trRadio) trRadio.checked = true;
-            document.getElementById('triageNotes').value = prev.notes || '';
+            document.getElementById('scenarioHypothesis').value = prev.scenario_hypothesis || '';
+            document.getElementById('primaryCue').value = prev.primary_indicator || '';
+
+            if (prev.confidence === 'prefer_not_to_answer') {
+              document.getElementById('confPreferNot').checked = true;
+              document.getElementById('confidenceRange').disabled = true;
+              document.getElementById('confidenceVal').textContent = 'Prefer not to answer';
+            } else {
+              document.getElementById('confidenceRange').value = prev.confidence;
+              document.getElementById('confidenceVal').textContent = `${prev.confidence}%`;
+            }
+
+            const prevSec = (prev.secondary_indicators || '').split(';').filter(Boolean);
+            document.querySelectorAll('input[name="secondaryCue"]').forEach(cb => {
+              cb.checked = prevSec.includes(cb.value);
+            });
           }
 
           document.getElementById('triageModal').style.display = 'flex';
@@ -1133,14 +1445,47 @@
       });
     }
 
+    // Confidence slider & Prefer-not-to-answer sync
+    document.getElementById('confidenceRange').addEventListener('input', function () {
+      document.getElementById('confidenceVal').textContent = `${this.value}%`;
+    });
+    document.getElementById('confPreferNot').addEventListener('change', function () {
+      const slider = document.getElementById('confidenceRange');
+      const valSpan = document.getElementById('confidenceVal');
+      slider.disabled = this.checked;
+      valSpan.textContent = this.checked ? 'Prefer not to answer' : `${slider.value}%`;
+    });
+
+    // Zoom toolbar & click-to-zoom controls
+    document.getElementById('btnZoomIn').addEventListener('click', () => applyZoom(currentZoomPct + 25));
+    document.getElementById('btnZoomOut').addEventListener('click', () => applyZoom(currentZoomPct - 25));
+    document.getElementById('btnZoomReset').addEventListener('click', () => applyZoom(100));
+    document.getElementById('triageTargetImg').addEventListener('click', () => {
+      applyZoom(currentZoomPct === 100 ? 160 : 100);
+    });
+    document.getElementById('btnFullLightbox').addEventListener('click', () => {
+      const src = document.getElementById('triageTargetImg').src;
+      if (src) {
+        document.getElementById('modalTargetImg').src = src;
+        document.getElementById('matrixModal').style.display = 'flex';
+      }
+    });
+    document.getElementById('btnToggleRefTable').addEventListener('click', () => {
+      const box = document.getElementById('refTableContainer');
+      box.style.display = box.style.display === 'none' ? 'block' : 'none';
+    });
+
+    // Save triage decision (exact 5 training portal fields)
     document.getElementById('btnSaveTriage').addEventListener('click', () => {
       if (!activeTrialContext) return;
-      const dec = document.querySelector('input[name="t_decision"]:checked')?.value;
-      const conf = document.querySelector('input[name="t_conf"]:checked')?.value;
-      const clar = document.querySelector('input[name="t_clar"]:checked')?.value;
-      const trust = document.querySelector('input[name="t_trust"]:checked')?.value;
+      const decision = document.querySelector('input[name="decision"]:checked')?.value;
+      const scenHyp = document.getElementById('scenarioHypothesis').value;
+      const primaryCue = document.getElementById('primaryCue').value;
+      const confSkip = document.getElementById('confPreferNot').checked;
+      const confidenceVal = confSkip ? 'prefer_not_to_answer' : document.getElementById('confidenceRange').value;
+      const secondaryCues = Array.from(document.querySelectorAll('input[name="secondaryCue"]:checked')).map(cb => cb.value);
 
-      if (!dec || !conf || !clar || !trust) {
+      if (!decision || !scenHyp || !primaryCue) {
         document.getElementById('triageValidationMsg').style.display = 'block';
         return;
       }
@@ -1163,12 +1508,12 @@
         threshold: trial.threshold,
         shap_output_fx: trial.shap_output_value ?? '',
         shap_expected_efx: trial.shap_expected_value ?? '',
-        triage_decision: dec,
-        confidence: conf,
-        clarity: clar,
-        trust: trust,
+        decision: decision,
+        scenario_hypothesis: scenHyp,
+        primary_indicator: primaryCue,
+        confidence: confidenceVal,
+        secondary_indicators: secondaryCues.join(';'),
         reaction_time_ms: elapsedMs,
-        notes: document.getElementById('triageNotes').value.trim(),
         timestamp_iso: new Date().toISOString()
       };
 
@@ -1177,6 +1522,7 @@
       renderAllCohorts();
     });
 
+    // Export CSV
     document.getElementById('btnExportSession').addEventListener('click', () => {
       const rows = Object.values(triageResponses);
       if (!rows.length) {
@@ -1198,6 +1544,22 @@
       URL.revokeObjectURL(url);
     });
 
+    // Keep Qualtrics links synced whenever Participant ID changes & remind if blank on click
+    document.getElementById('participantIdInput').addEventListener('input', syncQualtricsLinks);
+
+    ['btnStudentSurvey', 'btnAnalystSurvey'].forEach(btnId => {
+      document.getElementById(btnId).addEventListener('click', function (e) {
+        syncQualtricsLinks();
+        const pid = document.getElementById('participantIdInput').value.trim();
+        if (!pid) {
+          e.preventDefault();
+          alert('Please enter your Participant ID in Step 1 at the top of the page before opening the exit survey.');
+          document.getElementById('participantIdInput').focus();
+        }
+      });
+    });
+
+    // Passkey Verification Flow
     const selectFilter = document.getElementById('cohortFilter');
     const groups = document.querySelectorAll('.cohort-group-block');
     const pModal = document.getElementById('passkeyModal');
@@ -1237,6 +1599,7 @@
             group.querySelectorAll('.matrix-dropdown').forEach(d => d.classList.remove('active'));
           }
         });
+        syncQualtricsLinks();
       } else {
         pField.classList.remove('error-shake');
         void pField.offsetWidth;
@@ -1269,10 +1632,8 @@
     });
 
     document.addEventListener('DOMContentLoaded', () => {
-      buildLikert('likertConf', 't_conf');
-      buildLikert('likertClar', 't_clar');
-      buildLikert('likertTrust', 't_trust');
       initManifest();
+      syncQualtricsLinks();
     });
   </script>
 </body>
