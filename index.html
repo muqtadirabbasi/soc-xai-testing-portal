@@ -545,7 +545,7 @@
       overflow-y: auto;
       padding: 16px;
       display: grid;
-      grid-template-columns: 1.55fr 1fr;
+      grid-template-columns: 1.52fr 1fr;
       gap: 16px;
     }
     @media (max-width: 1120px) {
@@ -587,21 +587,20 @@
       border-color: #a78bfa;
       color: #ffffff;
     }
+    /* Full-width legible reading viewport (enables genuine vertical scroll_depth_pct tracking across 33 features) */
     .triage-img-viewport {
       width: 100%;
-      max-height: 72vh;
-      overflow: auto;
+      height: 68vh;
+      overflow-y: auto;
+      overflow-x: auto;
       background: #ffffff;
       border-radius: 4px;
-      text-align: center;
       position: relative;
+      border: 1px solid #334155;
     }
     .triage-img-viewport img {
-      width: auto;
-      max-width: 100%;
-      max-height: 72vh;
+      width: 100%;
       height: auto;
-      margin: 0 auto;
       display: block;
       cursor: zoom-in;
     }
@@ -682,24 +681,24 @@
       background: #1e293b;
       padding: 8px 10px;
       border-radius: 6px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       font-size: 0.74rem;
     }
     .score-strip span { color: #94a3b8; display: block; }
     .score-strip strong { display: block; font-size: 0.88rem; color: #ffffff; margin-top: 2px; }
 
-    .form-section { margin-bottom: 11px; }
+    .form-section { margin-bottom: 10px; }
     .form-section label.sec-lbl {
       display: block;
-      font-size: 0.79rem;
+      font-size: 0.78rem;
       font-weight: 700;
       color: #f1f5f9;
-      margin-bottom: 5px;
+      margin-bottom: 4px;
     }
     .choice-btn-group {
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: 4px;
     }
     .choice-opt {
       display: flex;
@@ -707,9 +706,9 @@
       gap: 8px;
       background: #1e293b;
       border: 1px solid #334155;
-      padding: 7px 10px;
+      padding: 6px 10px;
       border-radius: 6px;
-      font-size: 0.78rem;
+      font-size: 0.77rem;
       cursor: pointer;
     }
     .choice-opt:hover { border-color: #7c3aed; }
@@ -721,9 +720,9 @@
       border: 1px solid #475569;
       color: #ffffff;
       border-radius: 6px;
-      padding: 7px 9px;
+      padding: 6px 9px;
       font-family: inherit;
-      font-size: 0.78rem;
+      font-size: 0.77rem;
       outline: none;
     }
     .triage-select:focus { border-color: #a78bfa; }
@@ -741,20 +740,46 @@
     .range-hints {
       display: flex;
       justify-content: space-between;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       color: #94a3b8;
       margin-top: 2px;
+    }
+
+    /* Compact 1-5 Likert Bar for Explanation Helpfulness */
+    .likert-bar {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+    .likert-bar label {
+      flex: 1 1 auto;
+      text-align: center;
+      background: #1e293b;
+      border: 1px solid #334155;
+      padding: 5px 6px;
+      border-radius: 5px;
+      font-size: 0.74rem;
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+    .likert-bar label:hover { border-color: #7c3aed; }
+    .likert-bar input { display: none; }
+    .likert-bar label:has(input:checked) {
+      background: #7c3aed;
+      border-color: #7c3aed;
+      color: #ffffff;
+      font-weight: 700;
     }
 
     .checkbox-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 5px;
+      gap: 4px 6px;
       background: #1e293b;
       border: 1px solid #334155;
       border-radius: 6px;
-      padding: 8px;
-      max-height: 175px;
+      padding: 7px 8px;
+      max-height: 150px;
       overflow-y: auto;
     }
     @media (max-width: 560px) {
@@ -764,10 +789,10 @@
       display: flex;
       align-items: flex-start;
       gap: 6px;
-      font-size: 0.74rem;
+      font-size: 0.73rem;
       color: #cbd5e1;
       cursor: pointer;
-      line-height: 1.3;
+      line-height: 1.28;
     }
     .checkbox-grid input[type="checkbox"] {
       margin-top: 2px;
@@ -877,7 +902,7 @@
     </div>
 
     <div class="instructions-box">
-      <div><strong>Evaluation Protocol Notice:</strong> Complete the triaging workflow across your active matrix row systematically from left to right.</div>
+      <div><strong>Evaluation Protocol Notice:</strong> Complete the triaging workflow across your active matrix row systematically from left to right. Scroll down the explanation chart to inspect all 33 behavioral features.</div>
       <div id="manifestStatus" style="color:#38bdf8;font-weight:600;">Loading stimulus manifest...</div>
     </div>
 
@@ -943,7 +968,7 @@
   <!-- ALERT TRIAGE EVALUATION MODAL -->
   <div id="triageModal" class="image-modal">
     <div class="triage-modal-box">
-      <!-- Left Pane: Explanation Image (72vh) + Interactive Zoom + Hidden-by-Default Playbook -->
+      <!-- Left Pane: Full-Width Scrollable Explanation Image (68vh) + Zoom + Hidden-by-Default Playbook -->
       <div class="triage-img-pane">
         <div class="zoom-toolbar">
           <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
@@ -952,16 +977,16 @@
           </div>
           <div class="zoom-btn-group">
             <button type="button" class="zoom-btn" id="btnZoomOut" title="Zoom Out">&minus;</button>
-            <button type="button" class="zoom-btn" id="btnZoomReset" title="Reset to Fit"><span id="zoomLevelLabel">100% (Fit)</span></button>
+            <button type="button" class="zoom-btn" id="btnZoomReset" title="Reset Width"><span id="zoomLevelLabel">100%</span></button>
             <button type="button" class="zoom-btn" id="btnZoomIn" title="Zoom In">+</button>
-            <button type="button" class="zoom-btn" id="btnFullLightbox" style="border-color:#38bdf8;color:#38bdf8;">Full-Screen Zoom</button>
+            <button type="button" class="zoom-btn" id="btnFullLightbox" style="border-color:#38bdf8;color:#38bdf8;">Full-Screen</button>
           </div>
         </div>
 
         <div id="designGuideBar" class="design-guide-bar"></div>
 
         <div class="triage-img-viewport" id="triageImgViewport">
-          <img id="triageTargetImg" src="" alt="Behavioral Explanation Plot" title="Click image or use + / - buttons to zoom">
+          <img id="triageTargetImg" src="" alt="Behavioral Explanation Plot" title="Scroll down to inspect all 33 features; click to toggle 100% / 145% zoom">
         </div>
 
         <!-- Full 4-Column Scenario Description & Behavioral Indicator Playbook (Hidden by Default) -->
@@ -970,7 +995,7 @@
             <strong style="color:#f1f5f9;">Scenario Descriptions &amp; Behavioral Indicator Playbook</strong>
             <button type="button" class="zoom-btn" id="btnToggleRefTable">Show Playbook</button>
           </div>
-          <div id="refTableContainer" style="display:none;overflow-x:auto;max-height:240px;overflow-y:auto;">
+          <div id="refTableContainer" style="display:none;overflow-x:auto;max-height:230px;overflow-y:auto;">
             <table>
               <thead>
                 <tr>
@@ -1023,18 +1048,18 @@
         </div>
       </div>
 
-      <!-- Right Pane: Bottom-Up Cognitive Sequence (Decision -> Primary -> Secondary -> Scenario -> Confidence) -->
+      <!-- Right Pane: Bottom-Up Cognitive Sequence + Explanation Helpfulness Rating -->
       <div class="triage-form-pane">
         <div>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-            <strong style="color:#ffffff;font-size:0.95rem;">Analyst Triage Decision &amp; Behavioral Attribution</strong>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <strong style="color:#ffffff;font-size:0.93rem;">Analyst Triage Decision &amp; Behavioral Attribution</strong>
             <span class="modal-close" id="triageClose" style="margin:0;">&times;</span>
           </div>
 
           <!-- Condition-specific metrics strip (Z-score vs. SHAP f(x) & E[f(x)]) -->
           <div class="score-strip" id="scoreStripContainer"></div>
 
-          <!-- Q1: Triage Classification Decision -->
+          <!-- Q1: Triage Verdict -->
           <div class="form-section">
             <label class="sec-lbl">1. Triage Classification Decision:</label>
             <div class="choice-btn-group">
@@ -1053,7 +1078,7 @@
             </div>
           </div>
 
-          <!-- Q2: Primary Behavioral Indicator (Bottom-Up Evidence Extraction First, No Scenario Hints) -->
+          <!-- Q2: Primary Behavioral Indicator -->
           <div class="form-section">
             <label class="sec-lbl" for="primaryCue">2. Primary Behavioral Indicator (Strongest Driver):</label>
             <select id="primaryCue" class="triage-select">
@@ -1072,7 +1097,7 @@
             </select>
           </div>
 
-          <!-- Q3: Secondary / Co-Occurring Indicators (Auto-Excludes Q2 Primary Choice) -->
+          <!-- Q3: Secondary / Co-Occurring Indicators -->
           <div class="form-section">
             <label class="sec-lbl">3. Secondary / Co-Occurring Indicators (Check all additional cues):</label>
             <div class="checkbox-grid" id="secondaryCueGroup">
@@ -1091,7 +1116,7 @@
             </div>
           </div>
 
-          <!-- Q4: Suspected Scenario / Pattern Type (Synthesized from Primary + Secondary Cues) -->
+          <!-- Q4: Suspected Scenario / Pattern Type -->
           <div class="form-section">
             <label class="sec-lbl" for="scenarioHypothesis">4. Suspected Scenario / Pattern Type:</label>
             <select id="scenarioHypothesis" class="triage-select">
@@ -1107,13 +1132,13 @@
             </select>
           </div>
 
-          <!-- Q5: Overall Decision Confidence (Final Metacognitive Rating) -->
+          <!-- Q5: Overall Decision Confidence (0% - 100% + derived 1-5 calibration score) -->
           <div class="form-section">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">
               <label class="sec-lbl" for="confidenceRange" style="margin:0;">
                 5. Overall Decision Confidence: <strong id="confidenceVal" style="color:#a78bfa;">50%</strong>
               </label>
-              <label style="font-size:0.74rem;color:#94a3b8;cursor:pointer;display:flex;align-items:center;gap:4px;">
+              <label style="font-size:0.73rem;color:#94a3b8;cursor:pointer;display:flex;align-items:center;gap:4px;">
                 <input type="checkbox" id="confPreferNot" style="accent-color:#7c3aed;"> Prefer not to answer
               </label>
             </div>
@@ -1126,11 +1151,24 @@
               <span>100% (Certain)</span>
             </div>
           </div>
+
+          <!-- Q6: Explanation Helpfulness (Variable #14: 1-5 Likert per case) -->
+          <div class="form-section">
+            <label class="sec-lbl">6. Explanation Helpfulness (1 = Not Helpful, 5 = Extremely Helpful):</label>
+            <div class="likert-bar" id="helpfulnessLikert">
+              <label><input type="radio" name="helpfulness" value="1">1</label>
+              <label><input type="radio" name="helpfulness" value="2">2</label>
+              <label><input type="radio" name="helpfulness" value="3">3</label>
+              <label><input type="radio" name="helpfulness" value="4">4</label>
+              <label><input type="radio" name="helpfulness" value="5">5</label>
+              <label><input type="radio" name="helpfulness" value="prefer_not_to_answer">Prefer not to answer</label>
+            </div>
+          </div>
         </div>
 
         <div>
-          <div id="triageValidationMsg" style="color:#f87171;font-size:0.78rem;margin-bottom:8px;display:none;">
-            Please complete Questions 1, 2, and 4 (or select "Prefer not to answer") before saving.
+          <div id="triageValidationMsg" style="color:#f87171;font-size:0.77rem;margin-bottom:6px;display:none;">
+            Please complete Questions 1, 2, 4, and 6 (or select "Prefer not to answer") before saving.
           </div>
           <button type="button" id="btnSaveTriage" class="passkey-btn passkey-submit" style="width:100%;">
             Save Triage Decision &amp; Close
@@ -1225,13 +1263,51 @@
     let pendingCohortId = '';
     let unlockedCohortId = '';
     let activeTrialContext = null;
-    let trialOpenTimestamp = 0;
-    let playbookOpenedCount = 0;
     let currentZoomPct = 100;
+    let sessionSequenceCounter = 0;
     const triageResponses = {};
+
+    // Per-trial passive telemetry state (Variables #3, #4, #5, #8, #9, #10, #11)
+    let trialTelemetry = {
+      trial_order: 0,
+      case_load_ts: 0,
+      first_interaction_ts: null,
+      verdict_changes: 0,
+      max_scroll_depth_pct: 0,
+      chart_interaction_count: 0,
+      chart_dwell_ms: 0,
+      chart_hover_enter_ts: null,
+      playbook_opened_count: 0
+    };
 
     function basename(pathStr) {
       return String(pathStr || '').split(/[\\/]/).pop();
+    }
+
+    function markFirstInteraction() {
+      if (trialTelemetry.first_interaction_ts === null && trialTelemetry.case_load_ts > 0) {
+        trialTelemetry.first_interaction_ts = performance.now();
+      }
+    }
+
+    function updateScrollDepth() {
+      const vp = document.getElementById('triageImgViewport');
+      if (!vp) return;
+      const scrollable = vp.scrollHeight - vp.clientHeight;
+      let pct = 100;
+      if (scrollable > 4) {
+        pct = Math.min(100, Math.max(0, ((vp.scrollTop + vp.clientHeight) / vp.scrollHeight) * 100));
+      }
+      if (pct > trialTelemetry.max_scroll_depth_pct) {
+        trialTelemetry.max_scroll_depth_pct = Number(pct.toFixed(1));
+      }
+    }
+
+    function flushChartDwell() {
+      if (trialTelemetry.chart_hover_enter_ts !== null) {
+        trialTelemetry.chart_dwell_ms += (performance.now() - trialTelemetry.chart_hover_enter_ts);
+        trialTelemetry.chart_hover_enter_ts = null;
+      }
     }
 
     function resolveParticipantAssignment(globalId) {
@@ -1285,25 +1361,17 @@
       const viewport = document.getElementById('triageImgViewport');
       const label = document.getElementById('zoomLevelLabel');
 
-      if (pct <= 100) {
-        currentZoomPct = 100;
-        img.style.width = 'auto';
-        img.style.maxWidth = '100%';
-        img.style.maxHeight = '72vh';
-        img.style.margin = '0 auto';
-        img.style.cursor = 'zoom-in';
+      currentZoomPct = Math.min(250, Math.max(70, pct));
+      img.style.width = `${currentZoomPct}%`;
+      img.style.height = 'auto';
+      img.style.cursor = currentZoomPct > 100 ? 'zoom-out' : 'zoom-in';
+      label.textContent = `${currentZoomPct}%`;
+
+      if (currentZoomPct === 100) {
         viewport.scrollTop = 0;
         viewport.scrollLeft = 0;
-        label.textContent = '100% (Fit)';
-      } else {
-        currentZoomPct = Math.min(250, pct);
-        img.style.maxWidth = 'none';
-        img.style.maxHeight = 'none';
-        img.style.width = `${currentZoomPct}%`;
-        img.style.margin = '0';
-        img.style.cursor = 'zoom-out';
-        label.textContent = `${currentZoomPct}%`;
       }
+      requestAnimationFrame(updateScrollDepth);
     }
 
     function syncSecondaryExclusions() {
@@ -1337,12 +1405,12 @@
 
       const rows = Object.values(triageResponses);
       const totalCompleted = rows.length;
-      const escalatedCount = rows.filter(r => r.decision === 'THREAT').length;
-      const dismissedCount = rows.filter(r => r.decision === 'BENIGN').length;
-      const preferNotCount = rows.filter(r => r.decision === 'PREFER_NOT_TO_ANSWER').length;
-      const meanRtMs = totalCompleted > 0
-        ? Math.round(rows.reduce((sum, r) => sum + Number(r.reaction_time_ms || 0), 0) / totalCompleted)
-        : 0;
+      const escalatedCount = rows.filter(r => r.triage_verdict === 'THREAT').length;
+      const dismissedCount = rows.filter(r => r.triage_verdict === 'BENIGN').length;
+      const preferNotCount = rows.filter(r => r.triage_verdict === 'PREFER_NOT_TO_ANSWER').length;
+      const meanTriageSec = totalCompleted > 0
+        ? (rows.reduce((sum, r) => sum + Number(r.total_triage_time_sec || 0), 0) / totalCompleted).toFixed(2)
+        : '0.00';
 
       if (!info) {
         roleChip.className = 'role-chip';
@@ -1386,7 +1454,7 @@
       urlObj.searchParams.set('EscalatedCount', String(escalatedCount));
       urlObj.searchParams.set('DismissedCount', String(dismissedCount));
       urlObj.searchParams.set('PreferNotCount', String(preferNotCount));
-      urlObj.searchParams.set('MeanReactionTimeMs', String(meanRtMs));
+      urlObj.searchParams.set('MeanTriageTimeSec', String(meanTriageSec));
 
       if (info.isStudent) {
         titleEl.className = 'survey-role-title student-theme';
@@ -1553,10 +1621,21 @@
           const trial = manifestTrials.find(t => t.trial_id === trialId);
           if (!trial) return;
 
+          sessionSequenceCounter += 1;
           activeTrialContext = { cohortId, slot, trial };
-          trialOpenTimestamp = performance.now();
-          playbookOpenedCount = 0;
-          applyZoom(100);
+
+          // Initialize 14-variable telemetry state for this trial
+          trialTelemetry = {
+            trial_order: sessionSequenceCounter,
+            case_load_ts: performance.now(),
+            first_interaction_ts: null,
+            verdict_changes: 0,
+            max_scroll_depth_pct: 0,
+            chart_interaction_count: 0,
+            chart_dwell_ms: 0,
+            chart_hover_enter_ts: null,
+            playbook_opened_count: 0
+          };
 
           document.getElementById('refTableContainer').style.display = 'none';
           document.getElementById('btnToggleRefTable').textContent = 'Show Playbook';
@@ -1626,9 +1705,13 @@
             `;
           }
 
-          document.getElementById('triageTargetImg').src = isA ? trial.imgA : trial.imgB;
+          const imgEl = document.getElementById('triageTargetImg');
+          imgEl.onload = () => {
+            applyZoom(100);
+          };
+          imgEl.src = isA ? trial.imgA : trial.imgB;
 
-          // Reset all 5 fields
+          // Reset all 6 fields
           document.querySelectorAll('input[name="decision"]').forEach(r => r.checked = false);
           document.getElementById('primaryCue').value = '';
           document.querySelectorAll('input[name="secondaryCue"]').forEach(cb => cb.checked = false);
@@ -1638,13 +1721,14 @@
           document.getElementById('confidenceRange').disabled = false;
           document.getElementById('confidenceVal').textContent = '50%';
           document.getElementById('confPreferNot').checked = false;
+          document.querySelectorAll('input[name="helpfulness"]').forEach(r => r.checked = false);
           document.getElementById('triageValidationMsg').style.display = 'none';
 
           // Restore previous response if re-opening a reviewed trial
           const key = `${cohortId}__${slot.cert_id}__${trial.trial_id}`;
           const prev = triageResponses[key];
           if (prev) {
-            const dRadio = document.querySelector(`input[name="decision"][value="${prev.decision}"]`);
+            const dRadio = document.querySelector(`input[name="decision"][value="${prev.triage_verdict}"]`);
             if (dRadio) dRadio.checked = true;
             document.getElementById('primaryCue').value = prev.primary_indicator || '';
             syncSecondaryExclusions();
@@ -1654,22 +1738,53 @@
               if (!cb.disabled) cb.checked = prevSec.includes(cb.value);
             });
 
-            document.getElementById('scenarioHypothesis').value = prev.scenario_hypothesis || '';
+            document.getElementById('scenarioHypothesis').value = prev.scenario_classification || '';
 
-            if (prev.confidence === 'prefer_not_to_answer') {
+            if (prev.decision_confidence_pct === 'prefer_not_to_answer') {
               document.getElementById('confPreferNot').checked = true;
               document.getElementById('confidenceRange').disabled = true;
               document.getElementById('confidenceVal').textContent = 'Prefer not to answer';
             } else {
-              document.getElementById('confidenceRange').value = prev.confidence;
-              document.getElementById('confidenceVal').textContent = `${prev.confidence}%`;
+              document.getElementById('confidenceRange').value = prev.decision_confidence_pct;
+              document.getElementById('confidenceVal').textContent = `${prev.decision_confidence_pct}%`;
             }
+
+            const hRadio = document.querySelector(`input[name="helpfulness"][value="${prev.explanation_helpfulness}"]`);
+            if (hRadio) hRadio.checked = true;
           }
 
           document.getElementById('triageModal').style.display = 'flex';
         });
       });
     }
+
+    // Passive telemetry listeners inside Triage Modal
+    const triageViewport = document.getElementById('triageImgViewport');
+    triageViewport.addEventListener('scroll', () => {
+      markFirstInteraction();
+      updateScrollDepth();
+    });
+    triageViewport.addEventListener('mouseenter', () => {
+      trialTelemetry.chart_hover_enter_ts = performance.now();
+    });
+    triageViewport.addEventListener('mouseleave', () => {
+      flushChartDwell();
+    });
+    triageViewport.addEventListener('click', () => {
+      markFirstInteraction();
+      trialTelemetry.chart_interaction_count += 1;
+    });
+
+    document.getElementById('triageModal').addEventListener('change', (e) => {
+      markFirstInteraction();
+      if (e.target && (e.target.name === 'decision' || e.target.id === 'scenarioHypothesis')) {
+        trialTelemetry.verdict_changes += 1;
+      }
+    });
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) flushChartDwell();
+    });
 
     document.getElementById('primaryCue').addEventListener('change', syncSecondaryExclusions);
 
@@ -1683,13 +1798,27 @@
       valSpan.textContent = this.checked ? 'Prefer not to answer' : `${slider.value}%`;
     });
 
-    document.getElementById('btnZoomIn').addEventListener('click', () => applyZoom(currentZoomPct + 25));
-    document.getElementById('btnZoomOut').addEventListener('click', () => applyZoom(currentZoomPct - 25));
-    document.getElementById('btnZoomReset').addEventListener('click', () => applyZoom(100));
+    document.getElementById('btnZoomIn').addEventListener('click', () => {
+      markFirstInteraction();
+      trialTelemetry.chart_interaction_count += 1;
+      applyZoom(currentZoomPct + 25);
+    });
+    document.getElementById('btnZoomOut').addEventListener('click', () => {
+      markFirstInteraction();
+      trialTelemetry.chart_interaction_count += 1;
+      applyZoom(currentZoomPct - 25);
+    });
+    document.getElementById('btnZoomReset').addEventListener('click', () => {
+      markFirstInteraction();
+      trialTelemetry.chart_interaction_count += 1;
+      applyZoom(100);
+    });
     document.getElementById('triageTargetImg').addEventListener('click', () => {
-      applyZoom(currentZoomPct === 100 ? 160 : 100);
+      applyZoom(currentZoomPct === 100 ? 145 : 100);
     });
     document.getElementById('btnFullLightbox').addEventListener('click', () => {
+      markFirstInteraction();
+      trialTelemetry.chart_interaction_count += 1;
       const src = document.getElementById('triageTargetImg').src;
       if (src) {
         document.getElementById('modalTargetImg').src = src;
@@ -1697,13 +1826,16 @@
       }
     });
     document.getElementById('btnToggleRefTable').addEventListener('click', function () {
+      markFirstInteraction();
+      trialTelemetry.chart_interaction_count += 1;
       const box = document.getElementById('refTableContainer');
       const isHidden = box.style.display === 'none';
-      if (isHidden) playbookOpenedCount += 1;
+      if (isHidden) trialTelemetry.playbook_opened_count += 1;
       box.style.display = isHidden ? 'block' : 'none';
       this.textContent = isHidden ? 'Hide Playbook' : 'Show Playbook';
     });
 
+    // Save triage decision with all 14 core evaluation variables
     document.getElementById('btnSaveTriage').addEventListener('click', () => {
       if (!activeTrialContext) return;
       const decision = document.querySelector('input[name="decision"]:checked')?.value;
@@ -1711,41 +1843,83 @@
       const secondaryCues = Array.from(document.querySelectorAll('input[name="secondaryCue"]:checked')).map(cb => cb.value);
       const scenHyp = document.getElementById('scenarioHypothesis').value;
       const confSkip = document.getElementById('confPreferNot').checked;
-      const confidenceVal = confSkip ? 'prefer_not_to_answer' : document.getElementById('confidenceRange').value;
+      const confidencePct = confSkip ? 'prefer_not_to_answer' : document.getElementById('confidenceRange').value;
+      const helpfulness = document.querySelector('input[name="helpfulness"]:checked')?.value;
 
-      if (!decision || !primaryCue || !scenHyp) {
+      if (!decision || !primaryCue || !scenHyp || !helpfulness) {
         document.getElementById('triageValidationMsg').style.display = 'block';
         return;
       }
 
+      flushChartDwell();
+      updateScrollDepth();
+
+      const submitTs = performance.now();
+      const totalTriageSec = Number(((submitTs - trialTelemetry.case_load_ts) / 1000).toFixed(3));
+      const ttfiSec = trialTelemetry.first_interaction_ts !== null
+        ? Number(((trialTelemetry.first_interaction_ts - trialTelemetry.case_load_ts) / 1000).toFixed(3))
+        : totalTriageSec;
+      const dwellSec = Number((trialTelemetry.chart_dwell_ms / 1000).toFixed(3));
+
+      // Map 0-100% confidence to 1-5 scale alongside exact percentage for Brier calibration
+      const confidence5Pt = confSkip
+        ? 'prefer_not_to_answer'
+        : Math.min(5, Math.max(1, Math.floor(Number(confidencePct) / 20) + (Number(confidencePct) === 100 ? 0 : 1)));
+
+      const citedCombined = [primaryCue, ...secondaryCues].filter(Boolean).join(';');
+
       const { cohortId, slot, trial } = activeTrialContext;
       const info = resolveParticipantAssignment(document.getElementById('participantIdSelect').value);
-      const elapsedMs = Math.round(performance.now() - trialOpenTimestamp);
       const key = `${cohortId}__${slot.cert_id}__${trial.trial_id}`;
 
       triageResponses[key] = {
+        // 1. participant_id & cohort metadata
         participant_id: info ? info.compositeId : 'UNSPECIFIED',
         global_participant_num: info ? info.globalId : '',
         within_cohort_slot: info ? info.withinCohortSlot : '',
         participant_role: info ? info.roleCode : '',
         cohort: cohortId,
-        design_locked: slot.design,
-        scenario: trial.scenario,
+
+        // 2. design_condition
+        design_condition: slot.design === 'A' ? 'Design_A' : 'Design_B',
+
+        // 3. case_id & trial_order
+        case_id: trial.trial_id,
+        trial_order: trialTelemetry.trial_order,
         cert_id: trial.cert_id,
-        trial_id: trial.trial_id,
         date: trial.date,
+        ground_truth_scenario: trial.scenario,
         ground_truth_type: trial.alert_type,
         anomaly_score: trial.anomaly_score,
         threshold: trial.threshold,
         shap_output_fx: trial.shap_output_value ?? '',
         shap_expected_efx: trial.shap_expected_value ?? '',
-        decision: decision,
+
+        // 4 & 5. Efficiency telemetry
+        time_to_first_interaction_sec: ttfiSec,
+        total_triage_time_sec: totalTriageSec,
+
+        // 6, 7 & 8. Decision, scenario & self-correction
+        triage_verdict: decision,
+        scenario_classification: scenHyp,
+        verdict_changes: trialTelemetry.verdict_changes,
+
+        // 9, 10 & 11. Visual inspection & XAI engagement telemetry
+        scroll_depth_pct: trialTelemetry.max_scroll_depth_pct,
+        hover_or_click_count: trialTelemetry.chart_interaction_count,
+        dwell_time_on_chart_sec: dwellSec,
+        playbook_opened_count: trialTelemetry.playbook_opened_count,
+
+        // 12. Feature grounding
         primary_indicator: primaryCue,
         secondary_indicators: secondaryCues.join(';'),
-        scenario_hypothesis: scenHyp,
-        confidence: confidenceVal,
-        playbook_opened_count: playbookOpenedCount,
-        reaction_time_ms: elapsedMs,
+        cited_top_features: citedCombined,
+
+        // 13 & 14. Trust calibration & perceived utility
+        decision_confidence_pct: confidencePct,
+        decision_confidence_5pt: confidence5Pt,
+        explanation_helpfulness: helpfulness,
+
         timestamp_iso: new Date().toISOString()
       };
 
@@ -1770,7 +1944,7 @@
       const a = document.createElement('a');
       const info = resolveParticipantAssignment(document.getElementById('participantIdSelect').value);
       a.href = url;
-      a.download = `${info ? info.compositeId : 'participant'}_triage_results.csv`;
+      a.download = `${info ? info.compositeId : 'participant'}_14var_triage_results.csv`;
       a.click();
       URL.revokeObjectURL(url);
     });
@@ -1844,6 +2018,7 @@
       }
     });
     document.getElementById('triageClose').addEventListener('click', () => {
+      flushChartDwell();
       document.getElementById('triageModal').style.display = 'none';
     });
 
