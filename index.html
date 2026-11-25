@@ -278,16 +278,12 @@
       text-align: left;
       font-family: inherit;
     }
-    .dashboard-btn:hover {
-      background: #1d4ed8;
-    }
+    .dashboard-btn:hover { background: #1d4ed8; }
     .dashboard-btn.design-b-btn {
       background: #be123c;
       border-color: #9f1239;
     }
-    .dashboard-btn.design-b-btn:hover {
-      background: #9f1239;
-    }
+    .dashboard-btn.design-b-btn:hover { background: #9f1239; }
     .dashboard-btn.completed {
       background: #065f46;
       border-color: #047857;
@@ -488,12 +484,12 @@
       border: 1px solid #475569;
       border-radius: 10px;
       width: 100%;
-      max-width: 1440px;
+      max-width: 1480px;
       max-height: 92vh;
       overflow-y: auto;
       padding: 16px;
       display: grid;
-      grid-template-columns: 1.6fr 1fr;
+      grid-template-columns: 1.65fr 1fr;
       gap: 16px;
     }
     @media (max-width: 1024px) {
@@ -508,11 +504,26 @@
     }
     .triage-img-pane img {
       width: 100%;
-      max-height: 74vh;
+      max-height: 70vh;
       object-fit: contain;
       background: #ffffff;
       border-radius: 4px;
     }
+    .design-guide-bar {
+      text-align: left;
+      font-size: 0.76rem;
+      padding: 7px 10px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      border-left: 3px solid #38bdf8;
+      background: rgba(56, 189, 248, 0.08);
+      color: #e2e8f0;
+    }
+    .design-guide-bar.theme-b {
+      border-left-color: #f43f5e;
+      background: rgba(244, 63, 94, 0.08);
+    }
+
     .triage-form-pane {
       background: #0f172a;
       border: 1px solid #334155;
@@ -530,9 +541,11 @@
       padding: 8px 10px;
       border-radius: 6px;
       margin-bottom: 12px;
-      font-size: 0.76rem;
+      font-size: 0.74rem;
     }
-    .score-strip strong { display: block; font-size: 0.92rem; color: #ffffff; }
+    .score-strip span { color: #94a3b8; display: block; }
+    .score-strip strong { display: block; font-size: 0.9rem; color: #ffffff; margin-top: 2px; }
+
     .form-section { margin-bottom: 12px; }
     .form-section label.sec-lbl {
       display: block;
@@ -695,7 +708,7 @@
       <div id="manifestStatus" style="color:#38bdf8;font-weight:600;">Loading stimulus manifest...</div>
     </div>
 
-    <!-- DYNAMIC COHORT CONTAINERS (RENDERED FROM COHORT MATRIX + MANIFEST) -->
+    <!-- DYNAMIC COHORT CONTAINERS -->
     <div id="cohort-1" class="cohort-group-block"></div>
     <div id="cohort-2" class="cohort-group-block"></div>
     <div id="cohort-3" class="cohort-group-block"></div>
@@ -755,7 +768,7 @@
     </div>
   </div>
 
-  <!-- ALERT TRIAGE EVALUATION MODAL -->
+  <!-- ALERT TRIAGE EVALUATION MODAL (CONDITION-ADAPTIVE HEADER + SHARED TRIAGE FORM) -->
   <div id="triageModal" class="image-modal">
     <div class="triage-modal-box">
       <div class="triage-img-pane">
@@ -763,6 +776,7 @@
           <span id="triageModalTitle" style="color:#ffffff;font-weight:700;font-size:0.9rem;">Alert Review</span>
           <span id="triageDesignBadge" class="badge">Design A</span>
         </div>
+        <div id="designGuideBar" class="design-guide-bar"></div>
         <img id="triageTargetImg" src="" alt="Behavioral Explanation Plot">
       </div>
 
@@ -773,11 +787,8 @@
             <span class="modal-close" id="triageClose" style="margin:0;">&times;</span>
           </div>
 
-          <div class="score-strip">
-            <div><span>Deviation Score</span><strong id="mScore">0.0000</strong></div>
-            <div><span>Baseline Cutoff (τ)</span><strong id="mThresh">0.0000</strong></div>
-            <div><span>System Status</span><strong id="mStatus" style="color:#f59e0b;">Flagged</strong></div>
-          </div>
+          <!-- Condition-specific metrics strip (Z-score vs. SHAP f(x) & E[f(x)]) -->
+          <div class="score-strip" id="scoreStripContainer"></div>
 
           <div class="form-section">
             <label class="sec-lbl">1. Triage Decision</label>
@@ -835,7 +846,6 @@
   </div>
 
   <script>
-    // 1. Passkey registry (exact match to mock-testing.html)
     const passkeyRegistry = {
       'cohort-1': '12034',
       'cohort-2': '21043',
@@ -843,51 +853,49 @@
       'cohort-4': '43021'
     };
 
-    // 2. 4-Cohort Latin-Square Design (10 participants/cohort: 5 students/staff + 5 SOC analysts)
-    // Maps mock-testing.html sequence [093, 345, 091(Benign->AAB1302), 401, 100] with exact A/B locks
     const COHORT_MATRIX = {
       'cohort-1': {
         title: 'Testing Cohort Group 1',
         composition: '10 Participants (5 Students/Staff + 5 SOC Analysts) • Order: A, A, A (Benign), B, B',
         slots: [
-          { cert_id: 'ALT1465', scenario: 'S1', legacy_id: '093', label: 'Scenario S1 (ALT1465)', design: 'A' },
-          { cert_id: 'CIF1430', scenario: 'S2', legacy_id: '345', label: 'Scenario S2 (CIF1430)', design: 'A' },
-          { cert_id: 'AAB1302', scenario: 'BENIGN', legacy_id: 'Benign Control', label: 'Benign Control (AAB1302)', design: 'A' },
-          { cert_id: 'CRD0272', scenario: 'S3', legacy_id: '401', label: 'Scenario S3 (CRD0272)', design: 'B' },
-          { cert_id: 'AMC1883', scenario: 'S4', legacy_id: '100', label: 'Scenario S4 (AMC1883)', design: 'B' },
+          { cert_id: 'ALT1465', scenario: 'S1', label: 'Scenario S1 (ALT1465)', design: 'A' },
+          { cert_id: 'CIF1430', scenario: 'S2', label: 'Scenario S2 (CIF1430)', design: 'A' },
+          { cert_id: 'AAB1302', scenario: 'BENIGN', label: 'Benign Control (AAB1302)', design: 'A' },
+          { cert_id: 'CRD0272', scenario: 'S3', label: 'Scenario S3 (CRD0272)', design: 'B' },
+          { cert_id: 'AMC1883', scenario: 'S4', label: 'Scenario S4 (AMC1883)', design: 'B' },
         ]
       },
       'cohort-2': {
         title: 'Testing Cohort Group 2',
         composition: '10 Participants (5 Students/Staff + 5 SOC Analysts) • Order: B, B, A (Benign), A, A',
         slots: [
-          { cert_id: 'CIF1430', scenario: 'S2', legacy_id: '345', label: 'Scenario S2 (CIF1430)', design: 'B' },
-          { cert_id: 'ALT1465', scenario: 'S1', legacy_id: '093', label: 'Scenario S1 (ALT1465)', design: 'B' },
-          { cert_id: 'AAB1302', scenario: 'BENIGN', legacy_id: 'Benign Control', label: 'Benign Control (AAB1302)', design: 'A' },
-          { cert_id: 'AMC1883', scenario: 'S4', legacy_id: '100', label: 'Scenario S4 (AMC1883)', design: 'A' },
-          { cert_id: 'CRD0272', scenario: 'S3', legacy_id: '401', label: 'Scenario S3 (CRD0272)', design: 'A' },
+          { cert_id: 'CIF1430', scenario: 'S2', label: 'Scenario S2 (CIF1430)', design: 'B' },
+          { cert_id: 'ALT1465', scenario: 'S1', label: 'Scenario S1 (ALT1465)', design: 'B' },
+          { cert_id: 'AAB1302', scenario: 'BENIGN', label: 'Benign Control (AAB1302)', design: 'A' },
+          { cert_id: 'AMC1883', scenario: 'S4', label: 'Scenario S4 (AMC1883)', design: 'A' },
+          { cert_id: 'CRD0272', scenario: 'S3', label: 'Scenario S3 (CRD0272)', design: 'A' },
         ]
       },
       'cohort-3': {
         title: 'Testing Cohort Group 3',
         composition: '10 Participants (5 Students/Staff + 5 SOC Analysts) • Order: A, A, B (Benign), B, B',
         slots: [
-          { cert_id: 'CRD0272', scenario: 'S3', legacy_id: '401', label: 'Scenario S3 (CRD0272)', design: 'A' },
-          { cert_id: 'AMC1883', scenario: 'S4', legacy_id: '100', label: 'Scenario S4 (AMC1883)', design: 'A' },
-          { cert_id: 'AAB1302', scenario: 'BENIGN', legacy_id: 'Benign Control', label: 'Benign Control (AAB1302)', design: 'B' },
-          { cert_id: 'ALT1465', scenario: 'S1', legacy_id: '093', label: 'Scenario S1 (ALT1465)', design: 'B' },
-          { cert_id: 'CIF1430', scenario: 'S2', legacy_id: '345', label: 'Scenario S2 (CIF1430)', design: 'B' },
+          { cert_id: 'CRD0272', scenario: 'S3', label: 'Scenario S3 (CRD0272)', design: 'A' },
+          { cert_id: 'AMC1883', scenario: 'S4', label: 'Scenario S4 (AMC1883)', design: 'A' },
+          { cert_id: 'AAB1302', scenario: 'BENIGN', label: 'Benign Control (AAB1302)', design: 'B' },
+          { cert_id: 'ALT1465', scenario: 'S1', label: 'Scenario S1 (ALT1465)', design: 'B' },
+          { cert_id: 'CIF1430', scenario: 'S2', label: 'Scenario S2 (CIF1430)', design: 'B' },
         ]
       },
       'cohort-4': {
         title: 'Testing Cohort Group 4',
         composition: '10 Participants (5 Students/Staff + 5 SOC Analysts) • Order: B, B, B (Benign), A, A',
         slots: [
-          { cert_id: 'AMC1883', scenario: 'S4', legacy_id: '100', label: 'Scenario S4 (AMC1883)', design: 'B' },
-          { cert_id: 'CRD0272', scenario: 'S3', legacy_id: '401', label: 'Scenario S3 (CRD0272)', design: 'B' },
-          { cert_id: 'AAB1302', scenario: 'BENIGN', legacy_id: 'Benign Control', label: 'Benign Control (AAB1302)', design: 'B' },
-          { cert_id: 'CIF1430', scenario: 'S2', legacy_id: '345', label: 'Scenario S2 (CIF1430)', design: 'A' },
-          { cert_id: 'ALT1465', scenario: 'S1', legacy_id: '093', label: 'Scenario S1 (ALT1465)', design: 'A' },
+          { cert_id: 'AMC1883', scenario: 'S4', label: 'Scenario S4 (AMC1883)', design: 'B' },
+          { cert_id: 'CRD0272', scenario: 'S3', label: 'Scenario S3 (CRD0272)', design: 'B' },
+          { cert_id: 'AAB1302', scenario: 'BENIGN', label: 'Benign Control (AAB1302)', design: 'B' },
+          { cert_id: 'CIF1430', scenario: 'S2', label: 'Scenario S2 (CIF1430)', design: 'A' },
+          { cert_id: 'ALT1465', scenario: 'S1', label: 'Scenario S1 (ALT1465)', design: 'A' },
         ]
       }
     };
@@ -1004,14 +1012,12 @@
     }
 
     function bindDynamicEvents() {
-      // Accordion toggles
       document.querySelectorAll('.matrix-toggle-btn').forEach(btn => {
         btn.addEventListener('click', function () {
           this.parentElement.classList.toggle('active');
         });
       });
 
-      // Model Matrix Lightbox
       const mModal = document.getElementById('matrixModal');
       const mImg = document.getElementById('modalTargetImg');
       document.querySelectorAll('.matrix-link').forEach(link => {
@@ -1025,7 +1031,6 @@
         });
       });
 
-      // Alert Triage Modal launcher
       document.querySelectorAll('.dashboard-btn').forEach(btn => {
         btn.addEventListener('click', function () {
           const cohortId = this.getAttribute('data-cohort');
@@ -1039,21 +1044,72 @@
           trialOpenTimestamp = performance.now();
 
           const isA = slot.design === 'A';
+          const scoreVal = Number(trial.anomaly_score);
+          const threshVal = Number(trial.threshold);
+          const flagged = scoreVal >= threshVal;
+
           document.getElementById('triageModalTitle').textContent =
             `${slot.label} • Alert Date: ${trial.date} (${trial.day_of_week})`;
+
           const badge = document.getElementById('triageDesignBadge');
-          badge.textContent = isA ? 'Design A (Z-Score)' : 'Design B (SHAP Waterfall)';
+          badge.textContent = isA
+            ? 'Design A: Statistical Baseline Deviation (Z-Score)'
+            : 'Design B: SHAP Feature Attribution Waterfall';
           badge.style.color = isA ? '#38bdf8' : '#f43f5e';
+          badge.style.borderColor = isA ? '#38bdf8' : '#f43f5e';
+
+          const guideBar = document.getElementById('designGuideBar');
+          const stripEl = document.getElementById('scoreStripContainer');
+
+          if (isA) {
+            guideBar.className = 'design-guide-bar';
+            guideBar.innerHTML =
+              '<strong>Design A Guide (Z-Score Deviation):</strong> Bars show how many standard deviations (&sigma;) each feature shifted from this user&rsquo;s 96-day normal baseline. Red bars (&ge; +2&sigma;) mark elevated deviations.';
+            stripEl.innerHTML = `
+              <div>
+                <span>Daily Deviation Score</span>
+                <strong>${scoreVal.toFixed(6)}</strong>
+              </div>
+              <div>
+                <span>Baseline Cutoff (MAD &tau;)</span>
+                <strong>${threshVal.toFixed(6)}</strong>
+              </div>
+              <div>
+                <span>Statistical Cutoff Status</span>
+                <strong style="color:${flagged ? '#f59e0b' : '#34d399'};">
+                  ${flagged ? 'Above Cutoff (+' + (scoreVal - threshVal).toFixed(5) + ')' : 'Within Baseline Cutoff'}
+                </strong>
+              </div>
+            `;
+          } else {
+            guideBar.className = 'design-guide-bar theme-b';
+            guideBar.innerHTML =
+              '<strong>Design B Guide (SHAP Waterfall):</strong> Starts from the expected baseline prediction <strong>E[f(x)]</strong> at the bottom and accumulates each feature&rsquo;s attribution (<span style="color:#fda4af;">+SHAP red</span> vs. <span style="color:#93c5fd;">&minus;SHAP blue</span>) to reach final output <strong>f(x)</strong> at the top.';
+
+            const hasShapVals = trial.shap_output_value !== undefined && trial.shap_expected_value !== undefined;
+            const fxText = hasShapVals ? Number(trial.shap_output_value).toFixed(3) : 'See Waterfall Top f(x)';
+            const efxText = hasShapVals ? Number(trial.shap_expected_value).toFixed(3) : 'See Waterfall Base E[f(x)]';
+
+            stripEl.innerHTML = `
+              <div>
+                <span>SHAP Model Output f(x)</span>
+                <strong style="color:#fda4af;">${fxText}</strong>
+              </div>
+              <div>
+                <span>Expected Baseline E[f(x)]</span>
+                <strong style="color:#93c5fd;">${efxText}</strong>
+              </div>
+              <div>
+                <span>AE Score / Cutoff (&tau;)</span>
+                <strong style="color:${flagged ? '#f59e0b' : '#34d399'};">
+                  ${scoreVal.toFixed(4)} / ${threshVal.toFixed(4)}
+                </strong>
+              </div>
+            `;
+          }
 
           document.getElementById('triageTargetImg').src = isA ? trial.imgA : trial.imgB;
-          document.getElementById('mScore').textContent = Number(trial.anomaly_score).toFixed(6);
-          document.getElementById('mThresh').textContent = Number(trial.threshold).toFixed(6);
-          const flagged = Number(trial.anomaly_score) >= Number(trial.threshold);
-          const stEl = document.getElementById('mStatus');
-          stEl.textContent = flagged ? 'Above Cutoff (Flagged)' : 'Below Cutoff (Review)';
-          stEl.style.color = flagged ? '#f59e0b' : '#34d399';
 
-          // Reset or restore saved response
           document.querySelectorAll('#triageModal input[type="radio"]').forEach(r => r.checked = false);
           document.getElementById('triageNotes').value = '';
           document.getElementById('triageValidationMsg').style.display = 'none';
@@ -1077,7 +1133,6 @@
       });
     }
 
-    // Save triage decision
     document.getElementById('btnSaveTriage').addEventListener('click', () => {
       if (!activeTrialContext) return;
       const dec = document.querySelector('input[name="t_decision"]:checked')?.value;
@@ -1106,6 +1161,8 @@
         ground_truth_type: trial.alert_type,
         anomaly_score: trial.anomaly_score,
         threshold: trial.threshold,
+        shap_output_fx: trial.shap_output_value ?? '',
+        shap_expected_efx: trial.shap_expected_value ?? '',
         triage_decision: dec,
         confidence: conf,
         clarity: clar,
@@ -1120,7 +1177,6 @@
       renderAllCohorts();
     });
 
-    // Export CSV
     document.getElementById('btnExportSession').addEventListener('click', () => {
       const rows = Object.values(triageResponses);
       if (!rows.length) {
@@ -1142,7 +1198,6 @@
       URL.revokeObjectURL(url);
     });
 
-    // Passkey Verification Flow (exact match to mock-testing.html)
     const selectFilter = document.getElementById('cohortFilter');
     const groups = document.querySelectorAll('.cohort-group-block');
     const pModal = document.getElementById('passkeyModal');
@@ -1199,7 +1254,6 @@
       selectFilter.value = activeCohortId ? activeCohortId : '';
     });
 
-    // Modal close handlers
     document.getElementById('modalClose').addEventListener('click', () => {
       document.getElementById('matrixModal').style.display = 'none';
       document.getElementById('modalTargetImg').src = '';
