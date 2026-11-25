@@ -1023,7 +1023,7 @@
         </div>
       </div>
 
-      <!-- Right Pane: Exact 5 Questions from Training Portal -->
+      <!-- Right Pane: Cognitive Triage Sequence (Decision -> Scenario -> Primary -> Secondary -> Confidence) -->
       <div class="triage-form-pane">
         <div>
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
@@ -1088,29 +1088,9 @@
             </select>
           </div>
 
-          <!-- Q4: Decision Confidence (0% - 100%, step 5% + Prefer not to answer) -->
+          <!-- Q4: Secondary / Co-Occurring Indicators (Multi-Select, auto-excludes Q3 Primary choice) -->
           <div class="form-section">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
-              <label class="sec-lbl" for="confidenceRange" style="margin:0;">
-                4. Decision Confidence: <strong id="confidenceVal" style="color:#a78bfa;">50%</strong>
-              </label>
-              <label style="font-size:0.74rem;color:#94a3b8;cursor:pointer;display:flex;align-items:center;gap:4px;">
-                <input type="checkbox" id="confPreferNot" style="accent-color:#7c3aed;"> Prefer not to answer
-              </label>
-            </div>
-            <div class="slider-row">
-              <input type="range" id="confidenceRange" min="0" max="100" step="5" value="50">
-            </div>
-            <div class="range-hints">
-              <span>0% (Guess)</span>
-              <span>50%</span>
-              <span>100% (Certain)</span>
-            </div>
-          </div>
-
-          <!-- Q5: Secondary / Co-Occurring Indicators (Multi-Select, auto-excludes Q3 Primary choice) -->
-          <div class="form-section">
-            <label class="sec-lbl">5. Secondary / Co-Occurring Indicators (Check all additional cues):</label>
+            <label class="sec-lbl">4. Secondary / Co-Occurring Indicators (Check all additional cues):</label>
             <div class="checkbox-grid" id="secondaryCueGroup">
               <label><input type="checkbox" name="secondaryCue" value="wikileaks_access"> WikiLeaks Access</label>
               <label><input type="checkbox" name="secondaryCue" value="thumb_removable_drive"> Thumb / Removable Drive</label>
@@ -1124,6 +1104,26 @@
               <label><input type="checkbox" name="secondaryCue" value="sudden_departure"> Sudden Departure Flag</label>
               <label><input type="checkbox" name="secondaryCue" value="workload_timing_spike"> Workload / Timing Variance</label>
               <label><input type="checkbox" name="secondaryCue" value="prefer_not_to_answer"> Prefer not to answer</label>
+            </div>
+          </div>
+
+          <!-- Q5: Decision Confidence (Final Metacognitive Summary Judgment) -->
+          <div class="form-section">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+              <label class="sec-lbl" for="confidenceRange" style="margin:0;">
+                5. Overall Decision Confidence: <strong id="confidenceVal" style="color:#a78bfa;">50%</strong>
+              </label>
+              <label style="font-size:0.74rem;color:#94a3b8;cursor:pointer;display:flex;align-items:center;gap:4px;">
+                <input type="checkbox" id="confPreferNot" style="accent-color:#7c3aed;"> Prefer not to answer
+              </label>
+            </div>
+            <div class="slider-row">
+              <input type="range" id="confidenceRange" min="0" max="100" step="5" value="50">
+            </div>
+            <div class="range-hints">
+              <span>0% (Guess)</span>
+              <span>50%</span>
+              <span>100% (Certain)</span>
             </div>
           </div>
         </div>
@@ -1623,16 +1623,16 @@
 
           document.getElementById('triageTargetImg').src = isA ? trial.imgA : trial.imgB;
 
-          // Reset all 5 training-portal fields
+          // Reset all 5 fields
           document.querySelectorAll('input[name="decision"]').forEach(r => r.checked = false);
           document.getElementById('scenarioHypothesis').value = '';
           document.getElementById('primaryCue').value = '';
+          document.querySelectorAll('input[name="secondaryCue"]').forEach(cb => cb.checked = false);
+          syncSecondaryExclusions();
           document.getElementById('confidenceRange').value = 50;
           document.getElementById('confidenceRange').disabled = false;
           document.getElementById('confidenceVal').textContent = '50%';
           document.getElementById('confPreferNot').checked = false;
-          document.querySelectorAll('input[name="secondaryCue"]').forEach(cb => cb.checked = false);
-          syncSecondaryExclusions();
           document.getElementById('triageValidationMsg').style.display = 'none';
 
           // Restore previous response if re-opening a reviewed trial
@@ -1645,6 +1645,11 @@
             document.getElementById('primaryCue').value = prev.primary_indicator || '';
             syncSecondaryExclusions();
 
+            const prevSec = (prev.secondary_indicators || '').split(';').filter(Boolean);
+            document.querySelectorAll('input[name="secondaryCue"]').forEach(cb => {
+              if (!cb.disabled) cb.checked = prevSec.includes(cb.value);
+            });
+
             if (prev.confidence === 'prefer_not_to_answer') {
               document.getElementById('confPreferNot').checked = true;
               document.getElementById('confidenceRange').disabled = true;
@@ -1653,11 +1658,6 @@
               document.getElementById('confidenceRange').value = prev.confidence;
               document.getElementById('confidenceVal').textContent = `${prev.confidence}%`;
             }
-
-            const prevSec = (prev.secondary_indicators || '').split(';').filter(Boolean);
-            document.querySelectorAll('input[name="secondaryCue"]').forEach(cb => {
-              if (!cb.disabled) cb.checked = prevSec.includes(cb.value);
-            });
           }
 
           document.getElementById('triageModal').style.display = 'flex';
@@ -1665,10 +1665,8 @@
       });
     }
 
-    // Primary indicator exclusion sync
     document.getElementById('primaryCue').addEventListener('change', syncSecondaryExclusions);
 
-    // Confidence slider & Prefer-not-to-answer sync
     document.getElementById('confidenceRange').addEventListener('input', function () {
       document.getElementById('confidenceVal').textContent = `${this.value}%`;
     });
@@ -1679,7 +1677,6 @@
       valSpan.textContent = this.checked ? 'Prefer not to answer' : `${slider.value}%`;
     });
 
-    // Zoom toolbar & click-to-zoom controls
     document.getElementById('btnZoomIn').addEventListener('click', () => applyZoom(currentZoomPct + 25));
     document.getElementById('btnZoomOut').addEventListener('click', () => applyZoom(currentZoomPct - 25));
     document.getElementById('btnZoomReset').addEventListener('click', () => applyZoom(100));
@@ -1700,15 +1697,14 @@
       this.textContent = isHidden ? 'Hide Playbook' : 'Show Playbook';
     });
 
-    // Save triage decision
     document.getElementById('btnSaveTriage').addEventListener('click', () => {
       if (!activeTrialContext) return;
       const decision = document.querySelector('input[name="decision"]:checked')?.value;
       const scenHyp = document.getElementById('scenarioHypothesis').value;
       const primaryCue = document.getElementById('primaryCue').value;
+      const secondaryCues = Array.from(document.querySelectorAll('input[name="secondaryCue"]:checked')).map(cb => cb.value);
       const confSkip = document.getElementById('confPreferNot').checked;
       const confidenceVal = confSkip ? 'prefer_not_to_answer' : document.getElementById('confidenceRange').value;
-      const secondaryCues = Array.from(document.querySelectorAll('input[name="secondaryCue"]:checked')).map(cb => cb.value);
 
       if (!decision || !scenHyp || !primaryCue) {
         document.getElementById('triageValidationMsg').style.display = 'block';
@@ -1739,8 +1735,8 @@
         decision: decision,
         scenario_hypothesis: scenHyp,
         primary_indicator: primaryCue,
-        confidence: confidenceVal,
         secondary_indicators: secondaryCues.join(';'),
+        confidence: confidenceVal,
         reaction_time_ms: elapsedMs,
         timestamp_iso: new Date().toISOString()
       };
@@ -1750,7 +1746,6 @@
       renderAllCohorts();
     });
 
-    // Export CSV
     document.getElementById('btnExportSession').addEventListener('click', () => {
       const rows = Object.values(triageResponses);
       if (!rows.length) {
@@ -1772,7 +1767,6 @@
       URL.revokeObjectURL(url);
     });
 
-    // Participant ID (1-40) auto-selection & unlock trigger
     document.getElementById('participantIdSelect').addEventListener('change', function () {
       const info = resolveParticipantAssignment(this.value);
       syncAssignmentAndSurvey();
@@ -1801,7 +1795,6 @@
       }
     });
 
-    // Passkey Verification Flow
     const pModal = document.getElementById('passkeyModal');
     const pField = document.getElementById('passkeyField');
     const pCancel = document.getElementById('passkeyCancelBtn');
