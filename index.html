@@ -272,9 +272,14 @@
       flex-direction: column;
       justify-content: space-between;
       border-top: 3px solid #64748b;
+      transition: opacity 0.2s ease, border-color 0.2s ease;
     }
     .user-card.border-a { border-top-color: #38bdf8; }
     .user-card.border-b { border-top-color: #f43f5e; }
+    .user-card.locked-card {
+      opacity: 0.48;
+      border-color: #1e293b;
+    }
 
     .user-title {
       font-size: 0.92rem;
@@ -333,6 +338,15 @@
     .dashboard-btn.completed {
       background: #065f46;
       border-color: #047857;
+    }
+    .dashboard-btn:disabled {
+      background: #1e293b;
+      border-color: #334155;
+      color: #64748b;
+      cursor: not-allowed;
+    }
+    .dashboard-btn:disabled:hover {
+      background: #1e293b;
     }
     .trial-status-dot {
       font-size: 0.68rem;
@@ -415,7 +429,7 @@
       text-align: center;
     }
     .single-survey-card {
-      max-width: 560px;
+      max-width: 580px;
       margin: 12px auto 0;
       background: rgba(15, 23, 42, 0.75);
       border: 1px solid #334155;
@@ -451,7 +465,7 @@
       font-weight: 800;
       transition: all 0.15s;
       width: 100%;
-      max-width: 380px;
+      max-width: 440px;
       cursor: pointer;
     }
     .survey-btn:hover {
@@ -464,6 +478,7 @@
       border-color: #475569;
       color: #94a3b8;
       cursor: not-allowed;
+      pointer-events: none;
       box-shadow: none;
     }
 
@@ -865,7 +880,7 @@
     <header>
       <div class="badge">Experimental User Study (N = 40 &bull; P01–P40)</div>
       <h1>SOC Triage Operations - Evaluation Portal</h1>
-      <div class="subtitle">Automated Participant Routing &amp; Target Verification Hub</div>
+      <div class="subtitle">Automated Participant Routing &amp; Sequential Target Verification Hub</div>
 
       <div class="nav-container">
         <a href="index.html" class="btn-nav-back">
@@ -902,7 +917,7 @@
     </div>
 
     <div class="instructions-box">
-      <div><strong>Evaluation Protocol Notice:</strong> Complete the triaging workflow across your active matrix row systematically from left to right. Scroll down the explanation chart to inspect all 33 behavioral features.</div>
+      <div><strong>Sequential Protocol Notice:</strong> Assessments unlock strictly from <strong>left to right</strong> (Case 1 &rarr; Case 5). Complete every alert in order to unlock the Exit Survey.</div>
       <div id="manifestStatus" style="color:#38bdf8;font-weight:600;">Loading stimulus manifest...</div>
     </div>
 
@@ -912,11 +927,11 @@
     <div id="cohort-3" class="cohort-group-block"></div>
     <div id="cohort-4" class="cohort-group-block"></div>
 
-    <!-- SINGLE DYNAMIC EXIT SURVEY BLOCK (AUTO-SWITCHES BY PARTICIPANT ID 1-40) -->
+    <!-- SINGLE DYNAMIC EXIT SURVEY BLOCK (LOCKED UNTIL ALL COHORT ASSESSMENTS ARE COMPLETED) -->
     <div class="survey-section">
       <h2 style="color: #10b981; font-size: 1.1rem; font-weight: 800; margin-bottom: 4px;">Study Phase Completion</h2>
       <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 4px;">
-        Your role, cohort, and exit survey link are configured automatically from your Participant ID (1–40):
+        The exit survey button unlocks automatically once you complete all assigned user assessments from left to right:
       </p>
 
       <div class="single-survey-card">
@@ -1391,6 +1406,28 @@
       });
     }
 
+    function getCohortTrialSequence(cohortId) {
+      const cfg = COHORT_MATRIX[cohortId];
+      if (!cfg) return [];
+      const seq = [];
+      cfg.slots.forEach((slot, sIdx) => {
+        const userTrials = manifestTrials.filter(t => t.cert_id === slot.cert_id);
+        userTrials.forEach((tr, tIdx) => {
+          const key = `${cohortId}__${slot.cert_id}__${tr.trial_id}`;
+          seq.push({
+            key,
+            cohortId,
+            sIdx,
+            tIdx,
+            slot,
+            trial: tr,
+            isDone: Boolean(triageResponses[key])
+          });
+        });
+      });
+      return seq;
+    }
+
     function syncAssignmentAndSurvey() {
       const rawVal = document.getElementById('participantIdSelect').value;
       const info = resolveParticipantAssignment(rawVal);
@@ -1402,15 +1439,6 @@
       const btnEl = document.getElementById('btnDynamicSurvey');
       const labelEl = document.getElementById('surveyBtnLabel');
       const previewEl = document.getElementById('surveyParamPreview');
-
-      const rows = Object.values(triageResponses);
-      const totalCompleted = rows.length;
-      const escalatedCount = rows.filter(r => r.triage_verdict === 'THREAT').length;
-      const dismissedCount = rows.filter(r => r.triage_verdict === 'BENIGN').length;
-      const preferNotCount = rows.filter(r => r.triage_verdict === 'PREFER_NOT_TO_ANSWER').length;
-      const meanTriageSec = totalCompleted > 0
-        ? (rows.reduce((sum, r) => sum + Number(r.total_triage_time_sec || 0), 0) / totalCompleted).toFixed(2)
-        : '0.00';
 
       if (!info) {
         roleChip.className = 'role-chip';
@@ -1442,6 +1470,19 @@
         ? `${info.cohortTitle} Unlocked ✓`
         : `Unlock ${info.cohortTitle}`;
 
+      const cohortSeq = getCohortTrialSequence(info.cohortId);
+      const totalRequired = cohortSeq.length;
+      const completedInCohort = cohortSeq.filter(x => x.isDone).length;
+      const allAssessmentsDone = isAlreadyUnlocked && totalRequired > 0 && completedInCohort === totalRequired;
+
+      const rows = cohortSeq.filter(x => x.isDone).map(x => triageResponses[x.key]);
+      const escalatedCount = rows.filter(r => r.triage_verdict === 'THREAT').length;
+      const dismissedCount = rows.filter(r => r.triage_verdict === 'BENIGN').length;
+      const preferNotCount = rows.filter(r => r.triage_verdict === 'PREFER_NOT_TO_ANSWER').length;
+      const meanTriageSec = completedInCohort > 0
+        ? (rows.reduce((sum, r) => sum + Number(r.total_triage_time_sec || 0), 0) / completedInCohort).toFixed(2)
+        : '0.00';
+
       const baseUrl = info.isStudent ? SURVEY_URLS.STUDENT : SURVEY_URLS.ANALYST;
       const urlObj = new URL(baseUrl);
       urlObj.searchParams.set('ParticipantID', info.compositeId);
@@ -1450,27 +1491,35 @@
       urlObj.searchParams.set('Cohort', info.cohortId);
       urlObj.searchParams.set('Role', info.roleCode);
       urlObj.searchParams.set('ConditionOrder', info.orderCode);
-      urlObj.searchParams.set('TrialsCompleted', String(totalCompleted));
+      urlObj.searchParams.set('TrialsCompleted', String(completedInCohort));
+      urlObj.searchParams.set('TotalTrialsRequired', String(totalRequired));
       urlObj.searchParams.set('EscalatedCount', String(escalatedCount));
       urlObj.searchParams.set('DismissedCount', String(dismissedCount));
       urlObj.searchParams.set('PreferNotCount', String(preferNotCount));
       urlObj.searchParams.set('MeanTriageTimeSec', String(meanTriageSec));
 
-      if (info.isStudent) {
-        titleEl.className = 'survey-role-title student-theme';
-        titleEl.textContent = `University Student / Staff Exit Survey (${info.paddedId})`;
-        labelEl.textContent = 'Open Student / Staff Exit Survey';
+      titleEl.className = `survey-role-title ${info.isStudent ? 'student-theme' : 'analyst-theme'}`;
+      titleEl.textContent = info.isStudent
+        ? `University Student / Staff Exit Survey (${info.paddedId})`
+        : `Professional SOC Analyst Exit Survey (${info.paddedId})`;
+
+      if (allAssessmentsDone) {
+        btnEl.className = 'survey-btn';
+        btnEl.href = urlObj.toString();
+        labelEl.textContent = info.isStudent
+          ? 'All Cases Complete — Open Student / Staff Exit Survey'
+          : 'All Cases Complete — Open Professional SOC Analyst Survey';
       } else {
-        titleEl.className = 'survey-role-title analyst-theme';
-        titleEl.textContent = `Professional SOC Analyst Exit Survey (${info.paddedId})`;
-        labelEl.textContent = 'Open Professional SOC Analyst Survey';
+        btnEl.className = 'survey-btn disabled-survey';
+        btnEl.href = '#';
+        labelEl.textContent = !isAlreadyUnlocked
+          ? `Unlock ${info.cohortTitle} First (${completedInCohort}/${totalRequired})`
+          : `Survey Locked (${completedInCohort} / ${totalRequired} Assessments Completed)`;
       }
 
-      btnEl.className = 'survey-btn';
-      btnEl.href = urlObj.toString();
       previewEl.innerHTML =
-        `Active Qualtrics Metadata: <code>ParticipantID=${info.compositeId}</code> &bull; ` +
-        `<code>Cohort=${info.cohortId}</code> &bull; <code>Role=${info.roleCode}</code> &bull; <code>TrialsCompleted=${totalCompleted}</code>`;
+        `Progress: <strong>${completedInCohort} / ${totalRequired}</strong> &bull; ` +
+        `<code>ParticipantID=${info.compositeId}</code> &bull; <code>Cohort=${info.cohortId}</code> &bull; <code>Role=${info.roleCode}</code>`;
     }
 
     function triggerCohortUnlockFlow(targetCohortId) {
@@ -1522,27 +1571,42 @@
     function renderAllCohorts() {
       Object.entries(COHORT_MATRIX).forEach(([cohortId, cfg]) => {
         const container = document.getElementById(cohortId);
+        const seq = getCohortTrialSequence(cohortId);
+        const firstIncompleteIdx = seq.findIndex(item => !item.isDone);
+        const allDone = seq.length > 0 && firstIncompleteIdx === -1;
+
         let cardsHtml = '';
 
         cfg.slots.forEach((slot, sIdx) => {
-          const userTrials = manifestTrials.filter(t => t.cert_id === slot.cert_id);
+          const slotItems = seq.filter(item => item.sIdx === sIdx);
           const isA = slot.design === 'A';
           const designLabel = isA
             ? 'System Evaluation - Design A (Z-Score)'
             : 'System Evaluation - Design B (SHAP)';
 
+          const slotUnlocked = allDone || slotItems.some(item => {
+            const globalIdx = seq.findIndex(x => x.key === item.key);
+            return item.isDone || globalIdx === firstIncompleteIdx;
+          });
+
           let trialBtnsHtml = '';
-          userTrials.forEach((tr, tIdx) => {
-            const key = `${cohortId}__${slot.cert_id}__${tr.trial_id}`;
-            const isDone = Boolean(triageResponses[key]);
+          slotItems.forEach((item) => {
+            const globalIdx = seq.findIndex(x => x.key === item.key);
+            const isCurrentNext = !allDone && globalIdx === firstIncompleteIdx;
+            const isEnabled = item.isDone || isCurrentNext;
+            const statusText = item.isDone
+              ? 'Reviewed ✓'
+              : (isCurrentNext ? 'Start Next →' : 'Locked');
+
             trialBtnsHtml += `
               <button type="button"
-                class="dashboard-btn ${isA ? '' : 'design-b-btn'} ${isDone ? 'completed' : ''}"
+                class="dashboard-btn ${isA ? '' : 'design-b-btn'} ${item.isDone ? 'completed' : ''}"
                 data-cohort="${cohortId}"
                 data-slot="${sIdx}"
-                data-trial-id="${tr.trial_id}">
-                <span>Alert ${tIdx + 1}: ${tr.date}</span>
-                <span class="trial-status-dot">${isDone ? 'Reviewed ✓' : 'Inspect'}</span>
+                data-trial-id="${item.trial.trial_id}"
+                ${isEnabled ? '' : 'disabled'}>
+                <span>Alert ${item.tIdx + 1}: ${item.trial.date}</span>
+                <span class="trial-status-dot">${statusText}</span>
               </button>
             `;
           });
@@ -1551,11 +1615,11 @@
           const bsPath = `./data/beeswarms/beeswarm_${slot.scenario}_${slot.cert_id}.png`;
 
           cardsHtml += `
-            <div class="user-card ${isA ? 'border-a' : 'border-b'}">
+            <div class="user-card ${isA ? 'border-a' : 'border-b'} ${slotUnlocked ? '' : 'locked-card'}">
               <div>
                 <div class="user-title">
                   <span>User ${slot.cert_id}</span>
-                  <span class="scen-badge">Case ${sIdx + 1}</span>
+                  <span class="scen-badge">Case ${sIdx + 1} ${slotUnlocked ? '' : '• Locked'}</span>
                 </div>
                 <div class="user-subtitle ${isA ? 'design-a' : 'design-b'}">${designLabel}</div>
                 <div class="trial-btn-list">
@@ -1579,9 +1643,10 @@
           `;
         });
 
+        const completedCount = seq.filter(x => x.isDone).length;
         container.innerHTML = `
           <div class="group-header-title">
-            <span>Active Environment: ${cfg.title}</span>
+            <span>Active Environment: ${cfg.title} (${completedCount} / ${seq.length} Completed)</span>
             <span class="cohort-meta-pill">${cfg.composition}</span>
           </div>
           <div class="users-grid">${cardsHtml}</div>
@@ -1614,6 +1679,7 @@
 
       document.querySelectorAll('.dashboard-btn').forEach(btn => {
         btn.addEventListener('click', function () {
+          if (this.disabled) return;
           const cohortId = this.getAttribute('data-cohort');
           const slotIdx = parseInt(this.getAttribute('data-slot'), 10);
           const trialId = this.getAttribute('data-trial-id');
@@ -1624,7 +1690,6 @@
           sessionSequenceCounter += 1;
           activeTrialContext = { cohortId, slot, trial };
 
-          // Initialize 14-variable telemetry state for this trial
           trialTelemetry = {
             trial_order: sessionSequenceCounter,
             case_load_ts: performance.now(),
@@ -1861,7 +1926,6 @@
         : totalTriageSec;
       const dwellSec = Number((trialTelemetry.chart_dwell_ms / 1000).toFixed(3));
 
-      // Map 0-100% confidence to 1-5 scale alongside exact percentage for Brier calibration
       const confidence5Pt = confSkip
         ? 'prefer_not_to_answer'
         : Math.min(5, Math.max(1, Math.floor(Number(confidencePct) / 20) + (Number(confidencePct) === 100 ? 0 : 1)));
@@ -1873,17 +1937,14 @@
       const key = `${cohortId}__${slot.cert_id}__${trial.trial_id}`;
 
       triageResponses[key] = {
-        // 1. participant_id & cohort metadata
         participant_id: info ? info.compositeId : 'UNSPECIFIED',
         global_participant_num: info ? info.globalId : '',
         within_cohort_slot: info ? info.withinCohortSlot : '',
         participant_role: info ? info.roleCode : '',
         cohort: cohortId,
 
-        // 2. design_condition
         design_condition: slot.design === 'A' ? 'Design_A' : 'Design_B',
 
-        // 3. case_id & trial_order
         case_id: trial.trial_id,
         trial_order: trialTelemetry.trial_order,
         cert_id: trial.cert_id,
@@ -1895,27 +1956,22 @@
         shap_output_fx: trial.shap_output_value ?? '',
         shap_expected_efx: trial.shap_expected_value ?? '',
 
-        // 4 & 5. Efficiency telemetry
         time_to_first_interaction_sec: ttfiSec,
         total_triage_time_sec: totalTriageSec,
 
-        // 6, 7 & 8. Decision, scenario & self-correction
         triage_verdict: decision,
         scenario_classification: scenHyp,
         verdict_changes: trialTelemetry.verdict_changes,
 
-        // 9, 10 & 11. Visual inspection & XAI engagement telemetry
         scroll_depth_pct: trialTelemetry.max_scroll_depth_pct,
         hover_or_click_count: trialTelemetry.chart_interaction_count,
         dwell_time_on_chart_sec: dwellSec,
         playbook_opened_count: trialTelemetry.playbook_opened_count,
 
-        // 12. Feature grounding
         primary_indicator: primaryCue,
         secondary_indicators: secondaryCues.join(';'),
         cited_top_features: citedCombined,
 
-        // 13 & 14. Trust calibration & perceived utility
         decision_confidence_pct: confidencePct,
         decision_confidence_5pt: confidence5Pt,
         explanation_helpfulness: helpfulness,
@@ -1974,6 +2030,13 @@
         e.preventDefault();
         alert('Please select your assigned Participant ID (P01–P40) in Step 1 first.');
         document.getElementById('participantIdSelect').focus();
+        return;
+      }
+      const cohortSeq = getCohortTrialSequence(info.cohortId);
+      const completedInCohort = cohortSeq.filter(x => x.isDone).length;
+      if (unlockedCohortId !== info.cohortId || completedInCohort < cohortSeq.length) {
+        e.preventDefault();
+        alert(`Please complete all ${cohortSeq.length} user assessments from left to right before opening the exit survey (${completedInCohort}/${cohortSeq.length} completed).`);
       }
     });
 
