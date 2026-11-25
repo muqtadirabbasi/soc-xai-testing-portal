@@ -589,7 +589,7 @@
     }
     .triage-img-viewport {
       width: 100%;
-      max-height: 68vh;
+      max-height: 62vh;
       overflow: auto;
       background: #ffffff;
       border-radius: 4px;
@@ -599,7 +599,7 @@
     .triage-img-viewport img {
       width: auto;
       max-width: 100%;
-      max-height: 68vh;
+      max-height: 62vh;
       height: auto;
       margin: 0 auto;
       display: block;
@@ -622,29 +622,49 @@
       background: rgba(244, 63, 94, 0.08);
     }
 
+    /* Full 4-Column Scenario Description & Playbook Drawer */
     .playbook-mini {
       margin-top: 8px;
       background: #1e293b;
       border: 1px solid #334155;
       border-radius: 6px;
       padding: 8px 10px;
-      font-size: 0.74rem;
+      font-size: 0.73rem;
     }
     .playbook-mini table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 6px;
+      margin-top: 8px;
     }
     .playbook-mini th, .playbook-mini td {
       border: 1px solid #334155;
-      padding: 5px 6px;
+      padding: 6px 7px;
       text-align: left;
       vertical-align: top;
+      line-height: 1.38;
     }
     .playbook-mini th {
       background: #0f172a;
       color: #f8fafc;
+      font-weight: 700;
     }
+    .playbook-mini code {
+      background: #0f172a;
+      padding: 1px 4px;
+      border-radius: 3px;
+      color: #93c5fd;
+    }
+    .pb-tag {
+      display: inline-block;
+      margin-top: 3px;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 0.66rem;
+      font-weight: 700;
+    }
+    .pb-tag.threat { background: rgba(244, 63, 94, 0.16); color: #fda4af; border: 1px solid rgba(244, 63, 94, 0.4); }
+    .pb-tag.mixed { background: rgba(168, 85, 247, 0.16); color: #d8b4fe; border: 1px solid rgba(168, 85, 247, 0.4); }
+    .pb-tag.benign { background: rgba(16, 185, 129, 0.16); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.4); }
 
     .triage-form-pane {
       background: #0f172a;
@@ -923,7 +943,7 @@
   <!-- ALERT TRIAGE EVALUATION MODAL -->
   <div id="triageModal" class="image-modal">
     <div class="triage-modal-box">
-      <!-- Left Pane: Explanation Image + Interactive Zoom + Quick Playbook -->
+      <!-- Left Pane: Explanation Image + Interactive Zoom + Full 4-Column Scenario Playbook -->
       <div class="triage-img-pane">
         <div class="zoom-toolbar">
           <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
@@ -944,51 +964,58 @@
           <img id="triageTargetImg" src="" alt="Behavioral Explanation Plot" title="Click image or use + / - buttons to zoom">
         </div>
 
-        <!-- Collapsible Scenario & Behavioral Indicator Reference -->
+        <!-- Full 4-Column Scenario Description & Behavioral Indicator Playbook -->
         <div class="playbook-mini">
           <div style="display:flex;justify-content:space-between;align-items:center;">
-            <strong style="color:#f1f5f9;">Scenario &amp; Behavioral Indicator Quick-Reference</strong>
-            <button type="button" class="zoom-btn" id="btnToggleRefTable">Show / Hide Playbook</button>
+            <strong style="color:#f1f5f9;">Scenario Descriptions &amp; Behavioral Indicator Playbook</strong>
+            <button type="button" class="zoom-btn" id="btnToggleRefTable">Hide Playbook</button>
           </div>
-          <div id="refTableContainer" style="display:none;overflow-x:auto;">
+          <div id="refTableContainer" style="display:block;overflow-x:auto;max-height:240px;overflow-y:auto;">
             <table>
               <thead>
                 <tr>
-                  <th>Scenario / Pattern</th>
-                  <th>Primary Indicators (Strongest Drivers)</th>
-                  <th>Secondary / Co-Occurring Indicators</th>
+                  <th style="min-width:140px;">Category / Scenario</th>
+                  <th style="min-width:260px;">Full Behavioral Description</th>
+                  <th style="min-width:170px;">Primary Indicators (Strongest Drivers)</th>
+                  <th style="min-width:170px;">Secondary / Co-Occurring Indicators</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td><strong>S1: WikiLeaks Exfiltration</strong></td>
-                  <td>WikiLeaks Access Count; Thumb Drive / Removable Media</td>
-                  <td>After-hours (Evening/Night/Weekend); Sudden Departure Flag</td>
+                  <td><strong>Scenario 1</strong><br><span class="pb-tag threat">WikiLeaks Exfiltration</span></td>
+                  <td>A user who did not previously use removable drives or work after hours suddenly begins logging in after hours, using a removable thumb drive, and uploading sensitive data to <code>wikileaks.org</code>, leaving the organization shortly thereafter.</td>
+                  <td>&bull; <strong>WikiLeaks Access Count</strong><br>&bull; <strong>Thumb Drive / Removable Media Usage</strong></td>
+                  <td>&bull; After-hours activity (Evening/Night/Weekend)<br>&bull; <strong>Sudden Departure Flag</strong></td>
                 </tr>
                 <tr>
-                  <td><strong>S2: Pre-Departure IP Theft</strong></td>
-                  <td>Thumb Drive Usage spike; Job Site / Competitor Email</td>
-                  <td>Sudden Departure Flag; Elevated File / Http transitions</td>
+                  <td><strong>Scenario 2</strong><br><span class="pb-tag threat">Pre-Departure IP Theft</span></td>
+                  <td>A user begins surfing external job websites and soliciting employment from a competitor. Before leaving the company, they use a thumb drive at markedly higher rates than their baseline to steal proprietary data.</td>
+                  <td>&bull; <strong>Thumb Drive Usage Count</strong> (sharp spike above baseline)<br>&bull; <strong>Job Site Access / Competitor Email Count</strong></td>
+                  <td>&bull; <strong>Sudden Departure Flag</strong><br>&bull; Elevated <code>File</code> / <code>Http</code> activity transitions</td>
                 </tr>
                 <tr>
-                  <td><strong>S3: Keylogger &amp; Sabotage</strong></td>
-                  <td>Keylogger Download Count; Mass Email (&ge; 5 recipients)</td>
-                  <td>Thumb Drive Usage; Unauthorized PC Login; Sudden Departure</td>
+                  <td><strong>Scenario 3</strong><br><span class="pb-tag threat">Keylogger &amp; Sabotage</span></td>
+                  <td>A disgruntled system administrator downloads a keylogger and uses a thumb drive to transfer it to their supervisor's machine. The next day, they use the collected credentials to log in as the supervisor and send out an alarming mass email causing organization-wide panic before leaving immediately.</td>
+                  <td>&bull; <strong>Keylogger Download Count</strong><br>&bull; <strong>Mass Email Count</strong> (&ge; 5 recipients)</td>
+                  <td>&bull; <strong>Thumb Drive Usage Count</strong> (transferring keylogger)<br>&bull; <strong>Unauthorized / Suspicious PC Login</strong><br>&bull; <strong>Sudden Departure Flag</strong></td>
                 </tr>
                 <tr>
-                  <td><strong>S4: Lateral &amp; Home Email</strong></td>
-                  <td>Unauthorized / Non-Primary PC Logon; Home Email Count</td>
-                  <td>File Search / Decoy File Access; Http &harr; File transitions</td>
+                  <td><strong>Scenario 4</strong><br><span class="pb-tag threat">Lateral Snooping &amp; Home Email</span></td>
+                  <td>A user repeatedly logs into another user's workstation, searches for interesting or confidential files, and emails them to their personal home email address (e.g., Gmail, Yahoo, Hotmail), with frequency escalating over time.</td>
+                  <td>&bull; <strong>Unauthorized / Non-Primary PC Login</strong><br>&bull; <strong>Home Email Count</strong></td>
+                  <td>&bull; <strong>File Search / Decoy File Access Count</strong><br>&bull; <code>Http &rarr; File</code> or <code>File &rarr; Http</code> transitions</td>
                 </tr>
                 <tr>
-                  <td><strong>Mixed Mode</strong></td>
-                  <td>2+ primary threat indicators active simultaneously</td>
-                  <td>Multi-channel spikes across email, http, file, after-hours</td>
+                  <td><strong>Mixed Mode</strong><br><span class="pb-tag mixed">Multi-Vector Attack</span></td>
+                  <td>A compound threat profile in which a user exhibits behavioral indicators spanning <strong>two or more</strong> distinct insider scenarios within the same observation window (e.g., unauthorized PC snooping + home email exfiltration combined with WikiLeaks uploads or job-search USB theft).</td>
+                  <td>&bull; Two or more primary threat indicators active simultaneously (e.g., <strong>WikiLeaks + Home Email</strong> or <strong>Unauthorized Login + Thumb Drive</strong>)</td>
+                  <td>&bull; Multi-channel spikes across <code>email</code>, <code>http</code>, <code>file</code>, and after-hours timing</td>
                 </tr>
                 <tr>
-                  <td><strong>Benign Anomaly</strong></td>
-                  <td>Routine Workload / Timing Spike (Morning/Afternoon, inter-activity time)</td>
-                  <td>Occasional authorized USB or Weekend work without exfiltration cues</td>
+                  <td><strong>Benign Anomaly</strong><br><span class="pb-tag benign">Non-Malicious Outlier</span></td>
+                  <td>A legitimate employee whose daily reconstruction score crosses the MAD threshold due to an unusual but benign workload surge (e.g., deadline crunch, heavy email volume, atypical meeting gaps, or routine authorized USB use) with <strong>no</strong> malicious exfiltration or unauthorized access.</td>
+                  <td>&bull; <strong>Routine Workload / Timing Spike</strong> (<code>Morning</code>/<code>Afternoon</code> count, inter-activity time, or <code>Logon &rarr; Email</code>)</td>
+                  <td>&bull; Occasional authorized <code>Thumb Drive</code> or <code>Weekend</code> work without WikiLeaks, keyloggers, decoy files, or unauthorized logins</td>
                 </tr>
               </tbody>
             </table>
@@ -1146,11 +1173,11 @@
         orderCode: 'A_A_A_B_B',
         composition: 'Participants P01–P10 (P01–P05 Students/Staff • P06–P10 SOC Analysts) • Order: A, A, A (Benign), B, B',
         slots: [
-          { cert_id: 'ALT1465', scenario: 'S1', label: 'Scenario S1 (ALT1465)', design: 'A' },
-          { cert_id: 'CIF1430', scenario: 'S2', label: 'Scenario S2 (CIF1430)', design: 'A' },
-          { cert_id: 'AAB1302', scenario: 'BENIGN', label: 'Benign Control (AAB1302)', design: 'A' },
-          { cert_id: 'CRD0272', scenario: 'S3', label: 'Scenario S3 (CRD0272)', design: 'B' },
-          { cert_id: 'AMC1883', scenario: 'S4', label: 'Scenario S4 (AMC1883)', design: 'B' },
+          { cert_id: 'ALT1465', scenario: 'S1', label: 'User Profile ALT1465', design: 'A' },
+          { cert_id: 'CIF1430', scenario: 'S2', label: 'User Profile CIF1430', design: 'A' },
+          { cert_id: 'AAB1302', scenario: 'BENIGN', label: 'User Profile AAB1302', design: 'A' },
+          { cert_id: 'CRD0272', scenario: 'S3', label: 'User Profile CRD0272', design: 'B' },
+          { cert_id: 'AMC1883', scenario: 'S4', label: 'User Profile AMC1883', design: 'B' },
         ]
       },
       'cohort-2': {
@@ -1159,11 +1186,11 @@
         orderCode: 'B_B_A_A_A',
         composition: 'Participants P11–P20 (P11–P15 Students/Staff • P16–P20 SOC Analysts) • Order: B, B, A (Benign), A, A',
         slots: [
-          { cert_id: 'CIF1430', scenario: 'S2', label: 'Scenario S2 (CIF1430)', design: 'B' },
-          { cert_id: 'ALT1465', scenario: 'S1', label: 'Scenario S1 (ALT1465)', design: 'B' },
-          { cert_id: 'AAB1302', scenario: 'BENIGN', label: 'Benign Control (AAB1302)', design: 'A' },
-          { cert_id: 'AMC1883', scenario: 'S4', label: 'Scenario S4 (AMC1883)', design: 'A' },
-          { cert_id: 'CRD0272', scenario: 'S3', label: 'Scenario S3 (CRD0272)', design: 'A' },
+          { cert_id: 'CIF1430', scenario: 'S2', label: 'User Profile CIF1430', design: 'B' },
+          { cert_id: 'ALT1465', scenario: 'S1', label: 'User Profile ALT1465', design: 'B' },
+          { cert_id: 'AAB1302', scenario: 'BENIGN', label: 'User Profile AAB1302', design: 'A' },
+          { cert_id: 'AMC1883', scenario: 'S4', label: 'User Profile AMC1883', design: 'A' },
+          { cert_id: 'CRD0272', scenario: 'S3', label: 'User Profile CRD0272', design: 'A' },
         ]
       },
       'cohort-3': {
@@ -1172,11 +1199,11 @@
         orderCode: 'A_A_B_B_B',
         composition: 'Participants P21–P30 (P21–P25 Students/Staff • P26–P30 SOC Analysts) • Order: A, A, B (Benign), B, B',
         slots: [
-          { cert_id: 'CRD0272', scenario: 'S3', label: 'Scenario S3 (CRD0272)', design: 'A' },
-          { cert_id: 'AMC1883', scenario: 'S4', label: 'Scenario S4 (AMC1883)', design: 'A' },
-          { cert_id: 'AAB1302', scenario: 'BENIGN', label: 'Benign Control (AAB1302)', design: 'B' },
-          { cert_id: 'ALT1465', scenario: 'S1', label: 'Scenario S1 (ALT1465)', design: 'B' },
-          { cert_id: 'CIF1430', scenario: 'S2', label: 'Scenario S2 (CIF1430)', design: 'B' },
+          { cert_id: 'CRD0272', scenario: 'S3', label: 'User Profile CRD0272', design: 'A' },
+          { cert_id: 'AMC1883', scenario: 'S4', label: 'User Profile AMC1883', design: 'A' },
+          { cert_id: 'AAB1302', scenario: 'BENIGN', label: 'User Profile AAB1302', design: 'B' },
+          { cert_id: 'ALT1465', scenario: 'S1', label: 'User Profile ALT1465', design: 'B' },
+          { cert_id: 'CIF1430', scenario: 'S2', label: 'User Profile CIF1430', design: 'B' },
         ]
       },
       'cohort-4': {
@@ -1185,11 +1212,11 @@
         orderCode: 'B_B_B_A_A',
         composition: 'Participants P31–P40 (P31–P35 Students/Staff • P36–P40 SOC Analysts) • Order: B, B, B (Benign), A, A',
         slots: [
-          { cert_id: 'AMC1883', scenario: 'S4', label: 'Scenario S4 (AMC1883)', design: 'B' },
-          { cert_id: 'CRD0272', scenario: 'S3', label: 'Scenario S3 (CRD0272)', design: 'B' },
-          { cert_id: 'AAB1302', scenario: 'BENIGN', label: 'Benign Control (AAB1302)', design: 'B' },
-          { cert_id: 'CIF1430', scenario: 'S2', label: 'Scenario S2 (CIF1430)', design: 'A' },
-          { cert_id: 'ALT1465', scenario: 'S1', label: 'Scenario S1 (ALT1465)', design: 'A' },
+          { cert_id: 'AMC1883', scenario: 'S4', label: 'User Profile AMC1883', design: 'B' },
+          { cert_id: 'CRD0272', scenario: 'S3', label: 'User Profile CRD0272', design: 'B' },
+          { cert_id: 'AAB1302', scenario: 'BENIGN', label: 'User Profile AAB1302', design: 'B' },
+          { cert_id: 'CIF1430', scenario: 'S2', label: 'User Profile CIF1430', design: 'A' },
+          { cert_id: 'ALT1465', scenario: 'S1', label: 'User Profile ALT1465', design: 'A' },
         ]
       }
     };
@@ -1206,18 +1233,13 @@
       return String(pathStr || '').split(/[\\/]/).pop();
     }
 
-    // Deterministic mapping for Global Participant ID 1..40:
-    // P01-P10 -> Cohort 1 (1-5 Student/Staff, 6-10 SOC Analyst)
-    // P11-P20 -> Cohort 2 (11-15 Student/Staff, 16-20 SOC Analyst)
-    // P21-P30 -> Cohort 3 (21-25 Student/Staff, 26-30 SOC Analyst)
-    // P31-P40 -> Cohort 4 (31-35 Student/Staff, 36-40 SOC Analyst)
     function resolveParticipantAssignment(globalId) {
       const idNum = parseInt(globalId, 10);
       if (!idNum || idNum < 1 || idNum > 40) {
         return null;
       }
-      const cohortIndex = Math.floor((idNum - 1) / 10) + 1; // 1..4
-      const withinCohortSlot = ((idNum - 1) % 10) + 1;     // 1..10
+      const cohortIndex = Math.floor((idNum - 1) / 10) + 1;
+      const withinCohortSlot = ((idNum - 1) % 10) + 1;
       const isStudent = withinCohortSlot <= 5;
       const cohortId = `cohort-${cohortIndex}`;
       const cohortCfg = COHORT_MATRIX[cohortId];
@@ -1266,7 +1288,7 @@
         currentZoomPct = 100;
         img.style.width = 'auto';
         img.style.maxWidth = '100%';
-        img.style.maxHeight = '68vh';
+        img.style.maxHeight = '62vh';
         img.style.margin = '0 auto';
         img.style.cursor = 'zoom-in';
         viewport.scrollTop = 0;
@@ -1339,20 +1361,18 @@
         return;
       }
 
-      // Update Role & Cohort Status Pills
       roleChip.className = `role-chip ${info.isStudent ? 'student' : 'analyst'}`;
       roleChip.textContent = `Role: ${info.roleDisplay} (Slot ${info.withinCohortSlot}/10)`;
 
       const isAlreadyUnlocked = unlockedCohortId === info.cohortId;
       cohortChip.className = 'role-chip cohort-pill';
-      cohortChip.textContent = `Assigned: ${info.cohortTitle} ${isAlreadyUnlocked ? '(Unlocked ✓)' : '(Locked 🔒)'}`;
+      cohortChip.textContent = `Assigned: ${info.cohortTitle} ${isAlreadyUnlocked ? '(Unlocked ✓)' : '(Locked)'}`;
 
       unlockBtn.disabled = false;
       unlockBtn.textContent = isAlreadyUnlocked
         ? `${info.cohortTitle} Unlocked ✓`
         : `Unlock ${info.cohortTitle}`;
 
-      // Configure Single Active Qualtrics Exit Survey Link
       const baseUrl = info.isStudent ? SURVEY_URLS.STUDENT : SURVEY_URLS.ANALYST;
       const urlObj = new URL(baseUrl);
       urlObj.searchParams.set('ParticipantID', info.compositeId);
@@ -1466,7 +1486,7 @@
               <div>
                 <div class="user-title">
                   <span>User ${slot.cert_id}</span>
-                  <span class="scen-badge">${slot.scenario}</span>
+                  <span class="scen-badge">Case ${sIdx + 1}</span>
                 </div>
                 <div class="user-subtitle ${isA ? 'design-a' : 'design-b'}">${designLabel}</div>
                 <div class="trial-btn-list">
@@ -1673,9 +1693,11 @@
         document.getElementById('matrixModal').style.display = 'flex';
       }
     });
-    document.getElementById('btnToggleRefTable').addEventListener('click', () => {
+    document.getElementById('btnToggleRefTable').addEventListener('click', function () {
       const box = document.getElementById('refTableContainer');
-      box.style.display = box.style.display === 'none' ? 'block' : 'none';
+      const isHidden = box.style.display === 'none';
+      box.style.display = isHidden ? 'block' : 'none';
+      this.textContent = isHidden ? 'Hide Playbook' : 'Show Playbook';
     });
 
     // Save triage decision
