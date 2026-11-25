@@ -92,7 +92,7 @@
       }
     }
 
-    /* PROMINENT FIRST-ACTION PARTICIPANT NUMBER & COHORT SELECTOR */
+    /* PROMINENT FIRST-ACTION PARTICIPANT ID (1-40) SELECTOR */
     .selector-container {
       background: #1e293b;
       border: 2px solid #7c3aed;
@@ -132,8 +132,9 @@
       flex-wrap: wrap;
       gap: 12px;
       justify-content: center;
+      align-items: center;
       width: 100%;
-      max-width: 820px;
+      max-width: 840px;
     }
     .cohort-select {
       background: #0f172a;
@@ -142,17 +143,45 @@
       padding: 10px 16px;
       border-radius: 8px;
       font-family: inherit;
-      font-size: 0.92rem;
+      font-size: 0.95rem;
       font-weight: 700;
       outline: none;
       cursor: pointer;
       transition: all 0.20s ease-in-out;
       text-align: center;
-      flex: 1 1 340px;
+      flex: 1 1 360px;
+      max-width: 440px;
     }
     .cohort-select:focus, .cohort-select:hover {
       border-color: #a78bfa;
       box-shadow: 0 0 12px rgba(167, 139, 250, 0.3);
+    }
+    .unlock-btn {
+      background: #7c3aed;
+      border: 2px solid #6d28d9;
+      color: #ffffff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .unlock-btn:hover { background: #6d28d9; }
+    .unlock-btn:disabled {
+      background: #334155;
+      border-color: #475569;
+      color: #94a3b8;
+      cursor: not-allowed;
+    }
+
+    .assignment-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      align-items: center;
     }
     .role-chip {
       font-size: 0.78rem;
@@ -172,6 +201,11 @@
       color: #a78bfa;
       border-color: #7c3aed;
       background: rgba(124, 58, 237, 0.12);
+    }
+    .role-chip.cohort-pill {
+      color: #34d399;
+      border-color: #059669;
+      background: rgba(16, 185, 129, 0.08);
     }
 
     .instructions-box {
@@ -381,7 +415,7 @@
       text-align: center;
     }
     .single-survey-card {
-      max-width: 540px;
+      max-width: 560px;
       margin: 12px auto 0;
       background: rgba(15, 23, 42, 0.75);
       border: 1px solid #334155;
@@ -417,7 +451,7 @@
       font-weight: 800;
       transition: all 0.15s;
       width: 100%;
-      max-width: 360px;
+      max-width: 380px;
       cursor: pointer;
     }
     .survey-btn:hover {
@@ -434,7 +468,7 @@
     }
 
     .survey-param-preview {
-      margin-top: 10px;
+      margin-top: 8px;
       font-size: 0.74rem;
       color: #94a3b8;
     }
@@ -784,9 +818,9 @@
 
   <div class="wrapper">
     <header>
-      <div class="badge">Experimental User Study (N = 40 &bull; 4 Cohorts &bull; 10 per Cohort)</div>
+      <div class="badge">Experimental User Study (N = 40 &bull; P01–P40)</div>
       <h1>SOC Triage Operations - Evaluation Portal</h1>
-      <div class="subtitle">Cohort Matrix Routing &amp; Target Verification Hub</div>
+      <div class="subtitle">Automated Participant Routing &amp; Target Verification Hub</div>
 
       <div class="nav-container">
         <a href="index.html" class="btn-nav-back">
@@ -802,41 +836,23 @@
       </div>
     </header>
 
-    <!-- PROMINENT FIRST-ACTION PARTICIPANT NUMBER & COHORT SELECTOR -->
+    <!-- STEP 1: SINGLE PARTICIPANT ID (1-40) SELECTOR -->
     <div class="selector-container">
-      <label class="selector-label" for="cohortFilter">
-        <span class="step-badge">Step 1</span> Select Your Assigned Participant Number (1–10) &amp; Testing Cohort:
+      <label class="selector-label" for="participantIdSelect">
+        <span class="step-badge">Step 1</span> Select Your Assigned Participant ID (1–40):
       </label>
       <div class="selector-row">
-        <select id="participantNumberSelect" class="cohort-select">
-          <option value="" disabled selected>-- Select Participant Number (1–10) --</option>
-          <optgroup label="University Students / Staff (Numbers 1–5)">
-            <option value="1">Participant 1 (University Student / Staff)</option>
-            <option value="2">Participant 2 (University Student / Staff)</option>
-            <option value="3">Participant 3 (University Student / Staff)</option>
-            <option value="4">Participant 4 (University Student / Staff)</option>
-            <option value="5">Participant 5 (University Student / Staff)</option>
-          </optgroup>
-          <optgroup label="Professional SOC Analysts (Numbers 6–10)">
-            <option value="6">Participant 6 (Professional SOC Analyst)</option>
-            <option value="7">Participant 7 (Professional SOC Analyst)</option>
-            <option value="8">Participant 8 (Professional SOC Analyst)</option>
-            <option value="9">Participant 9 (Professional SOC Analyst)</option>
-            <option value="10">Participant 10 (Professional SOC Analyst)</option>
-          </optgroup>
+        <select id="participantIdSelect" class="cohort-select">
+          <option value="" disabled selected>-- Select Participant ID (P01 – P40) --</option>
         </select>
-
-        <select id="cohortFilter" class="cohort-select">
-          <option value="" disabled selected>-- Choose your cohort row to unlock --</option>
-          <option value="cohort-1">Testing Cohort Group 1 (Passkey Required)</option>
-          <option value="cohort-2">Testing Cohort Group 2 (Passkey Required)</option>
-          <option value="cohort-3">Testing Cohort Group 3 (Passkey Required)</option>
-          <option value="cohort-4">Testing Cohort Group 4 (Passkey Required)</option>
-        </select>
+        <button type="button" id="btnUnlockAssignedCohort" class="unlock-btn" disabled>
+          Unlock Assigned Cohort
+        </button>
       </div>
 
-      <div id="roleStatusChip" class="role-chip">
-        Role Routing: Select Participant Number 1–5 (Student/Staff) or 6–10 (SOC Analyst)
+      <div class="assignment-strip">
+        <span id="roleStatusChip" class="role-chip">Role: Waiting for Participant ID (1–40)</span>
+        <span id="cohortStatusChip" class="role-chip">Assigned Cohort: —</span>
       </div>
     </div>
 
@@ -851,22 +867,22 @@
     <div id="cohort-3" class="cohort-group-block"></div>
     <div id="cohort-4" class="cohort-group-block"></div>
 
-    <!-- SINGLE DYNAMIC EXIT SURVEY BLOCK (AUTO-SWITCHES BETWEEN 1-5 STUDENT & 6-10 SOC ANALYST) -->
+    <!-- SINGLE DYNAMIC EXIT SURVEY BLOCK (AUTO-SWITCHES BY PARTICIPANT ID 1-40) -->
     <div class="survey-section">
       <h2 style="color: #10b981; font-size: 1.1rem; font-weight: 800; margin-bottom: 4px;">Study Phase Completion</h2>
       <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 4px;">
-        Your exit survey link automatically adjusts to your assigned role (<strong>1–5: Student / Staff</strong> &bull; <strong>6–10: Professional SOC Analyst</strong>) and forwards your session metadata:
+        Your role, cohort, and exit survey link are configured automatically from your Participant ID (1–40):
       </p>
 
       <div class="single-survey-card">
-        <div id="surveyRoleTitle" class="survey-role-title">Select Participant Number (1–10) Above</div>
+        <div id="surveyRoleTitle" class="survey-role-title">Select Participant ID (P01–P40) Above</div>
         <a id="btnDynamicSurvey"
            href="#"
            class="survey-btn disabled-survey"
            target="_blank"
            rel="noopener noreferrer">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-          <span id="surveyBtnLabel">Select Participant Number to Unlock Survey</span>
+          <span id="surveyBtnLabel">Select Participant ID to Activate Survey</span>
         </a>
         <div id="surveyParamPreview" class="survey-param-preview">
           Embedded Qualtrics Metadata: <code>ParticipantID=UNSPECIFIED</code> &bull; <code>Cohort=NONE</code> &bull; <code>Role=UNASSIGNED</code>
@@ -904,7 +920,7 @@
     </div>
   </div>
 
-  <!-- ALERT TRIAGE EVALUATION MODAL (EXACT QUESTIONS & FIXED 100% ZOOM RESET) -->
+  <!-- ALERT TRIAGE EVALUATION MODAL -->
   <div id="triageModal" class="image-modal">
     <div class="triage-modal-box">
       <!-- Left Pane: Explanation Image + Interactive Zoom + Quick Playbook -->
@@ -1128,7 +1144,7 @@
         title: 'Testing Cohort Group 1',
         shortCode: 'C1',
         orderCode: 'A_A_A_B_B',
-        composition: '10 Participants (1–5 Students/Staff • 6–10 SOC Analysts) • Order: A, A, A (Benign), B, B',
+        composition: 'Participants P01–P10 (P01–P05 Students/Staff • P06–P10 SOC Analysts) • Order: A, A, A (Benign), B, B',
         slots: [
           { cert_id: 'ALT1465', scenario: 'S1', label: 'Scenario S1 (ALT1465)', design: 'A' },
           { cert_id: 'CIF1430', scenario: 'S2', label: 'Scenario S2 (CIF1430)', design: 'A' },
@@ -1141,7 +1157,7 @@
         title: 'Testing Cohort Group 2',
         shortCode: 'C2',
         orderCode: 'B_B_A_A_A',
-        composition: '10 Participants (1–5 Students/Staff • 6–10 SOC Analysts) • Order: B, B, A (Benign), A, A',
+        composition: 'Participants P11–P20 (P11–P15 Students/Staff • P16–P20 SOC Analysts) • Order: B, B, A (Benign), A, A',
         slots: [
           { cert_id: 'CIF1430', scenario: 'S2', label: 'Scenario S2 (CIF1430)', design: 'B' },
           { cert_id: 'ALT1465', scenario: 'S1', label: 'Scenario S1 (ALT1465)', design: 'B' },
@@ -1154,7 +1170,7 @@
         title: 'Testing Cohort Group 3',
         shortCode: 'C3',
         orderCode: 'A_A_B_B_B',
-        composition: '10 Participants (1–5 Students/Staff • 6–10 SOC Analysts) • Order: A, A, B (Benign), B, B',
+        composition: 'Participants P21–P30 (P21–P25 Students/Staff • P26–P30 SOC Analysts) • Order: A, A, B (Benign), B, B',
         slots: [
           { cert_id: 'CRD0272', scenario: 'S3', label: 'Scenario S3 (CRD0272)', design: 'A' },
           { cert_id: 'AMC1883', scenario: 'S4', label: 'Scenario S4 (AMC1883)', design: 'A' },
@@ -1167,7 +1183,7 @@
         title: 'Testing Cohort Group 4',
         shortCode: 'C4',
         orderCode: 'B_B_B_A_A',
-        composition: '10 Participants (1–5 Students/Staff • 6–10 SOC Analysts) • Order: B, B, B (Benign), A, A',
+        composition: 'Participants P31–P40 (P31–P35 Students/Staff • P36–P40 SOC Analysts) • Order: B, B, B (Benign), A, A',
         slots: [
           { cert_id: 'AMC1883', scenario: 'S4', label: 'Scenario S4 (AMC1883)', design: 'B' },
           { cert_id: 'CRD0272', scenario: 'S3', label: 'Scenario S3 (CRD0272)', design: 'B' },
@@ -1180,7 +1196,7 @@
 
     let manifestTrials = [];
     let pendingCohortId = '';
-    let activeCohortId = '';
+    let unlockedCohortId = '';
     let activeTrialContext = null;
     let trialOpenTimestamp = 0;
     let currentZoomPct = 100;
@@ -1190,22 +1206,57 @@
       return String(pathStr || '').split(/[\\/]/).pop();
     }
 
-    function getParticipantInfo() {
-      const numStr = document.getElementById('participantNumberSelect').value;
-      const pNum = numStr ? parseInt(numStr, 10) : null;
-      if (!pNum || pNum < 1 || pNum > 10) {
-        return { pNum: null, role: null, isStudent: null, compositeId: 'UNSPECIFIED' };
+    // Deterministic mapping for Global Participant ID 1..40:
+    // P01-P10 -> Cohort 1 (1-5 Student/Staff, 6-10 SOC Analyst)
+    // P11-P20 -> Cohort 2 (11-15 Student/Staff, 16-20 SOC Analyst)
+    // P21-P30 -> Cohort 3 (21-25 Student/Staff, 26-30 SOC Analyst)
+    // P31-P40 -> Cohort 4 (31-35 Student/Staff, 36-40 SOC Analyst)
+    function resolveParticipantAssignment(globalId) {
+      const idNum = parseInt(globalId, 10);
+      if (!idNum || idNum < 1 || idNum > 40) {
+        return null;
       }
-      const isStudent = pNum >= 1 && pNum <= 5;
-      const role = isStudent ? 'Student_Staff' : 'SOC_Analyst';
-      const cohortCode = activeCohortId && COHORT_MATRIX[activeCohortId]
-        ? COHORT_MATRIX[activeCohortId].shortCode
-        : 'CX';
-      const compositeId = `${cohortCode}_P${String(pNum).padStart(2, '0')}_${isStudent ? 'STU' : 'SOC'}`;
-      return { pNum, role, isStudent, compositeId };
+      const cohortIndex = Math.floor((idNum - 1) / 10) + 1; // 1..4
+      const withinCohortSlot = ((idNum - 1) % 10) + 1;     // 1..10
+      const isStudent = withinCohortSlot <= 5;
+      const cohortId = `cohort-${cohortIndex}`;
+      const cohortCfg = COHORT_MATRIX[cohortId];
+      const paddedId = `P${String(idNum).padStart(2, '0')}`;
+      const compositeId = `${paddedId}_${cohortCfg.shortCode}_${isStudent ? 'STU' : 'SOC'}`;
+
+      return {
+        globalId: idNum,
+        paddedId,
+        compositeId,
+        withinCohortSlot,
+        cohortIndex,
+        cohortId,
+        cohortTitle: cohortCfg.title,
+        orderCode: cohortCfg.orderCode,
+        isStudent,
+        roleCode: isStudent ? 'Student_Staff' : 'SOC_Analyst',
+        roleDisplay: isStudent ? 'University Student / Staff' : 'Professional SOC Analyst'
+      };
     }
 
-    // Fixed 100% Zoom Reset: fits entire square plot cleanly inside viewport without scrollbars
+    function populateParticipantDropdown() {
+      const sel = document.getElementById('participantIdSelect');
+      for (let c = 1; c <= 4; c++) {
+        const og = document.createElement('optgroup');
+        const startId = (c - 1) * 10 + 1;
+        const endId = c * 10;
+        og.label = `Cohort ${c} (P${String(startId).padStart(2, '0')}–P${String(endId).padStart(2, '0')})`;
+        for (let i = startId; i <= endId; i++) {
+          const info = resolveParticipantAssignment(i);
+          const opt = document.createElement('option');
+          opt.value = String(i);
+          opt.textContent = `${info.paddedId} — ${info.roleDisplay} (${info.cohortTitle})`;
+          og.appendChild(opt);
+        }
+        sel.appendChild(og);
+      }
+    }
+
     function applyZoom(pct) {
       const img = document.getElementById('triageTargetImg');
       const viewport = document.getElementById('triageImgViewport');
@@ -1232,7 +1283,6 @@
       }
     }
 
-    // Prevent choosing the exact same indicator as both Primary (Q3) and Secondary (Q5)
     function syncSecondaryExclusions() {
       const selectedPrimary = document.getElementById('primaryCue').value;
       document.querySelectorAll('input[name="secondaryCue"]').forEach(cb => {
@@ -1250,17 +1300,18 @@
       });
     }
 
-    // Automatically switch single Qualtrics button (1-5 Student/Staff vs 6-10 SOC Analyst) & forward params
-    function syncDynamicSurvey() {
-      const info = getParticipantInfo();
-      const chipEl = document.getElementById('roleStatusChip');
+    function syncAssignmentAndSurvey() {
+      const rawVal = document.getElementById('participantIdSelect').value;
+      const info = resolveParticipantAssignment(rawVal);
+
+      const roleChip = document.getElementById('roleStatusChip');
+      const cohortChip = document.getElementById('cohortStatusChip');
+      const unlockBtn = document.getElementById('btnUnlockAssignedCohort');
       const titleEl = document.getElementById('surveyRoleTitle');
       const btnEl = document.getElementById('btnDynamicSurvey');
       const labelEl = document.getElementById('surveyBtnLabel');
       const previewEl = document.getElementById('surveyParamPreview');
 
-      const cohort = activeCohortId || 'NONE';
-      const orderCode = activeCohortId && COHORT_MATRIX[activeCohortId] ? COHORT_MATRIX[activeCohortId].orderCode : 'NONE';
       const rows = Object.values(triageResponses);
       const totalCompleted = rows.length;
       const escalatedCount = rows.filter(r => r.decision === 'THREAT').length;
@@ -1270,26 +1321,46 @@
         ? Math.round(rows.reduce((sum, r) => sum + Number(r.reaction_time_ms || 0), 0) / totalCompleted)
         : 0;
 
-      if (!info.pNum) {
-        chipEl.className = 'role-chip';
-        chipEl.textContent = 'Role Routing: Select Participant Number 1–5 (Student/Staff) or 6–10 (SOC Analyst)';
+      if (!info) {
+        roleChip.className = 'role-chip';
+        roleChip.textContent = 'Role: Waiting for Participant ID (1–40)';
+        cohortChip.className = 'role-chip';
+        cohortChip.textContent = 'Assigned Cohort: —';
+        unlockBtn.disabled = true;
+        unlockBtn.textContent = 'Unlock Assigned Cohort';
+
         titleEl.className = 'survey-role-title';
-        titleEl.textContent = 'Select Participant Number (1–10) Above';
+        titleEl.textContent = 'Select Participant ID (P01–P40) Above';
         btnEl.className = 'survey-btn disabled-survey';
         btnEl.href = '#';
-        labelEl.textContent = 'Select Participant Number to Unlock Survey';
+        labelEl.textContent = 'Select Participant ID to Activate Survey';
         previewEl.innerHTML =
-          `Embedded Qualtrics Metadata: <code>ParticipantID=UNSPECIFIED</code> &bull; <code>Cohort=${cohort}</code> &bull; <code>Role=UNASSIGNED</code>`;
+          'Embedded Qualtrics Metadata: <code>ParticipantID=UNSPECIFIED</code> &bull; <code>Cohort=NONE</code> &bull; <code>Role=UNASSIGNED</code>';
         return;
       }
 
+      // Update Role & Cohort Status Pills
+      roleChip.className = `role-chip ${info.isStudent ? 'student' : 'analyst'}`;
+      roleChip.textContent = `Role: ${info.roleDisplay} (Slot ${info.withinCohortSlot}/10)`;
+
+      const isAlreadyUnlocked = unlockedCohortId === info.cohortId;
+      cohortChip.className = 'role-chip cohort-pill';
+      cohortChip.textContent = `Assigned: ${info.cohortTitle} ${isAlreadyUnlocked ? '(Unlocked ✓)' : '(Locked 🔒)'}`;
+
+      unlockBtn.disabled = false;
+      unlockBtn.textContent = isAlreadyUnlocked
+        ? `${info.cohortTitle} Unlocked ✓`
+        : `Unlock ${info.cohortTitle}`;
+
+      // Configure Single Active Qualtrics Exit Survey Link
       const baseUrl = info.isStudent ? SURVEY_URLS.STUDENT : SURVEY_URLS.ANALYST;
       const urlObj = new URL(baseUrl);
       urlObj.searchParams.set('ParticipantID', info.compositeId);
-      urlObj.searchParams.set('ParticipantNumber', String(info.pNum));
-      urlObj.searchParams.set('Cohort', cohort);
-      urlObj.searchParams.set('Role', info.role);
-      urlObj.searchParams.set('ConditionOrder', orderCode);
+      urlObj.searchParams.set('GlobalParticipantNumber', String(info.globalId));
+      urlObj.searchParams.set('WithinCohortSlot', String(info.withinCohortSlot));
+      urlObj.searchParams.set('Cohort', info.cohortId);
+      urlObj.searchParams.set('Role', info.roleCode);
+      urlObj.searchParams.set('ConditionOrder', info.orderCode);
       urlObj.searchParams.set('TrialsCompleted', String(totalCompleted));
       urlObj.searchParams.set('EscalatedCount', String(escalatedCount));
       urlObj.searchParams.set('DismissedCount', String(dismissedCount));
@@ -1297,24 +1368,47 @@
       urlObj.searchParams.set('MeanReactionTimeMs', String(meanRtMs));
 
       if (info.isStudent) {
-        chipEl.className = 'role-chip student';
-        chipEl.textContent = `Participant #${info.pNum} (${info.compositeId}) → Routed to Student / Staff Exit Survey`;
         titleEl.className = 'survey-role-title student-theme';
-        titleEl.textContent = `University Student / Staff Exit Survey (Participant #${info.pNum})`;
+        titleEl.textContent = `University Student / Staff Exit Survey (${info.paddedId})`;
         labelEl.textContent = 'Open Student / Staff Exit Survey';
       } else {
-        chipEl.className = 'role-chip analyst';
-        chipEl.textContent = `Participant #${info.pNum} (${info.compositeId}) → Routed to Professional SOC Analyst Exit Survey`;
         titleEl.className = 'survey-role-title analyst-theme';
-        titleEl.textContent = `Professional SOC Analyst Exit Survey (Participant #${info.pNum})`;
+        titleEl.textContent = `Professional SOC Analyst Exit Survey (${info.paddedId})`;
         labelEl.textContent = 'Open Professional SOC Analyst Survey';
       }
 
       btnEl.className = 'survey-btn';
       btnEl.href = urlObj.toString();
       previewEl.innerHTML =
-        `Embedded Qualtrics Metadata Ready: <code>ParticipantID=${info.compositeId}</code> &bull; ` +
-        `<code>Cohort=${cohort}</code> &bull; <code>Role=${info.role}</code> &bull; <code>TrialsCompleted=${totalCompleted}</code>`;
+        `Active Qualtrics Metadata: <code>ParticipantID=${info.compositeId}</code> &bull; ` +
+        `<code>Cohort=${info.cohortId}</code> &bull; <code>Role=${info.roleCode}</code> &bull; <code>TrialsCompleted=${totalCompleted}</code>`;
+    }
+
+    function triggerCohortUnlockFlow(targetCohortId) {
+      if (!targetCohortId) return;
+      if (unlockedCohortId === targetCohortId) {
+        showOnlyCohort(targetCohortId);
+        return;
+      }
+      pendingCohortId = targetCohortId;
+      document.getElementById('passkeyModalDesc').textContent =
+        `Please enter the 5-digit passkey assigned to ${COHORT_MATRIX[targetCohortId].title}.`;
+      const pField = document.getElementById('passkeyField');
+      pField.value = '';
+      pField.classList.remove('error-shake');
+      document.getElementById('passkeyModal').style.display = 'flex';
+      pField.focus();
+    }
+
+    function showOnlyCohort(targetCohortId) {
+      document.querySelectorAll('.cohort-group-block').forEach(group => {
+        if (group.id === targetCohortId) {
+          group.classList.add('visible');
+        } else {
+          group.classList.remove('visible');
+          group.querySelectorAll('.matrix-dropdown').forEach(d => d.classList.remove('active'));
+        }
+      });
     }
 
     async function initManifest() {
@@ -1406,7 +1500,7 @@
       });
 
       bindDynamicEvents();
-      syncDynamicSurvey();
+      syncAssignmentAndSurvey();
     }
 
     function bindDynamicEvents() {
@@ -1600,14 +1694,15 @@
       }
 
       const { cohortId, slot, trial } = activeTrialContext;
-      const info = getParticipantInfo();
+      const info = resolveParticipantAssignment(document.getElementById('participantIdSelect').value);
       const elapsedMs = Math.round(performance.now() - trialOpenTimestamp);
       const key = `${cohortId}__${slot.cert_id}__${trial.trial_id}`;
 
       triageResponses[key] = {
-        participant_id: info.compositeId,
-        participant_number: info.pNum ?? '',
-        participant_role: info.role ?? '',
+        participant_id: info ? info.compositeId : 'UNSPECIFIED',
+        global_participant_num: info ? info.globalId : '',
+        within_cohort_slot: info ? info.withinCohortSlot : '',
+        participant_role: info ? info.roleCode : '',
         cohort: cohortId,
         design_locked: slot.design,
         scenario: trial.scenario,
@@ -1648,67 +1743,57 @@
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      const info = getParticipantInfo();
+      const info = resolveParticipantAssignment(document.getElementById('participantIdSelect').value);
       a.href = url;
-      a.download = `${info.compositeId}_${activeCohortId || 'session'}_triage_results.csv`;
+      a.download = `${info ? info.compositeId : 'participant'}_triage_results.csv`;
       a.click();
       URL.revokeObjectURL(url);
     });
 
-    // Sync single Qualtrics button whenever Participant Number (1-10) changes
-    document.getElementById('participantNumberSelect').addEventListener('change', syncDynamicSurvey);
+    // Participant ID (1-40) auto-selection & unlock trigger
+    document.getElementById('participantIdSelect').addEventListener('change', function () {
+      const info = resolveParticipantAssignment(this.value);
+      syncAssignmentAndSurvey();
+      if (info) {
+        if (unlockedCohortId && unlockedCohortId !== info.cohortId) {
+          unlockedCohortId = '';
+          showOnlyCohort('');
+          syncAssignmentAndSurvey();
+        }
+        triggerCohortUnlockFlow(info.cohortId);
+      }
+    });
+
+    document.getElementById('btnUnlockAssignedCohort').addEventListener('click', () => {
+      const info = resolveParticipantAssignment(document.getElementById('participantIdSelect').value);
+      if (info) triggerCohortUnlockFlow(info.cohortId);
+    });
 
     document.getElementById('btnDynamicSurvey').addEventListener('click', function (e) {
-      syncDynamicSurvey();
-      const info = getParticipantInfo();
-      if (!info.pNum) {
+      syncAssignmentAndSurvey();
+      const info = resolveParticipantAssignment(document.getElementById('participantIdSelect').value);
+      if (!info) {
         e.preventDefault();
-        alert('Please select your assigned Participant Number (1–5 for Student/Staff or 6–10 for SOC Analyst) in Step 1 before opening the exit survey.');
-        document.getElementById('participantNumberSelect').focus();
+        alert('Please select your assigned Participant ID (P01–P40) in Step 1 first.');
+        document.getElementById('participantIdSelect').focus();
       }
     });
 
     // Passkey Verification Flow
-    const selectFilter = document.getElementById('cohortFilter');
-    const groups = document.querySelectorAll('.cohort-group-block');
     const pModal = document.getElementById('passkeyModal');
     const pField = document.getElementById('passkeyField');
     const pCancel = document.getElementById('passkeyCancelBtn');
     const pSubmit = document.getElementById('passkeySubmitBtn');
-    const pDesc = document.getElementById('passkeyModalDesc');
-
-    selectFilter.addEventListener('change', function () {
-      const selectedId = this.value;
-      if (!selectedId || selectedId === activeCohortId) return;
-
-      pendingCohortId = selectedId;
-      pDesc.textContent = `Please enter the 5-digit passkey assigned to Testing Cohort Group ${selectedId.split('-')[1]}.`;
-      pField.value = '';
-      pField.classList.remove('error-shake');
-      pModal.style.display = 'flex';
-      pField.focus();
-
-      selectFilter.value = activeCohortId ? activeCohortId : '';
-    });
 
     function verifyPasskey() {
       const inputKey = pField.value.trim();
       const correctKey = passkeyRegistry[pendingCohortId];
 
       if (inputKey === correctKey) {
-        activeCohortId = pendingCohortId;
-        selectFilter.value = activeCohortId;
+        unlockedCohortId = pendingCohortId;
         pModal.style.display = 'none';
-
-        groups.forEach(group => {
-          if (group.id === activeCohortId) {
-            group.classList.add('visible');
-          } else {
-            group.classList.remove('visible');
-            group.querySelectorAll('.matrix-dropdown').forEach(d => d.classList.remove('active'));
-          }
-        });
-        syncDynamicSurvey();
+        showOnlyCohort(unlockedCohortId);
+        syncAssignmentAndSurvey();
       } else {
         pField.classList.remove('error-shake');
         void pField.offsetWidth;
@@ -1723,7 +1808,6 @@
     pCancel.addEventListener('click', () => {
       pModal.style.display = 'none';
       pendingCohortId = '';
-      selectFilter.value = activeCohortId ? activeCohortId : '';
     });
 
     document.getElementById('modalClose').addEventListener('click', () => {
@@ -1741,8 +1825,9 @@
     });
 
     document.addEventListener('DOMContentLoaded', () => {
+      populateParticipantDropdown();
       initManifest();
-      syncDynamicSurvey();
+      syncAssignmentAndSurvey();
     });
   </script>
 </body>
