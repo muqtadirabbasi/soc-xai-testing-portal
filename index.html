@@ -269,7 +269,7 @@
         </div>
       </section>
 
-      <!-- Analyst Triage Response Panel (Aligned Bottom-Up Cognitive Sequence + Watchlist Option) -->
+      <!-- Analyst Triage Response Panel (Aligned Bottom-Up Cognitive Sequence) -->
       <section class="card decision-card">
         <h3>Analyst Triage Decision &amp; Behavioral Attribution</h3>
         <div class="decision-grid">
@@ -280,10 +280,6 @@
               <label class="radio-pill">
                 <input type="radio" name="decision" value="THREAT" />
                 Escalate as Insider Threat / Malicious Anomaly
-              </label>
-              <label class="radio-pill">
-                <input type="radio" name="decision" value="WATCHLIST" />
-                Place on Watchlist / Monitor (Borderline Precursor)
               </label>
               <label class="radio-pill">
                 <input type="radio" name="decision" value="BENIGN" />
@@ -377,25 +373,12 @@
   </div>
 
   <script>
-    window.PROTOCOL_CASE_BENCHMARK = {
-      'ALT1465': {
-        '2010-08-14': { case_id: 'S1_TP_1', state: 'TP', gold_disposition: 'THREAT', order: 1 },
-        '2010-08-11': { case_id: 'S1_FP',   state: 'FP', gold_disposition: 'BENIGN', order: 2 },
-        '2010-08-13': { case_id: 'S1_FN_1', state: 'FN', gold_disposition: 'WATCHLIST', order: 3 }
-      },
-      'CIF1430': {
-        '2010-08-02': { case_id: 'S2_TP',   state: 'TP', gold_disposition: 'THREAT', order: 1 },
-        '2010-08-30': { case_id: 'S2_FP_1', state: 'FP', gold_disposition: 'BENIGN', order: 2 },
-        '2010-07-26': { case_id: 'S2_FN_1', state: 'FN', gold_disposition: 'WATCHLIST', order: 3 }
-      },
-      'CRD0272': {
-        '2010-07-15': { case_id: 'S3_TP',   state: 'TP', gold_disposition: 'THREAT', order: 1 },
-        '2010-07-17': { case_id: 'S3_FP_1', state: 'FP', gold_disposition: 'BENIGN', order: 2 }
-      },
-      'AMC1883': {
-        '2011-02-11': { case_id: 'S4_TP',   state: 'TP', gold_disposition: 'THREAT', order: 1 },
-        '2011-01-22': { case_id: 'S4_FP_1', state: 'FP', gold_disposition: 'BENIGN', order: 2 }
-      },
+    // Paper-aligned user/date whitelist available to app.js (AAB1302 benign control untouched)
+    window.ALLOWED_PAPER_USER_DATES = {
+      'ALT1465': ['2010-08-20', '2010-08-11'],
+      'CIF1430': ['2010-08-02'],
+      'CRD0272': ['2010-07-15'],
+      'AMC1883': ['2011-02-11'],
       'AAB1302': null
     };
   </script>
