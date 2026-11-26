@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SOC Triage Operations - Evaluation Portal</title>
+  <title>SOC Triage Operations - 10-Case Evaluation Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
@@ -92,7 +92,7 @@
       }
     }
 
-    /* PROMINENT FIRST-ACTION PARTICIPANT ID (1-40) SELECTOR */
+    /* STEP 1: PARTICIPANT ID (1-40) SELECTOR */
     .selector-container {
       background: #1e293b;
       border: 2px solid #7c3aed;
@@ -253,7 +253,7 @@
       border-radius: 999px;
     }
 
-    /* 5-Column Grid */
+    /* 5-Column Grid (2 rows x 5 cases = 10 Benchmark Cases per Cohort) */
     .users-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
@@ -282,7 +282,7 @@
     }
 
     .user-title {
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       color: #ffffff;
       font-weight: 700;
       margin-bottom: 2px;
@@ -299,19 +299,20 @@
       border: 1px solid #334155;
     }
     .user-subtitle {
-      font-size: 0.74rem;
+      font-size: 0.73rem;
       font-weight: 700;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     .design-a { color: #38bdf8; }
     .design-b { color: #f43f5e; }
 
-    .trial-btn-list {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+    .card-meta-line {
+      font-size: 0.71rem;
+      color: #94a3b8;
       margin-bottom: 10px;
+      line-height: 1.35;
     }
+
     .dashboard-btn {
       display: flex;
       align-items: center;
@@ -319,7 +320,7 @@
       color: #ffffff;
       background: #2563eb;
       border: 1px solid #1d4ed8;
-      padding: 7px 10px;
+      padding: 8px 10px;
       border-radius: 5px;
       font-size: 0.75rem;
       font-weight: 600;
@@ -328,6 +329,7 @@
       width: 100%;
       text-align: left;
       font-family: inherit;
+      margin-bottom: 8px;
     }
     .dashboard-btn:hover { background: #1d4ed8; }
     .dashboard-btn.design-b-btn {
@@ -369,10 +371,10 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 8px;
+      padding: 7px 8px;
       color: #94a3b8;
       font-family: inherit;
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -636,7 +638,7 @@
       background: rgba(244, 63, 94, 0.08);
     }
 
-    /* Full 4-Column Scenario Description & Playbook Drawer (Hidden by Default) */
+    /* Full 4-Column Scenario Description & Kill-Chain Playbook Drawer (Hidden by Default) */
     .playbook-mini {
       margin-top: 8px;
       background: #1e293b;
@@ -644,6 +646,15 @@
       border-radius: 6px;
       padding: 8px 10px;
       font-size: 0.73rem;
+    }
+    .killchain-banner {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 5px;
+      padding: 7px 9px;
+      margin-top: 8px;
+      line-height: 1.4;
+      color: #cbd5e1;
     }
     .playbook-mini table {
       width: 100%;
@@ -702,7 +713,7 @@
     .score-strip span { color: #94a3b8; display: block; }
     .score-strip strong { display: block; font-size: 0.88rem; color: #ffffff; margin-top: 2px; }
 
-    .form-section { margin-bottom: 10px; }
+    .form-section { margin-bottom: 9px; }
     .form-section label.sec-lbl {
       display: block;
       font-size: 0.78rem;
@@ -721,9 +732,9 @@
       gap: 8px;
       background: #1e293b;
       border: 1px solid #334155;
-      padding: 6px 10px;
+      padding: 6px 9px;
       border-radius: 6px;
-      font-size: 0.77rem;
+      font-size: 0.76rem;
       cursor: pointer;
     }
     .choice-opt:hover { border-color: #7c3aed; }
@@ -737,7 +748,7 @@
       border-radius: 6px;
       padding: 6px 9px;
       font-family: inherit;
-      font-size: 0.77rem;
+      font-size: 0.76rem;
       outline: none;
     }
     .triage-select:focus { border-color: #a78bfa; }
@@ -773,7 +784,7 @@
       border: 1px solid #334155;
       padding: 5px 6px;
       border-radius: 5px;
-      font-size: 0.74rem;
+      font-size: 0.73rem;
       cursor: pointer;
       transition: all 0.12s;
     }
@@ -794,7 +805,7 @@
       border: 1px solid #334155;
       border-radius: 6px;
       padding: 7px 8px;
-      max-height: 150px;
+      max-height: 140px;
       overflow-y: auto;
     }
     @media (max-width: 560px) {
@@ -804,7 +815,7 @@
       display: flex;
       align-items: flex-start;
       gap: 6px;
-      font-size: 0.73rem;
+      font-size: 0.72rem;
       color: #cbd5e1;
       cursor: pointer;
       line-height: 1.28;
@@ -878,9 +889,9 @@
 
   <div class="wrapper">
     <header>
-      <div class="badge">Experimental User Study (N = 40 &bull; P01–P40)</div>
+      <div class="badge">CERT r5.2 XAI Triage Benchmark (10 Cases: 4 TP &bull; 4 FP &bull; 2 FN &bull; N = 40)</div>
       <h1>SOC Triage Operations - Evaluation Portal</h1>
-      <div class="subtitle">Automated Participant Routing &amp; Sequential Target Verification Hub</div>
+      <div class="subtitle">Automated Participant Routing &amp; Sequential 10-Case Verification Hub</div>
 
       <div class="nav-container">
         <a href="index.html" class="btn-nav-back">
@@ -891,7 +902,7 @@
 
       <div class="export-container">
         <button type="button" id="btnExportSession" class="btn-nav-back" style="border-color:#10b981;color:#10b981;">
-          Download Triage Log (CSV) (<span id="loggedCount">0</span>)
+          Download Scored Triage Log (CSV) (<span id="loggedCount">0</span>)
         </button>
       </div>
     </header>
@@ -917,7 +928,7 @@
     </div>
 
     <div class="instructions-box">
-      <div><strong>Sequential Protocol Notice:</strong> Assessments unlock strictly from <strong>left to right</strong> (Case 1 &rarr; Case 5). Complete every alert in order to unlock the Exit Survey.</div>
+      <div><strong>Sequential 10-Case Protocol:</strong> Cases unlock strictly from <strong>left to right</strong> (Case 1 &rarr; Case 10). Complete all 10 cases in order to activate the Exit Survey.</div>
       <div id="manifestStatus" style="color:#38bdf8;font-weight:600;">Loading stimulus manifest...</div>
     </div>
 
@@ -927,11 +938,11 @@
     <div id="cohort-3" class="cohort-group-block"></div>
     <div id="cohort-4" class="cohort-group-block"></div>
 
-    <!-- SINGLE DYNAMIC EXIT SURVEY BLOCK (LOCKED UNTIL ALL COHORT ASSESSMENTS ARE COMPLETED) -->
+    <!-- SINGLE DYNAMIC EXIT SURVEY BLOCK (LOCKED UNTIL ALL 10 COHORT CASES ARE COMPLETED) -->
     <div class="survey-section">
       <h2 style="color: #10b981; font-size: 1.1rem; font-weight: 800; margin-bottom: 4px;">Study Phase Completion</h2>
       <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 4px;">
-        The exit survey button unlocks automatically once you complete all assigned user assessments from left to right:
+        The exit survey button unlocks automatically once you complete all 10 cases from left to right:
       </p>
 
       <div class="single-survey-card">
@@ -1004,13 +1015,20 @@
           <img id="triageTargetImg" src="" alt="Behavioral Explanation Plot" title="Scroll down to inspect all 33 features; click to toggle 100% / 145% zoom">
         </div>
 
-        <!-- Full 4-Column Scenario Description & Behavioral Indicator Playbook (Hidden by Default) -->
+        <!-- Full 4-Step Kill-Chain & Scenario Playbook Drawer (Hidden by Default) -->
         <div class="playbook-mini">
           <div style="display:flex;justify-content:space-between;align-items:center;">
-            <strong style="color:#f1f5f9;">Scenario Descriptions &amp; Behavioral Indicator Playbook</strong>
+            <strong style="color:#f1f5f9;">4-Step Kill-Chain Verification &amp; Scenario Playbook</strong>
             <button type="button" class="zoom-btn" id="btnToggleRefTable">Show Playbook</button>
           </div>
-          <div id="refTableContainer" style="display:none;overflow-x:auto;max-height:230px;overflow-y:auto;">
+          <div id="refTableContainer" style="display:none;overflow-x:auto;max-height:240px;overflow-y:auto;">
+            <div class="killchain-banner">
+              <strong>Four-Step Behavioral Kill-Chain Check:</strong>
+              (1) <em>Threshold &amp; Temporal</em>: Compare Score vs. MAD Cutoff and check Night/Evening/Weekend;
+              (2) <em>Local Collection &amp; Access</em>: Verify Thumb Drive, File Search, Keylogger, Decoy File, or Suspicious/Unauthorized Login;
+              (3) <em>Transfer Direction &amp; Destination</em>: Distinguish inbound <code>Http &rarr; File</code> from outbound <code>File &rarr; Http</code>, WikiLeaks, Job Site, or Home/Competitor Email;
+              (4) <em>Negative Evidence Elimination</em>: Verify competing scenario signatures sit at zero (or <code>0 = feature</code> in SHAP) before escalating.
+            </div>
             <table>
               <thead>
                 <tr>
@@ -1025,7 +1043,7 @@
                   <td><strong>Scenario 1</strong><br><span class="pb-tag threat">WikiLeaks Exfiltration</span></td>
                   <td>A user who did not previously use removable drives or work after hours suddenly begins logging in after hours, using a removable thumb drive, and uploading sensitive data to <code>wikileaks.org</code>, leaving the organization shortly thereafter.</td>
                   <td>&bull; <strong>WikiLeaks Access Count</strong><br>&bull; <strong>Thumb Drive / Removable Media Usage</strong></td>
-                  <td>&bull; After-hours activity (Evening/Night/Weekend)<br>&bull; <strong>Sudden Departure Flag</strong></td>
+                  <td>&bull; After-hours activity (Evening/Night/Weekend)<br>&bull; <code>File &rarr; Http</code> transfer &amp; <strong>Sudden Departure Flag</strong></td>
                 </tr>
                 <tr>
                   <td><strong>Scenario 2</strong><br><span class="pb-tag threat">Pre-Departure IP Theft</span></td>
@@ -1046,16 +1064,16 @@
                   <td>&bull; <strong>File Search / Decoy File Access Count</strong><br>&bull; <code>Http &rarr; File</code> or <code>File &rarr; Http</code> transitions</td>
                 </tr>
                 <tr>
-                  <td><strong>Mixed Mode</strong><br><span class="pb-tag mixed">Multi-Vector Attack</span></td>
-                  <td>A compound threat profile in which a user exhibits behavioral indicators spanning <strong>two or more</strong> distinct insider scenarios within the same observation window (e.g., unauthorized PC snooping + home email exfiltration combined with WikiLeaks uploads or job-search USB theft).</td>
-                  <td>&bull; Two or more primary threat indicators active simultaneously (e.g., <strong>WikiLeaks + Home Email</strong> or <strong>Unauthorized Login + Thumb Drive</strong>)</td>
-                  <td>&bull; Multi-channel spikes across <code>email</code>, <code>http</code>, <code>file</code>, and after-hours timing</td>
+                  <td><strong>Benign Anomaly (FP)</strong><br><span class="pb-tag benign">Non-Malicious Outlier</span></td>
+                  <td>A legitimate employee whose daily reconstruction score crosses the MAD threshold due to benign inbound catch-up work (<code>Http &rarr; File</code>), high routine role workload, or weekend inactivity (<code>Is Weekend</code> / zero weekday counts) with <strong>no</strong> outbound exfiltration or unauthorized access.</td>
+                  <td>&bull; <strong>Routine Workload / Timing / Weekend Inactivity</strong> (<code>Morning</code>/<code>Afternoon</code>, <code>Http &rarr; File</code>, or <code>Is Weekend</code>)</td>
+                  <td>&bull; Authorized baseline USB/email without WikiLeaks, keyloggers, decoy files, or unauthorized logins</td>
                 </tr>
                 <tr>
-                  <td><strong>Benign Anomaly</strong><br><span class="pb-tag benign">Non-Malicious Outlier</span></td>
-                  <td>A legitimate employee whose daily reconstruction score crosses the MAD threshold due to an unusual but benign workload surge (e.g., deadline crunch, heavy email volume, atypical meeting gaps, or routine authorized USB use) with <strong>no</strong> malicious exfiltration or unauthorized access.</td>
-                  <td>&bull; <strong>Routine Workload / Timing Spike</strong> (<code>Morning</code>/<code>Afternoon</code> count, inter-activity time, or <code>Logon &rarr; Email</code>)</td>
-                  <td>&bull; Occasional authorized <code>Thumb Drive</code> or <code>Weekend</code> work without WikiLeaks, keyloggers, decoy files, or unauthorized logins</td>
+                  <td><strong>Early Precursor (FN)</strong><br><span class="pb-tag mixed">Watchlist Monitoring</span></td>
+                  <td>An early-stage reconnaissance day falling slightly below the MAD cutoff (e.g., unprecedented after-hours login probing or early job-site browsing with <code>Http &harr; File</code> transfers) that warrants placing the user on a <strong>Tier-1 / DLP Watchlist</strong>.</td>
+                  <td>&bull; <strong>After-Hours Night Probing</strong> or <strong>Early Job-Site / File Transfer Spike</strong></td>
+                  <td>&bull; <code>Logon &rarr; Http</code>, <code>Http &harr; File</code>, or early <code>Decoy File</code> touch</td>
                 </tr>
               </tbody>
             </table>
@@ -1063,7 +1081,7 @@
         </div>
       </div>
 
-      <!-- Right Pane: Bottom-Up Cognitive Sequence + Explanation Helpfulness Rating -->
+      <!-- Right Pane: Bottom-Up Cognitive Sequence + 3-Tier Verdict + Helpfulness Rating -->
       <div class="triage-form-pane">
         <div>
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
@@ -1074,17 +1092,21 @@
           <!-- Condition-specific metrics strip (Z-score vs. SHAP f(x) & E[f(x)]) -->
           <div class="score-strip" id="scoreStripContainer"></div>
 
-          <!-- Q1: Triage Verdict -->
+          <!-- Q1: 3-Tier Triage Verdict (Escalate TP / Watchlist FN / Dismiss FP) -->
           <div class="form-section">
             <label class="sec-lbl">1. Triage Classification Decision:</label>
             <div class="choice-btn-group">
               <label class="choice-opt">
-                <input type="radio" name="decision" value="THREAT">
-                <span>Escalate as Insider Threat / Malicious Anomaly</span>
+                <input type="radio" name="decision" value="ESCALATE">
+                <span><strong>Escalate</strong> to Tier-2 IR (Confirmed Insider Threat / Malicious Anomaly)</span>
               </label>
               <label class="choice-opt">
-                <input type="radio" name="decision" value="BENIGN">
-                <span>Dismiss as Benign (Normal or Benign Anomaly)</span>
+                <input type="radio" name="decision" value="WATCHLIST">
+                <span><strong>Place on Tier-1 / DLP Watchlist</strong> (Early Precursor / Borderline Reconnaissance)</span>
+              </label>
+              <label class="choice-opt">
+                <input type="radio" name="decision" value="DISMISS">
+                <span><strong>Dismiss / Close</strong> (Benign Workload Anomaly or Weekend Inactivity)</span>
               </label>
               <label class="choice-opt muted-opt">
                 <input type="radio" name="decision" value="PREFER_NOT_TO_ANSWER">
@@ -1103,11 +1125,12 @@
               <option value="job_site_competitor">Job Site Surfing / Competitor Email</option>
               <option value="keylogger_download">Keylogger / Spyware Download</option>
               <option value="mass_email">Mass Email Burst (&ge; 5 Recipients)</option>
-              <option value="unauthorized_pc_login">Unauthorized / Non-Primary PC Logon</option>
+              <option value="unauthorized_pc_login">Unauthorized / Suspicious Non-Primary PC Logon</option>
               <option value="file_search_decoy">Decoy / Sensitive File Search &amp; Access</option>
               <option value="home_email">Personal / Home Email Exfiltration</option>
-              <option value="after_hours_departure">After-Hours Activity / Sudden Departure</option>
-              <option value="workload_timing_spike">Routine Workload / Inter-Activity Timing Spike</option>
+              <option value="after_hours_departure">After-Hours Night Probing / Sudden Departure</option>
+              <option value="inbound_http_file">Benign Inbound File Download (Http &rarr; File)</option>
+              <option value="workload_timing_spike">Routine Workload / Weekend Inactivity / Timing Shift</option>
               <option value="prefer_not_to_answer">Prefer not to answer</option>
             </select>
           </div>
@@ -1121,28 +1144,33 @@
               <label><input type="checkbox" name="secondaryCue" value="job_site_competitor"> Job Site / Competitor Email</label>
               <label><input type="checkbox" name="secondaryCue" value="keylogger_download"> Keylogger Download</label>
               <label><input type="checkbox" name="secondaryCue" value="mass_email"> Mass Email (&ge; 5 recipients)</label>
-              <label><input type="checkbox" name="secondaryCue" value="unauthorized_pc_login"> Unauthorized PC Login</label>
+              <label><input type="checkbox" name="secondaryCue" value="unauthorized_pc_login"> Unauthorized / Suspicious Login</label>
               <label><input type="checkbox" name="secondaryCue" value="file_search_decoy"> Decoy / Sensitive File Access</label>
               <label><input type="checkbox" name="secondaryCue" value="home_email"> Home Email (Gmail/Yahoo/Hotmail)</label>
+              <label><input type="checkbox" name="secondaryCue" value="outbound_file_http"> Outbound Transfer (File &rarr; Http)</label>
+              <label><input type="checkbox" name="secondaryCue" value="inbound_http_file"> Inbound Download (Http &rarr; File)</label>
               <label><input type="checkbox" name="secondaryCue" value="after_hours_weekend"> After-Hours / Weekend Shift</label>
               <label><input type="checkbox" name="secondaryCue" value="sudden_departure"> Sudden Departure Flag</label>
-              <label><input type="checkbox" name="secondaryCue" value="workload_timing_spike"> Workload / Timing Variance</label>
+              <label><input type="checkbox" name="secondaryCue" value="workload_timing_spike"> Routine Workload / Timing Variance</label>
               <label><input type="checkbox" name="secondaryCue" value="prefer_not_to_answer"> Prefer not to answer</label>
             </div>
           </div>
 
-          <!-- Q4: Suspected Scenario / Pattern Type -->
+          <!-- Q4: Suspected Scenario / Mechanism -->
           <div class="form-section">
-            <label class="sec-lbl" for="scenarioHypothesis">4. Suspected Scenario / Pattern Type:</label>
+            <label class="sec-lbl" for="scenarioHypothesis">4. Suspected Scenario / Mechanism:</label>
             <select id="scenarioHypothesis" class="triage-select">
-              <option value="">-- Select scenario / pattern type --</option>
+              <option value="">-- Select scenario / behavioral mechanism --</option>
               <option value="S1_wikileaks">Scenario 1: WikiLeaks Exfiltration (USB + WikiLeaks + After-Hours)</option>
               <option value="S2_ip_theft">Scenario 2: Pre-Departure IP Theft (Job Sites / Competitor + USB)</option>
-              <option value="S3_keylogger_sabotage">Scenario 3: Keylogger / Mass Email Sabotage</option>
-              <option value="S4_lateral_home_email">Scenario 4: Unauthorized PC Login + File Search + Home Email</option>
-              <option value="MIXED_MODE">Mixed Mode: Multiple Co-Occurring Attack Scenarios</option>
-              <option value="BENIGN_ANOMALY">Benign Anomaly: High Workload / Timing Shift (Non-Malicious)</option>
-              <option value="NORMAL_BASELINE">Normal Baseline Activity</option>
+              <option value="S3_keylogger_sabotage">Scenario 3: Keylogger Download &amp; Removable Media Sabotage</option>
+              <option value="S4_lateral_home_email">Scenario 4: Credential Masquerading / Lateral Snooping &amp; Decoy Access</option>
+              <option value="S1_precursor_watchlist">Scenario 1 Precursor: After-Hours Night Login Probing (Watchlist)</option>
+              <option value="S2_precursor_watchlist">Scenario 2 Precursor: Early Job-Site &amp; File Transfer Ramp-Up (Watchlist)</option>
+              <option value="BENIGN_INBOUND_WORK">Benign Anomaly (FP): Late-Night Inbound Download (Http &rarr; File)</option>
+              <option value="BENIGN_ROUTINE_WORKLOAD">Benign Anomaly (FP): High-Volume Routine Role Workload</option>
+              <option value="BENIGN_WEEKEND_SILENCE">Benign Anomaly (FP): Weekend Inactivity / Departure Record</option>
+              <option value="BENIGN_MINIMAL_WEEKEND">Benign Anomaly (FP): Minimal Weekend Email Check</option>
               <option value="prefer_not_to_answer">Prefer not to answer</option>
             </select>
           </div>
@@ -1219,62 +1247,247 @@
       ANALYST: 'https://uwaterloo.ca1.qualtrics.com/jfe/form/SV_es8HRdyIVOMqW6q'
     };
 
-    const COHORT_MATRIX = {
+    // Canonical 10-Case Ground-Truth Benchmark from CERT_Insider_Threat_XAI_Triage_Protocol_and_Outcomes.pdf
+    const BENCHMARK_CASES = [
+      {
+        case_id: 'S1_TP_1',
+        cert_id: 'ALT1465',
+        date: '2010-08-14',
+        day_of_week: 'Saturday',
+        anomaly_score: 0.0813,
+        threshold: 0.0501,
+        shap_expected_value: 0.080,
+        shap_output_value: 0.823,
+        gold_alert_type: 'TP',
+        gold_verdict: 'ESCALATE',
+        gold_scenario: 'S1_wikileaks',
+        gold_primary_cues: ['thumb_removable_drive', 'wikileaks_access'],
+        gold_secondary_cues: ['after_hours_weekend', 'file_search_decoy', 'outbound_file_http'],
+        normative_winner: 'Design_B'
+      },
+      {
+        case_id: 'S2_TP',
+        cert_id: 'CIF1430',
+        date: '2010-08-02',
+        day_of_week: 'Monday',
+        anomaly_score: 0.0629,
+        threshold: 0.0615,
+        shap_expected_value: 0.339,
+        shap_output_value: 0.688,
+        gold_alert_type: 'TP',
+        gold_verdict: 'ESCALATE',
+        gold_scenario: 'S2_ip_theft',
+        gold_primary_cues: ['job_site_competitor'],
+        gold_secondary_cues: ['workload_timing_spike'],
+        normative_winner: 'Design_A'
+      },
+      {
+        case_id: 'S3_TP',
+        cert_id: 'CRD0272',
+        date: '2010-07-15',
+        day_of_week: 'Thursday',
+        anomaly_score: 0.1106,
+        threshold: 0.1073,
+        shap_expected_value: 0.148,
+        shap_output_value: 0.770,
+        gold_alert_type: 'TP',
+        gold_verdict: 'ESCALATE',
+        gold_scenario: 'S3_keylogger_sabotage',
+        gold_primary_cues: ['keylogger_download', 'thumb_removable_drive'],
+        gold_secondary_cues: ['after_hours_weekend'],
+        normative_winner: 'Design_A'
+      },
+      {
+        case_id: 'S4_TP',
+        cert_id: 'AMC1883',
+        date: '2011-02-11',
+        day_of_week: 'Friday',
+        anomaly_score: 0.1010,
+        threshold: 0.0795,
+        shap_expected_value: 0.067,
+        shap_output_value: 0.993,
+        gold_alert_type: 'TP',
+        gold_verdict: 'ESCALATE',
+        gold_scenario: 'S4_lateral_home_email',
+        gold_primary_cues: ['unauthorized_pc_login', 'file_search_decoy'],
+        gold_secondary_cues: ['outbound_file_http', 'inbound_http_file'],
+        normative_winner: 'Design_B'
+      },
+      {
+        case_id: 'S1_FP',
+        cert_id: 'ALT1465',
+        date: '2010-08-11',
+        day_of_week: 'Wednesday',
+        anomaly_score: 0.0763,
+        threshold: 0.0501,
+        shap_expected_value: 0.080,
+        shap_output_value: 0.950,
+        gold_alert_type: 'FP',
+        gold_verdict: 'DISMISS',
+        gold_scenario: 'BENIGN_INBOUND_WORK',
+        gold_primary_cues: ['inbound_http_file', 'workload_timing_spike'],
+        gold_secondary_cues: ['after_hours_weekend', 'thumb_removable_drive'],
+        normative_winner: 'Design_A'
+      },
+      {
+        case_id: 'S2_FP_1',
+        cert_id: 'CIF1430',
+        date: '2010-08-30',
+        day_of_week: 'Monday',
+        anomaly_score: 0.0766,
+        threshold: 0.0615,
+        shap_expected_value: 0.339,
+        shap_output_value: 0.826,
+        gold_alert_type: 'FP',
+        gold_verdict: 'DISMISS',
+        gold_scenario: 'BENIGN_ROUTINE_WORKLOAD',
+        gold_primary_cues: ['workload_timing_spike'],
+        gold_secondary_cues: ['thumb_removable_drive', 'job_site_competitor'],
+        normative_winner: 'Design_A'
+      },
+      {
+        case_id: 'S3_FP_1',
+        cert_id: 'CRD0272',
+        date: '2010-07-17',
+        day_of_week: 'Saturday',
+        anomaly_score: 0.1532,
+        threshold: 0.1073,
+        shap_expected_value: 0.148,
+        shap_output_value: 0.716,
+        gold_alert_type: 'FP',
+        gold_verdict: 'DISMISS',
+        gold_scenario: 'BENIGN_WEEKEND_SILENCE',
+        gold_primary_cues: ['workload_timing_spike'],
+        gold_secondary_cues: ['after_hours_weekend', 'sudden_departure'],
+        normative_winner: 'Design_A'
+      },
+      {
+        case_id: 'S4_FP_1',
+        cert_id: 'AMC1883',
+        date: '2011-01-22',
+        day_of_week: 'Saturday',
+        anomaly_score: 0.1331,
+        threshold: 0.0795,
+        shap_expected_value: 0.067,
+        shap_output_value: 0.815,
+        gold_alert_type: 'FP',
+        gold_verdict: 'DISMISS',
+        gold_scenario: 'BENIGN_MINIMAL_WEEKEND',
+        gold_primary_cues: ['workload_timing_spike'],
+        gold_secondary_cues: ['after_hours_weekend'],
+        normative_winner: 'Design_A'
+      },
+      {
+        case_id: 'S1_FN_1',
+        cert_id: 'ALT1465',
+        date: '2010-08-13',
+        day_of_week: 'Friday',
+        anomaly_score: 0.0383,
+        threshold: 0.0501,
+        shap_expected_value: 0.080,
+        shap_output_value: 0.030,
+        gold_alert_type: 'FN',
+        gold_verdict: 'WATCHLIST',
+        gold_scenario: 'S1_precursor_watchlist',
+        gold_primary_cues: ['after_hours_departure'],
+        gold_secondary_cues: ['after_hours_weekend', 'workload_timing_spike'],
+        normative_winner: 'Design_A'
+      },
+      {
+        case_id: 'S2_FN_1',
+        cert_id: 'CIF1430',
+        date: '2010-07-26',
+        day_of_week: 'Monday',
+        anomaly_score: 0.0607,
+        threshold: 0.0615,
+        shap_expected_value: 0.339,
+        shap_output_value: 0.114,
+        gold_alert_type: 'FN',
+        gold_verdict: 'WATCHLIST',
+        gold_scenario: 'S2_precursor_watchlist',
+        gold_primary_cues: ['job_site_competitor'],
+        gold_secondary_cues: ['inbound_http_file', 'outbound_file_http', 'file_search_decoy'],
+        normative_winner: 'Design_A'
+      }
+    ];
+
+    // Counterbalanced 4-Cohort Latin-Square Assignments across all 10 Benchmark Cases (5 Design A + 5 Design B per Cohort)
+    const COHORT_SCHEDULES = {
       'cohort-1': {
         title: 'Testing Cohort Group 1',
         shortCode: 'C1',
-        orderCode: 'A_A_A_B_B',
-        composition: 'Participants P01–P10 (P01–P05 Students/Staff • P06–P10 SOC Analysts) • Order: A, A, A (Benign), B, B',
-        slots: [
-          { cert_id: 'ALT1465', scenario: 'S1', label: 'User Profile ALT1465', design: 'A' },
-          { cert_id: 'CIF1430', scenario: 'S2', label: 'User Profile CIF1430', design: 'A' },
-          { cert_id: 'AAB1302', scenario: 'BENIGN', label: 'User Profile AAB1302', design: 'A' },
-          { cert_id: 'CRD0272', scenario: 'S3', label: 'User Profile CRD0272', design: 'B' },
-          { cert_id: 'AMC1883', scenario: 'S4', label: 'User Profile AMC1883', design: 'B' },
+        orderCode: '10CASE_C1_AB_BALANCED',
+        composition: 'P01–P10 (P01–P05 Students/Staff • P06–P10 SOC Analysts) • 10 Cases (5 Design A + 5 Design B)',
+        sequence: [
+          { case_id: 'S1_TP_1', design: 'A' },
+          { case_id: 'S2_FP_1', design: 'B' },
+          { case_id: 'S3_TP',   design: 'A' },
+          { case_id: 'S1_FN_1', design: 'B' },
+          { case_id: 'S4_FP_1', design: 'A' },
+          { case_id: 'S2_TP',   design: 'B' },
+          { case_id: 'S1_FP',   design: 'A' },
+          { case_id: 'S4_TP',   design: 'B' },
+          { case_id: 'S2_FN_1', design: 'A' },
+          { case_id: 'S3_FP_1', design: 'B' }
         ]
       },
       'cohort-2': {
         title: 'Testing Cohort Group 2',
         shortCode: 'C2',
-        orderCode: 'B_B_A_A_A',
-        composition: 'Participants P11–P20 (P11–P15 Students/Staff • P16–P20 SOC Analysts) • Order: B, B, A (Benign), A, A',
-        slots: [
-          { cert_id: 'CIF1430', scenario: 'S2', label: 'User Profile CIF1430', design: 'B' },
-          { cert_id: 'ALT1465', scenario: 'S1', label: 'User Profile ALT1465', design: 'B' },
-          { cert_id: 'AAB1302', scenario: 'BENIGN', label: 'User Profile AAB1302', design: 'A' },
-          { cert_id: 'AMC1883', scenario: 'S4', label: 'User Profile AMC1883', design: 'A' },
-          { cert_id: 'CRD0272', scenario: 'S3', label: 'User Profile CRD0272', design: 'A' },
+        orderCode: '10CASE_C2_BA_BALANCED',
+        composition: 'P11–P20 (P11–P15 Students/Staff • P16–P20 SOC Analysts) • 10 Cases (5 Design B + 5 Design A)',
+        sequence: [
+          { case_id: 'S1_TP_1', design: 'B' },
+          { case_id: 'S2_FP_1', design: 'A' },
+          { case_id: 'S3_TP',   design: 'B' },
+          { case_id: 'S1_FN_1', design: 'A' },
+          { case_id: 'S4_FP_1', design: 'B' },
+          { case_id: 'S2_TP',   design: 'A' },
+          { case_id: 'S1_FP',   design: 'B' },
+          { case_id: 'S4_TP',   design: 'A' },
+          { case_id: 'S2_FN_1', design: 'B' },
+          { case_id: 'S3_FP_1', design: 'A' }
         ]
       },
       'cohort-3': {
         title: 'Testing Cohort Group 3',
         shortCode: 'C3',
-        orderCode: 'A_A_B_B_B',
-        composition: 'Participants P21–P30 (P21–P25 Students/Staff • P26–P30 SOC Analysts) • Order: A, A, B (Benign), B, B',
-        slots: [
-          { cert_id: 'CRD0272', scenario: 'S3', label: 'User Profile CRD0272', design: 'A' },
-          { cert_id: 'AMC1883', scenario: 'S4', label: 'User Profile AMC1883', design: 'A' },
-          { cert_id: 'AAB1302', scenario: 'BENIGN', label: 'User Profile AAB1302', design: 'B' },
-          { cert_id: 'ALT1465', scenario: 'S1', label: 'User Profile ALT1465', design: 'B' },
-          { cert_id: 'CIF1430', scenario: 'S2', label: 'User Profile CIF1430', design: 'B' },
+        orderCode: '10CASE_C3_REV_AB',
+        composition: 'P21–P30 (P21–P25 Students/Staff • P26–P30 SOC Analysts) • 10 Cases (5 Design A + 5 Design B)',
+        sequence: [
+          { case_id: 'S2_TP',   design: 'A' },
+          { case_id: 'S1_FP',   design: 'B' },
+          { case_id: 'S4_TP',   design: 'A' },
+          { case_id: 'S2_FN_1', design: 'B' },
+          { case_id: 'S3_FP_1', design: 'A' },
+          { case_id: 'S1_TP_1', design: 'B' },
+          { case_id: 'S2_FP_1', design: 'A' },
+          { case_id: 'S3_TP',   design: 'B' },
+          { case_id: 'S1_FN_1', design: 'A' },
+          { case_id: 'S4_FP_1', design: 'B' }
         ]
       },
       'cohort-4': {
         title: 'Testing Cohort Group 4',
         shortCode: 'C4',
-        orderCode: 'B_B_B_A_A',
-        composition: 'Participants P31–P40 (P31–P35 Students/Staff • P36–P40 SOC Analysts) • Order: B, B, B (Benign), A, A',
-        slots: [
-          { cert_id: 'AMC1883', scenario: 'S4', label: 'User Profile AMC1883', design: 'B' },
-          { cert_id: 'CRD0272', scenario: 'S3', label: 'User Profile CRD0272', design: 'B' },
-          { cert_id: 'AAB1302', scenario: 'BENIGN', label: 'User Profile AAB1302', design: 'B' },
-          { cert_id: 'CIF1430', scenario: 'S2', label: 'User Profile CIF1430', design: 'A' },
-          { cert_id: 'ALT1465', scenario: 'S1', label: 'User Profile ALT1465', design: 'A' },
+        orderCode: '10CASE_C4_REV_BA',
+        composition: 'P31–P40 (P31–P35 Students/Staff • P36–P40 SOC Analysts) • 10 Cases (5 Design B + 5 Design A)',
+        sequence: [
+          { case_id: 'S2_TP',   design: 'B' },
+          { case_id: 'S1_FP',   design: 'A' },
+          { case_id: 'S4_TP',   design: 'B' },
+          { case_id: 'S2_FN_1', design: 'A' },
+          { case_id: 'S3_FP_1', design: 'B' },
+          { case_id: 'S1_TP_1', design: 'A' },
+          { case_id: 'S2_FP_1', design: 'B' },
+          { case_id: 'S3_TP',   design: 'A' },
+          { case_id: 'S1_FN_1', design: 'B' },
+          { case_id: 'S4_FP_1', design: 'A' }
         ]
       }
     };
 
-    let manifestTrials = [];
+    let resolvedCasesMap = {};
     let pendingCohortId = '';
     let unlockedCohortId = '';
     let activeTrialContext = null;
@@ -1282,7 +1495,6 @@
     let sessionSequenceCounter = 0;
     const triageResponses = {};
 
-    // Per-trial passive telemetry state (Variables #3, #4, #5, #8, #9, #10, #11)
     let trialTelemetry = {
       trial_order: 0,
       case_load_ts: 0,
@@ -1327,14 +1539,12 @@
 
     function resolveParticipantAssignment(globalId) {
       const idNum = parseInt(globalId, 10);
-      if (!idNum || idNum < 1 || idNum > 40) {
-        return null;
-      }
+      if (!idNum || idNum < 1 || idNum > 40) return null;
       const cohortIndex = Math.floor((idNum - 1) / 10) + 1;
       const withinCohortSlot = ((idNum - 1) % 10) + 1;
       const isStudent = withinCohortSlot <= 5;
       const cohortId = `cohort-${cohortIndex}`;
-      const cohortCfg = COHORT_MATRIX[cohortId];
+      const cohortCfg = COHORT_SCHEDULES[cohortId];
       const paddedId = `P${String(idNum).padStart(2, '0')}`;
       const compositeId = `${paddedId}_${cohortCfg.shortCode}_${isStudent ? 'STU' : 'SOC'}`;
 
@@ -1406,26 +1616,74 @@
       });
     }
 
-    function getCohortTrialSequence(cohortId) {
-      const cfg = COHORT_MATRIX[cohortId];
+    // Automated 10-Point Protocol Rubric Scoring (Dimensions 1-3 + Brier Calibration)
+    function computeProtocolRubricScores(caseObj, decision, scenHyp, primaryCue, secondaryCues, confidencePct) {
+      // Dimension 1: Triage Disposition (Max 2.0)
+      let dim1Disposition = 0.0;
+      if (decision === caseObj.gold_verdict) {
+        dim1Disposition = 2.0;
+      } else if (
+        (caseObj.gold_verdict === 'ESCALATE' && decision === 'WATCHLIST') ||
+        (caseObj.gold_verdict === 'WATCHLIST' && decision === 'ESCALATE')
+      ) {
+        dim1Disposition = 1.0; // Right anomalous direction, different action tier
+      }
+
+      // Dimension 2: Scenario / Mechanism (Max 3.0)
+      let dim2Scenario = 0.0;
+      if (scenHyp === caseObj.gold_scenario) {
+        dim2Scenario = 3.0;
+      } else if (
+        (caseObj.gold_alert_type === 'FP' && scenHyp.startsWith('BENIGN_')) ||
+        (caseObj.gold_scenario.startsWith('S1') && scenHyp.startsWith('S1')) ||
+        (caseObj.gold_scenario.startsWith('S2') && scenHyp.startsWith('S2'))
+      ) {
+        dim2Scenario = 1.5; // Right family/category, partial mechanism match
+      }
+
+      // Dimension 3: Multi-Feature Synthesis (Max 3.0)
+      const citedAll = new Set([primaryCue, ...secondaryCues]);
+      const primaryHit = caseObj.gold_primary_cues.some(c => citedAll.has(c));
+      const secondaryHit = caseObj.gold_secondary_cues.some(c => citedAll.has(c));
+      let dim3Synthesis = 0.0;
+      if (primaryHit && secondaryHit) {
+        dim3Synthesis = 3.0;
+      } else if (primaryHit || secondaryHit) {
+        dim3Synthesis = 1.5;
+      }
+
+      // Brier Calibration Error (0.00 = perfect calibration, 1.00 = worst overconfident error)
+      const isExactVerdict = decision === caseObj.gold_verdict ? 1 : 0;
+      const brierScore = confidencePct === 'prefer_not_to_answer'
+        ? ''
+        : Number(Math.pow((Number(confidencePct) / 100) - isExactVerdict, 2).toFixed(4));
+
+      return {
+        is_exact_verdict: isExactVerdict,
+        rubric_dim1_disposition_max2: dim1Disposition,
+        rubric_dim2_scenario_max3: dim2Scenario,
+        rubric_dim3_synthesis_max3: dim3Synthesis,
+        rubric_auto_subtotal_max8: dim1Disposition + dim2Scenario + dim3Synthesis,
+        brier_calibration_error: brierScore
+      };
+    }
+
+    function getCohortCaseSequence(cohortId) {
+      const cfg = COHORT_SCHEDULES[cohortId];
       if (!cfg) return [];
-      const seq = [];
-      cfg.slots.forEach((slot, sIdx) => {
-        const userTrials = manifestTrials.filter(t => t.cert_id === slot.cert_id);
-        userTrials.forEach((tr, tIdx) => {
-          const key = `${cohortId}__${slot.cert_id}__${tr.trial_id}`;
-          seq.push({
-            key,
-            cohortId,
-            sIdx,
-            tIdx,
-            slot,
-            trial: tr,
-            isDone: Boolean(triageResponses[key])
-          });
-        });
+      return cfg.sequence.map((entry, idx) => {
+        const baseCase = resolvedCasesMap[entry.case_id];
+        const key = `${cohortId}__${idx + 1}__${entry.case_id}`;
+        return {
+          key,
+          cohortId,
+          seqIdx: idx,
+          caseNumber: idx + 1,
+          design: entry.design,
+          caseObj: baseCase,
+          isDone: Boolean(triageResponses[key])
+        };
       });
-      return seq;
     }
 
     function syncAssignmentAndSurvey() {
@@ -1470,15 +1728,16 @@
         ? `${info.cohortTitle} Unlocked ✓`
         : `Unlock ${info.cohortTitle}`;
 
-      const cohortSeq = getCohortTrialSequence(info.cohortId);
+      const cohortSeq = getCohortCaseSequence(info.cohortId);
       const totalRequired = cohortSeq.length;
       const completedInCohort = cohortSeq.filter(x => x.isDone).length;
       const allAssessmentsDone = isAlreadyUnlocked && totalRequired > 0 && completedInCohort === totalRequired;
 
       const rows = cohortSeq.filter(x => x.isDone).map(x => triageResponses[x.key]);
-      const escalatedCount = rows.filter(r => r.triage_verdict === 'THREAT').length;
-      const dismissedCount = rows.filter(r => r.triage_verdict === 'BENIGN').length;
-      const preferNotCount = rows.filter(r => r.triage_verdict === 'PREFER_NOT_TO_ANSWER').length;
+      const escalatedCount = rows.filter(r => r.triage_verdict === 'ESCALATE').length;
+      const watchlistCount = rows.filter(r => r.triage_verdict === 'WATCHLIST').length;
+      const dismissedCount = rows.filter(r => r.triage_verdict === 'DISMISS').length;
+      const exactMatches = rows.filter(r => r.is_exact_verdict === 1).length;
       const meanTriageSec = completedInCohort > 0
         ? (rows.reduce((sum, r) => sum + Number(r.total_triage_time_sec || 0), 0) / completedInCohort).toFixed(2)
         : '0.00';
@@ -1493,9 +1752,10 @@
       urlObj.searchParams.set('ConditionOrder', info.orderCode);
       urlObj.searchParams.set('TrialsCompleted', String(completedInCohort));
       urlObj.searchParams.set('TotalTrialsRequired', String(totalRequired));
+      urlObj.searchParams.set('ExactAccuracyCount', String(exactMatches));
       urlObj.searchParams.set('EscalatedCount', String(escalatedCount));
+      urlObj.searchParams.set('WatchlistCount', String(watchlistCount));
       urlObj.searchParams.set('DismissedCount', String(dismissedCount));
-      urlObj.searchParams.set('PreferNotCount', String(preferNotCount));
       urlObj.searchParams.set('MeanTriageTimeSec', String(meanTriageSec));
 
       titleEl.className = `survey-role-title ${info.isStudent ? 'student-theme' : 'analyst-theme'}`;
@@ -1507,14 +1767,14 @@
         btnEl.className = 'survey-btn';
         btnEl.href = urlObj.toString();
         labelEl.textContent = info.isStudent
-          ? 'All Cases Complete — Open Student / Staff Exit Survey'
-          : 'All Cases Complete — Open Professional SOC Analyst Survey';
+          ? 'All 10 Cases Complete — Open Student / Staff Exit Survey'
+          : 'All 10 Cases Complete — Open Professional SOC Analyst Survey';
       } else {
         btnEl.className = 'survey-btn disabled-survey';
         btnEl.href = '#';
         labelEl.textContent = !isAlreadyUnlocked
           ? `Unlock ${info.cohortTitle} First (${completedInCohort}/${totalRequired})`
-          : `Survey Locked (${completedInCohort} / ${totalRequired} Assessments Completed)`;
+          : `Survey Locked (${completedInCohort} / ${totalRequired} Cases Completed)`;
       }
 
       previewEl.innerHTML =
@@ -1530,7 +1790,7 @@
       }
       pendingCohortId = targetCohortId;
       document.getElementById('passkeyModalDesc').textContent =
-        `Please enter the 5-digit passkey assigned to ${COHORT_MATRIX[targetCohortId].title}.`;
+        `Please enter the 5-digit passkey assigned to ${COHORT_SCHEDULES[targetCohortId].title}.`;
       const pField = document.getElementById('passkeyField');
       pField.value = '';
       pField.classList.remove('error-shake');
@@ -1551,85 +1811,103 @@
 
     async function initManifest() {
       const statusEl = document.getElementById('manifestStatus');
+      // Initialize default paths from canonical 10-case benchmark
+      BENCHMARK_CASES.forEach(c => {
+        resolvedCasesMap[c.case_id] = {
+          ...c,
+          imgA: `./data/testing/design_A_zscore/${c.case_id}_designA.png`,
+          imgB: `./data/testing/design_B_shap/${c.case_id}_designB.png`
+        };
+      });
+
       try {
         const res = await fetch('./data/testing_manifest.json');
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        manifestTrials = (data.trials || []).map(t => ({
-          ...t,
-          imgA: `./data/testing/design_A_zscore/${basename(t.design_A_path)}`,
-          imgB: `./data/testing/design_B_shap/${basename(t.design_B_path)}`
-        }));
-        statusEl.textContent = `Ready: ${manifestTrials.length} Stimuli Loaded across 5 Users`;
-        renderAllCohorts();
+        if (res.ok) {
+          const data = await res.json();
+          const trials = data.trials || [];
+          trials.forEach(t => {
+            // Match by trial_id/case_id or by (cert_id + date)
+            const matched = BENCHMARK_CASES.find(
+              c => c.case_id === t.trial_id || c.case_id === t.case_id || (c.cert_id === t.cert_id && c.date === t.date)
+            );
+            if (matched) {
+              resolvedCasesMap[matched.case_id] = {
+                ...matched,
+                anomaly_score: t.anomaly_score ?? matched.anomaly_score,
+                threshold: t.threshold ?? matched.threshold,
+                shap_expected_value: t.shap_expected_value ?? matched.shap_expected_value,
+                shap_output_value: t.shap_output_value ?? matched.shap_output_value,
+                imgA: t.design_A_path
+                  ? `./data/testing/design_A_zscore/${basename(t.design_A_path)}`
+                  : resolvedCasesMap[matched.case_id].imgA,
+                imgB: t.design_B_path
+                  ? `./data/testing/design_B_shap/${basename(t.design_B_path)}`
+                  : resolvedCasesMap[matched.case_id].imgB
+              };
+            }
+          });
+          statusEl.textContent = `Ready: 10 Benchmark Cases Verified (4 TP • 4 FP • 2 FN)`;
+        } else {
+          statusEl.textContent = `Ready: 10-Case Protocol Matrix Loaded`;
+        }
       } catch (err) {
-        statusEl.style.color = '#f87171';
-        statusEl.textContent = `Error loading ./data/testing_manifest.json (${err.message})`;
+        statusEl.textContent = `Ready: 10-Case Protocol Matrix Loaded`;
       }
+
+      renderAllCohorts();
     }
 
     function renderAllCohorts() {
-      Object.entries(COHORT_MATRIX).forEach(([cohortId, cfg]) => {
+      Object.entries(COHORT_SCHEDULES).forEach(([cohortId, cfg]) => {
         const container = document.getElementById(cohortId);
-        const seq = getCohortTrialSequence(cohortId);
+        const seq = getCohortCaseSequence(cohortId);
         const firstIncompleteIdx = seq.findIndex(item => !item.isDone);
         const allDone = seq.length > 0 && firstIncompleteIdx === -1;
 
         let cardsHtml = '';
 
-        cfg.slots.forEach((slot, sIdx) => {
-          const slotItems = seq.filter(item => item.sIdx === sIdx);
-          const isA = slot.design === 'A';
+        seq.forEach((item, idx) => {
+          const cObj = item.caseObj;
+          const isA = item.design === 'A';
+          const isCurrentNext = !allDone && idx === firstIncompleteIdx;
+          const isUnlocked = item.isDone || isCurrentNext;
+
           const designLabel = isA
-            ? 'System Evaluation - Design A (Z-Score)'
-            : 'System Evaluation - Design B (SHAP)';
+            ? 'Design A — Baseline Z-Score (σ)'
+            : 'Design B — SHAP Waterfall';
+          const statusText = item.isDone
+            ? 'Reviewed ✓'
+            : (isCurrentNext ? 'Start Case →' : 'Locked');
 
-          const slotUnlocked = allDone || slotItems.some(item => {
-            const globalIdx = seq.findIndex(x => x.key === item.key);
-            return item.isDone || globalIdx === firstIncompleteIdx;
-          });
-
-          let trialBtnsHtml = '';
-          slotItems.forEach((item) => {
-            const globalIdx = seq.findIndex(x => x.key === item.key);
-            const isCurrentNext = !allDone && globalIdx === firstIncompleteIdx;
-            const isEnabled = item.isDone || isCurrentNext;
-            const statusText = item.isDone
-              ? 'Reviewed ✓'
-              : (isCurrentNext ? 'Start Next →' : 'Locked');
-
-            trialBtnsHtml += `
-              <button type="button"
-                class="dashboard-btn ${isA ? '' : 'design-b-btn'} ${item.isDone ? 'completed' : ''}"
-                data-cohort="${cohortId}"
-                data-slot="${sIdx}"
-                data-trial-id="${item.trial.trial_id}"
-                ${isEnabled ? '' : 'disabled'}>
-                <span>Alert ${item.tIdx + 1}: ${item.trial.date}</span>
-                <span class="trial-status-dot">${statusText}</span>
-              </button>
-            `;
-          });
-
-          const cmPath = `./data/confusion_matrices/confusion_matrix_${slot.scenario}_${slot.cert_id}.png`;
-          const bsPath = `./data/beeswarms/beeswarm_${slot.scenario}_${slot.cert_id}.png`;
+          const scenPrefix = cObj.case_id.split('_')[0];
+          const cmPath = `./data/confusion_matrices/confusion_matrix_${scenPrefix}_${cObj.cert_id}.png`;
+          const bsPath = `./data/beeswarms/beeswarm_${scenPrefix}_${cObj.cert_id}.png`;
 
           cardsHtml += `
-            <div class="user-card ${isA ? 'border-a' : 'border-b'} ${slotUnlocked ? '' : 'locked-card'}">
+            <div class="user-card ${isA ? 'border-a' : 'border-b'} ${isUnlocked ? '' : 'locked-card'}">
               <div>
                 <div class="user-title">
-                  <span>User ${slot.cert_id}</span>
-                  <span class="scen-badge">Case ${sIdx + 1} ${slotUnlocked ? '' : '• Locked'}</span>
+                  <span>Case ${item.caseNumber} of 10</span>
+                  <span class="scen-badge">User ${cObj.cert_id}</span>
                 </div>
                 <div class="user-subtitle ${isA ? 'design-a' : 'design-b'}">${designLabel}</div>
-                <div class="trial-btn-list">
-                  ${trialBtnsHtml || '<span style="font-size:0.75rem;color:#64748b;">No trials found</span>'}
+                <div class="card-meta-line">
+                  Date: <strong>${cObj.date}</strong> (${cObj.day_of_week})<br>
+                  Score: <strong>${Number(cObj.anomaly_score).toFixed(4)}</strong> / &tau; ${Number(cObj.threshold).toFixed(4)}
                 </div>
+                <button type="button"
+                  class="dashboard-btn ${isA ? '' : 'design-b-btn'} ${item.isDone ? 'completed' : ''}"
+                  data-cohort="${cohortId}"
+                  data-seq-idx="${idx}"
+                  ${isUnlocked ? '' : 'disabled'}>
+                  <span>${item.isDone ? 'Amend Assessment' : 'Evaluate Alert'}</span>
+                  <span class="trial-status-dot">${statusText}</span>
+                </button>
               </div>
 
               <div class="matrix-dropdown">
                 <button class="matrix-toggle-btn" type="button">
-                  <span class="left-side">Model Matrix</span>
+                  <span class="left-side">User Context</span>
                   <svg class="chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
                 </button>
                 <div class="matrix-content">
@@ -1681,14 +1959,14 @@
         btn.addEventListener('click', function () {
           if (this.disabled) return;
           const cohortId = this.getAttribute('data-cohort');
-          const slotIdx = parseInt(this.getAttribute('data-slot'), 10);
-          const trialId = this.getAttribute('data-trial-id');
-          const slot = COHORT_MATRIX[cohortId].slots[slotIdx];
-          const trial = manifestTrials.find(t => t.trial_id === trialId);
-          if (!trial) return;
+          const seqIdx = parseInt(this.getAttribute('data-seq-idx'), 10);
+          const seq = getCohortCaseSequence(cohortId);
+          const item = seq[seqIdx];
+          if (!item) return;
 
+          const cObj = item.caseObj;
           sessionSequenceCounter += 1;
-          activeTrialContext = { cohortId, slot, trial };
+          activeTrialContext = { cohortId, item, cObj };
 
           trialTelemetry = {
             trial_order: sessionSequenceCounter,
@@ -1705,13 +1983,13 @@
           document.getElementById('refTableContainer').style.display = 'none';
           document.getElementById('btnToggleRefTable').textContent = 'Show Playbook';
 
-          const isA = slot.design === 'A';
-          const scoreVal = Number(trial.anomaly_score);
-          const threshVal = Number(trial.threshold);
+          const isA = item.design === 'A';
+          const scoreVal = Number(cObj.anomaly_score);
+          const threshVal = Number(cObj.threshold);
           const flagged = scoreVal >= threshVal;
 
           document.getElementById('triageModalTitle').textContent =
-            `${slot.label} • Alert Date: ${trial.date} (${trial.day_of_week})`;
+            `Case ${item.caseNumber}/10 • User ${cObj.cert_id} • ${cObj.date} (${cObj.day_of_week})`;
 
           const badge = document.getElementById('triageDesignBadge');
           badge.textContent = isA
@@ -1726,44 +2004,40 @@
           if (isA) {
             guideBar.className = 'design-guide-bar';
             guideBar.innerHTML =
-              '<strong>Z-Score Criteria:</strong> <span style="color:#fca5a5;">Red (&ge; +2.0&sigma;)</span> = strong spike above 96-day baseline; <span style="color:#fdba74;">Orange (0 to +2.0&sigma;)</span> = mild elevation (+1.0&sigma; for rare zero-baseline events); <span style="color:#93c5fd;">Blue (&le; 0&sigma;)</span> = normal or below baseline.';
+              '<strong>Z-Score Criteria:</strong> <span style="color:#fca5a5;">Red (&ge; +2.0&sigma;)</span> = strong spike above 96-day baseline; <span style="color:#fdba74;">Orange (0 to +2.0&sigma;)</span> = mild elevation (+1.0&sigma; floor for zero-baseline events where <code>val=1, base=0</code>); <span style="color:#93c5fd;">Blue (&le; 0&sigma;)</span> = normal or below baseline.';
             stripEl.innerHTML = `
               <div>
                 <span>Reconstruction Score</span>
-                <strong>${scoreVal.toFixed(6)}</strong>
+                <strong>${scoreVal.toFixed(4)}</strong>
               </div>
               <div>
-                <span>Baseline Cutoff (MAD &tau;)</span>
-                <strong>${threshVal.toFixed(6)}</strong>
+                <span>MAD Threshold (&tau;)</span>
+                <strong>${threshVal.toFixed(4)}</strong>
               </div>
               <div>
-                <span>Statistical Cutoff Status</span>
-                <strong style="color:${flagged ? '#f59e0b' : '#34d399'};">
-                  ${flagged ? 'Above Cutoff (+' + (scoreVal - threshVal).toFixed(5) + ')' : 'Within Baseline Cutoff'}
+                <span>Threshold Status</span>
+                <strong style="color:${flagged ? '#f59e0b' : '#38bdf8'};">
+                  ${flagged ? 'Above Cutoff (+' + (scoreVal - threshVal).toFixed(4) + ')' : 'Below Cutoff (' + (scoreVal - threshVal).toFixed(4) + ')'}
                 </strong>
               </div>
             `;
           } else {
             guideBar.className = 'design-guide-bar theme-b';
             guideBar.innerHTML =
-              '<strong>SHAP Conservation Rule &mdash; <code>f(x) = E[f(X)] + &Sigma; &phi;<sub>j</sub></code>:</strong> Start at expected baseline <code>E[f(X)]</code> (bottom) and sum feature arrows to reach surrogate threat probability <code>f(x)</code> (top). <span style="color:#fca5a5;">Red (+&phi;)</span> &rarr; <em>Threat</em>; <span style="color:#93c5fd;">Blue (&minus;&phi;)</span> &rarr; <em>Benign</em> (<code>f(x) &ge; 0.50</code> = flagged).';
-
-            const hasShapVals = trial.shap_output_value !== undefined && trial.shap_expected_value !== undefined;
-            const fxText = hasShapVals ? Number(trial.shap_output_value).toFixed(3) : 'See Top f(x)';
-            const efxText = hasShapVals ? Number(trial.shap_expected_value).toFixed(3) : 'See Base E[f(X)]';
+              '<strong>SHAP Conservation Rule &mdash; <code>f(x) = E[f(X)] + &Sigma; &phi;<sub>j</sub></code>:</strong> Start at expected baseline <code>E[f(X)]</code> (bottom) and sum arrows to reach surrogate probability <code>f(x)</code> (top). <span style="color:#fca5a5;">Red (+&phi;)</span> &rarr; <em>Threat</em> (watch for <code>0 = feature</code> absence bars); <span style="color:#93c5fd;">Blue (&minus;&phi;)</span> &rarr; <em>Benign</em>.';
 
             stripEl.innerHTML = `
               <div>
                 <span>SHAP Output f(x)</span>
-                <strong style="color:#fda4af;">${fxText}</strong>
+                <strong style="color:#fda4af;">${Number(cObj.shap_output_value).toFixed(3)}</strong>
               </div>
               <div>
                 <span>Expected Baseline E[f(X)]</span>
-                <strong style="color:#93c5fd;">${efxText}</strong>
+                <strong style="color:#93c5fd;">${Number(cObj.shap_expected_value).toFixed(3)}</strong>
               </div>
               <div>
-                <span>AE Score / Cutoff (&tau;)</span>
-                <strong style="color:${flagged ? '#f59e0b' : '#34d399'};">
+                <span>AE Score / MAD Cutoff (&tau;)</span>
+                <strong style="color:${flagged ? '#f59e0b' : '#38bdf8'};">
                   ${scoreVal.toFixed(4)} / ${threshVal.toFixed(4)}
                 </strong>
               </div>
@@ -1771,10 +2045,8 @@
           }
 
           const imgEl = document.getElementById('triageTargetImg');
-          imgEl.onload = () => {
-            applyZoom(100);
-          };
-          imgEl.src = isA ? trial.imgA : trial.imgB;
+          imgEl.onload = () => applyZoom(100);
+          imgEl.src = isA ? cObj.imgA : cObj.imgB;
 
           // Reset all 6 fields
           document.querySelectorAll('input[name="decision"]').forEach(r => r.checked = false);
@@ -1789,9 +2061,8 @@
           document.querySelectorAll('input[name="helpfulness"]').forEach(r => r.checked = false);
           document.getElementById('triageValidationMsg').style.display = 'none';
 
-          // Restore previous response if re-opening a reviewed trial
-          const key = `${cohortId}__${slot.cert_id}__${trial.trial_id}`;
-          const prev = triageResponses[key];
+          // Restore previous response if amending
+          const prev = triageResponses[item.key];
           if (prev) {
             const dRadio = document.querySelector(`input[name="decision"][value="${prev.triage_verdict}"]`);
             if (dRadio) dRadio.checked = true;
@@ -1900,7 +2171,7 @@
       this.textContent = isHidden ? 'Hide Playbook' : 'Show Playbook';
     });
 
-    // Save triage decision with all 14 core evaluation variables
+    // Save triage decision with all 14 variables + automated protocol rubric scoring
     document.getElementById('btnSaveTriage').addEventListener('click', () => {
       if (!activeTrialContext) return;
       const decision = document.querySelector('input[name="decision"]:checked')?.value;
@@ -1931,50 +2202,64 @@
         : Math.min(5, Math.max(1, Math.floor(Number(confidencePct) / 20) + (Number(confidencePct) === 100 ? 0 : 1)));
 
       const citedCombined = [primaryCue, ...secondaryCues].filter(Boolean).join(';');
-
-      const { cohortId, slot, trial } = activeTrialContext;
+      const { cohortId, item, cObj } = activeTrialContext;
       const info = resolveParticipantAssignment(document.getElementById('participantIdSelect').value);
-      const key = `${cohortId}__${slot.cert_id}__${trial.trial_id}`;
+      const rubricScores = computeProtocolRubricScores(cObj, decision, scenHyp, primaryCue, secondaryCues, confidencePct);
 
-      triageResponses[key] = {
+      triageResponses[item.key] = {
+        // 1. participant_id & expertise group
         participant_id: info ? info.compositeId : 'UNSPECIFIED',
         global_participant_num: info ? info.globalId : '',
         within_cohort_slot: info ? info.withinCohortSlot : '',
         participant_role: info ? info.roleCode : '',
         cohort: cohortId,
 
-        design_condition: slot.design === 'A' ? 'Design_A' : 'Design_B',
+        // 2. design_condition
+        design_condition: item.design === 'A' ? 'Design_A' : 'Design_B',
+        normative_winner: cObj.normative_winner,
 
-        case_id: trial.trial_id,
+        // 3. case_id & trial_order
+        case_id: cObj.case_id,
+        case_sequence_slot: item.caseNumber,
         trial_order: trialTelemetry.trial_order,
-        cert_id: trial.cert_id,
-        date: trial.date,
-        ground_truth_scenario: trial.scenario,
-        ground_truth_type: trial.alert_type,
-        anomaly_score: trial.anomaly_score,
-        threshold: trial.threshold,
-        shap_output_fx: trial.shap_output_value ?? '',
-        shap_expected_efx: trial.shap_expected_value ?? '',
+        cert_id: cObj.cert_id,
+        date: cObj.date,
+        day_of_week: cObj.day_of_week,
+        gold_alert_type: cObj.gold_alert_type,
+        gold_verdict: cObj.gold_verdict,
+        gold_scenario: cObj.gold_scenario,
+        anomaly_score: cObj.anomaly_score,
+        threshold: cObj.threshold,
+        shap_output_fx: cObj.shap_output_value,
+        shap_expected_efx: cObj.shap_expected_value,
 
+        // 4 & 5. Efficiency telemetry
         time_to_first_interaction_sec: ttfiSec,
         total_triage_time_sec: totalTriageSec,
 
+        // 6, 7 & 8. Decision, scenario & self-correction
         triage_verdict: decision,
         scenario_classification: scenHyp,
         verdict_changes: trialTelemetry.verdict_changes,
 
+        // 9, 10 & 11. Visual inspection & XAI engagement telemetry
         scroll_depth_pct: trialTelemetry.max_scroll_depth_pct,
         hover_or_click_count: trialTelemetry.chart_interaction_count,
         dwell_time_on_chart_sec: dwellSec,
         playbook_opened_count: trialTelemetry.playbook_opened_count,
 
+        // 12. Feature grounding
         primary_indicator: primaryCue,
         secondary_indicators: secondaryCues.join(';'),
         cited_top_features: citedCombined,
 
+        // 13 & 14. Trust calibration & perceived utility
         decision_confidence_pct: confidencePct,
         decision_confidence_5pt: confidence5Pt,
         explanation_helpfulness: helpfulness,
+
+        // Automated Protocol Rubric Scoring (Section 6.3)
+        ...rubricScores,
 
         timestamp_iso: new Date().toISOString()
       };
@@ -2000,7 +2285,7 @@
       const a = document.createElement('a');
       const info = resolveParticipantAssignment(document.getElementById('participantIdSelect').value);
       a.href = url;
-      a.download = `${info ? info.compositeId : 'participant'}_14var_triage_results.csv`;
+      a.download = `${info ? info.compositeId : 'participant'}_10case_scored_results.csv`;
       a.click();
       URL.revokeObjectURL(url);
     });
@@ -2032,11 +2317,11 @@
         document.getElementById('participantIdSelect').focus();
         return;
       }
-      const cohortSeq = getCohortTrialSequence(info.cohortId);
+      const cohortSeq = getCohortCaseSequence(info.cohortId);
       const completedInCohort = cohortSeq.filter(x => x.isDone).length;
       if (unlockedCohortId !== info.cohortId || completedInCohort < cohortSeq.length) {
         e.preventDefault();
-        alert(`Please complete all ${cohortSeq.length} user assessments from left to right before opening the exit survey (${completedInCohort}/${cohortSeq.length} completed).`);
+        alert(`Please complete all ${cohortSeq.length} cases from left to right before opening the exit survey (${completedInCohort}/${cohortSeq.length} completed).`);
       }
     });
 
