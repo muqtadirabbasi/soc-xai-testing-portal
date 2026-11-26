@@ -602,7 +602,6 @@
       border-color: #a78bfa;
       color: #ffffff;
     }
-    /* Full-width legible reading viewport (enables genuine vertical scroll_depth_pct tracking across 33 features) */
     .triage-img-viewport {
       width: 100%;
       height: 68vh;
@@ -1219,6 +1218,14 @@
       ANALYST: 'https://uwaterloo.ca1.qualtrics.com/jfe/form/SV_es8HRdyIVOMqW6q'
     };
 
+    // Exact date allowlist & ordering per user (AAB1302 BENIGN is intentionally omitted from filter so all benign trials remain untouched)
+    const ALLOWED_TESTING_DATES = {
+      'ALT1465': ['2010-08-20', '2010-08-11', '2010-08-13'],
+      'CIF1430': ['2010-08-02', '2010-08-30', '2010-07-26'],
+      'CRD0272': ['2010-07-15', '2010-07-17'],
+      'AMC1883': ['2011-02-11', '2011-01-22']
+    };
+
     const COHORT_MATRIX = {
       'cohort-1': {
         title: 'Testing Cohort Group 1',
@@ -1282,7 +1289,6 @@
     let sessionSequenceCounter = 0;
     const triageResponses = {};
 
-    // Per-trial passive telemetry state (Variables #3, #4, #5, #8, #9, #10, #11)
     let trialTelemetry = {
       trial_order: 0,
       case_load_ts: 0,
@@ -1406,12 +1412,23 @@
       });
     }
 
+    function getTrialsForUser(certId) {
+      const allowedDates = ALLOWED_TESTING_DATES[certId];
+      const matches = manifestTrials.filter(t => t.cert_id === certId);
+      if (!allowedDates) {
+        return matches; // Keep AAB1302 (BENIGN) untouched
+      }
+      return matches
+        .filter(t => allowedDates.includes(t.date))
+        .sort((a, b) => allowedDates.indexOf(a.date) - allowedDates.indexOf(b.date));
+    }
+
     function getCohortTrialSequence(cohortId) {
       const cfg = COHORT_MATRIX[cohortId];
       if (!cfg) return [];
       const seq = [];
       cfg.slots.forEach((slot, sIdx) => {
-        const userTrials = manifestTrials.filter(t => t.cert_id === slot.cert_id);
+        const userTrials = getTrialsForUser(slot.cert_id);
         userTrials.forEach((tr, tIdx) => {
           const key = `${cohortId}__${slot.cert_id}__${tr.trial_id}`;
           seq.push({
@@ -1555,12 +1572,17 @@
         const res = await fetch('./data/testing_manifest.json');
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
-        manifestTrials = (data.trials || []).map(t => ({
-          ...t,
-          imgA: `./data/testing/design_A_zscore/${basename(t.design_A_path)}`,
-          imgB: `./data/testing/design_B_shap/${basename(t.design_B_path)}`
-        }));
-        statusEl.textContent = `Ready: ${manifestTrials.length} Stimuli Loaded across 5 Users`;
+        manifestTrials = (data.trials || [])
+          .filter(t => {
+            const allowedDates = ALLOWED_TESTING_DATES[t.cert_id];
+            return !allowedDates || allowedDates.includes(t.date);
+          })
+          .map(t => ({
+            ...t,
+            imgA: `./data/testing/design_A_zscore/${basename(t.design_A_path)}`,
+            imgB: `./data/testing/design_B_shap/${basename(t.design_B_path)}`
+          }));
+        statusEl.textContent = `Ready: ${manifestTrials.length} Active Stimuli Loaded across 5 Users`;
         renderAllCohorts();
       } catch (err) {
         statusEl.style.color = '#f87171';
